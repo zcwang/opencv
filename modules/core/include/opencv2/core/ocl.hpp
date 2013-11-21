@@ -108,7 +108,7 @@ public:
     };
     int doubleFPConfig() const;
     int singleFPConfig() const;
-    int halfFPConfig() const;
+    // TODO cl_ext.h: int halfFPConfig() const;
 
     bool endianLittle() const;
     bool errorCorrectionSupport() const;
