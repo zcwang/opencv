@@ -8,9 +8,9 @@ from common import remove_comments, getTokens, getParameters, postProcessParamet
 
 try:
     if len(sys.argv) > 1:
-        outfile = open('../../../include/opencv2/ocl/cl_runtime/' + sys.argv[1] + '.hpp', "w")
+        outfile = open('../../../include/opencv2/core/ocl_runtime/' + sys.argv[1] + '.hpp', "w")
         outfile_impl = open('../' + sys.argv[1] + '_impl.hpp', "w")
-        outfile_wrappers = open('../../../include/opencv2/ocl/cl_runtime/' + sys.argv[1] + '_wrappers.hpp', "w")
+        outfile_wrappers = open('../../../include/opencv2/core/ocl_runtime/' + sys.argv[1] + '_wrappers.hpp', "w")
         if len(sys.argv) > 2:
             f = open(sys.argv[2], "r")
         else:
@@ -101,12 +101,12 @@ ctx['CL_REMAP_DYNAMIC'] = generateRemapDynamic(fns)
 ctx['CL_FN_DECLARATIONS'] = generateFnDeclaration(fns)
 
 sys.stdout = outfile
-ProcessTemplate('template/cl_runtime_opencl.hpp.in', ctx)
+ProcessTemplate('template/ocl_runtime_opencl.hpp.in', ctx)
 
 ctx['CL_FN_INLINE_WRAPPERS'] = generateInlineWrappers(fns)
 
 sys.stdout = outfile_wrappers
-ProcessTemplate('template/cl_runtime_opencl_wrappers.hpp.in', ctx)
+ProcessTemplate('template/ocl_runtime_opencl_wrappers.hpp.in', ctx)
 
 ctx['CL_FN_ENUMS'] = generateEnums(fns)
 ctx['CL_FN_NAMES'] = generateNames(fns)
@@ -115,4 +115,4 @@ ctx['CL_FN_PTRS'] = generatePtrs(fns)
 ctx['CL_FN_SWITCH'] = generateTemplates(15, 'opencl_fn', 'opencl_check_fn', 'CL_API_CALL')
 
 sys.stdout = outfile_impl
-ProcessTemplate('template/cl_runtime_impl_opencl.hpp.in', ctx)
+ProcessTemplate('template/ocl_runtime_impl_opencl.hpp.in', ctx)

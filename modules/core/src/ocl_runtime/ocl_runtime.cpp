@@ -2,91 +2,142 @@
 
 #if defined(HAVE_OPENCL) && !defined(HAVE_OPENCL_STATIC)
 
-#include "opencv2/ocl/cl_runtime/cl_runtime.hpp"
+#include "opencv2/core.hpp" // CV_Error
+#include <sstream> // std::ostringstream
+
+#include "opencv2/core/ocl_runtime/ocl_runtime.hpp"
+
+static const char* funcToCheckOpenCL1_1 = "clEnqueueReadBufferRect";
+#define ERROR_MSG_CANT_LOAD "Failed to load OpenCL runtime\n"
+#define ERROR_MSG_INVALID_VERSION "Failed to load OpenCL runtime (expected version 1.1+)\n"
 
 #if defined(__APPLE__)
-    #include <dlfcn.h>
+#include <dlfcn.h>
 
-    static void* AppleCLGetProcAddress(const char* name)
+static void* AppleCLGetProcAddress(const char* name)
+{
+    static bool initialized = false;
+    static void* handle = NULL;
+    if (!handle)
     {
-        static void * image = NULL;
-        if (!image)
+        if(!initialized)
         {
-            image = dlopen("/System/Library/Frameworks/OpenCL.framework/Versions/Current/OpenCL", RTLD_LAZY | RTLD_GLOBAL);
-            if (!image)
-                return NULL;
+            initialized = true;
+            const char* path = "/System/Library/Frameworks/OpenCL.framework/Versions/Current/OpenCL";
+            const char* envPath = getenv("OPENCV_OPENCL_RUNTIME");
+            if (envPath)
+                path = envPath;
+            handle = dlopen(oclpath, RTLD_LAZY | RTLD_GLOBAL);
+            if (handle == NULL)
+            {
+                fprintf(stderr, ERROR_MSG_CANT_LOAD);
+            }
+            else if (dlsym(handle, funcToCheckOpenCL1_1) == NULL)
+            {
+                fprintf(stderr, ERROR_MSG_INVALID_VERSION);
+                handle = NULL;
+            }
         }
-
-        return dlsym(image, name);
+        if (!handle)
+            return NULL;
     }
-    #define CV_CL_GET_PROC_ADDRESS(name) AppleCLGetProcAddress(name)
+    return dlsym(handle, name);
+}
+#define CV_CL_GET_PROC_ADDRESS(name) AppleCLGetProcAddress(name)
 #endif // __APPLE__
 
 #if defined(_WIN32)
-    static void* WinGetProcAddress(const char* name)
+static void* WinGetProcAddress(const char* name)
+{
+    static bool initialized = false;
+    static HMODULE handle = NULL;
+    if (!handle)
     {
-        static HMODULE opencl_module = NULL;
-        if (!opencl_module)
+        if(!initialized)
         {
-            opencl_module = GetModuleHandleA("OpenCL.dll");
-            if (!opencl_module)
+            initialized = true;
+            handle = GetModuleHandleA("OpenCL.dll");
+            if (!handle)
             {
-                const char* name = "OpenCL.dll";
-                const char* envOpenCLBinary = getenv("OPENCV_OPENCL_BINARY");
-                if (envOpenCLBinary)
-                    name = envOpenCLBinary;
-                opencl_module = LoadLibraryA(name);
-                if (!opencl_module)
-                    return NULL;
+                const char* path = "OpenCL.dll";
+                const char* envPath = getenv("OPENCV_OPENCL_RUNTIME");
+                if (envPath)
+                    path = envPath;
+                handle = LoadLibraryA(path);
+                if (!handle)
+                {
+                    fprintf(stderr, ERROR_MSG_CANT_LOAD);
+                }
+                else if (GetProcAddress(handle, funcToCheckOpenCL1_1) == NULL)
+                {
+                    fprintf(stderr, ERROR_MSG_INVALID_VERSION);
+                    handle = NULL;
+                }
             }
         }
-        return (void*)GetProcAddress(opencl_module, name);
+        if (!handle)
+            return NULL;
     }
-    #define CV_CL_GET_PROC_ADDRESS(name) WinGetProcAddress(name)
+    return (void*)GetProcAddress(handle, name);
+}
+#define CV_CL_GET_PROC_ADDRESS(name) WinGetProcAddress(name)
 #endif // _WIN32
 
 #if defined(linux)
-    #include <dlfcn.h>
-    #include <stdio.h>
+#include <dlfcn.h>
+#include <stdio.h>
 
-    static void* GetProcAddress (const char* name)
+static void* GetProcAddress (const char* name)
+{
+    static bool initialized = false;
+    static void* handle = NULL;
+    if (!handle)
     {
-        static void* h = NULL;
-        if (!h)
+        if(!initialized)
         {
-            const char* name = "libOpenCL.so";
-            const char* envOpenCLBinary = getenv("OPENCV_OPENCL_BINARY");
-            if (envOpenCLBinary)
-                name = envOpenCLBinary;
-            h = dlopen(name, RTLD_LAZY | RTLD_GLOBAL);
-            if (!h)
-                return NULL;
+            initialized = true;
+            const char* path = "libOpenCL.so";
+            const char* envPath = getenv("OPENCV_OPENCL_RUNTIME");
+            if (envPath)
+                path = envPath;
+            handle = dlopen(path, RTLD_LAZY | RTLD_GLOBAL);
+            if (handle == NULL)
+            {
+                fprintf(stderr, ERROR_MSG_CANT_LOAD);
+            }
+            else if (dlsym(handle, funcToCheckOpenCL1_1) == NULL)
+            {
+                fprintf(stderr, ERROR_MSG_INVALID_VERSION);
+                handle = NULL;
+            }
         }
-
-        return dlsym(h, name);
+        if (!handle)
+            return NULL;
     }
-    #define CV_CL_GET_PROC_ADDRESS(name) GetProcAddress(name)
+    return dlsym(handle, name);
+}
+#define CV_CL_GET_PROC_ADDRESS(name) GetProcAddress(name)
 #endif
 
 #ifndef CV_CL_GET_PROC_ADDRESS
 #define CV_CL_GET_PROC_ADDRESS(name) NULL
 #endif
 
+static void* opencl_check_fn(int ID);
+
+#include "ocl_runtime_opencl_impl.hpp"
+
 static void* opencl_check_fn(int ID)
 {
-    extern const char* opencl_fn_names[];
     void* func = CV_CL_GET_PROC_ADDRESS(opencl_fn_names[ID]);
     if (!func)
     {
         std::ostringstream msg;
         msg << "OpenCL function is not available: [" << opencl_fn_names[ID] << "]";
-        CV_Error(CV_StsBadFunc, msg.str());
+        CV_Error(CV_StsBadFunc, msg.str().c_str());
     }
-    extern void* opencl_fn_ptrs[];
     *(void**)(opencl_fn_ptrs[ID]) = func;
     return func;
 }
-
-#include "cl_runtime_opencl_impl.hpp"
 
 #endif

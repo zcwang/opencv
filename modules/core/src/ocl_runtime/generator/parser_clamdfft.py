@@ -91,8 +91,8 @@ ctx['CLAMDFFT_REMAP_ORIGIN'] = generateRemapOrigin(fns)
 ctx['CLAMDFFT_REMAP_DYNAMIC'] = generateRemapDynamic(fns)
 ctx['CLAMDFFT_FN_DECLARATIONS'] = generateFnDeclaration(fns)
 
-sys.stdout = open('../../../include/opencv2/ocl/cl_runtime/clamdfft_runtime.hpp', 'w')
-ProcessTemplate('template/clamdfft_runtime.hpp.in', ctx)
+sys.stdout = open('../../../include/opencv2/core/ocl_runtime/ocl_clamdfft_runtime.hpp', 'w')
+ProcessTemplate('template/ocl_clamdfft_runtime.hpp.in', ctx)
 
 ctx['CL_FN_ENUMS'] = generateEnums(fns, 'OPENCLAMDFFT_FN')
 ctx['CL_FN_NAMES'] = generateNames(fns, 'openclamdfft_fn')
@@ -100,5 +100,5 @@ ctx['CL_FN_DEFINITIONS'] = generateFnDefinition(fns, 'openclamdfft_fn', 'OPENCLA
 ctx['CL_FN_PTRS'] = generatePtrs(fns, 'openclamdfft_fn')
 ctx['CL_FN_SWITCH'] = generateTemplates(23, 'openclamdfft_fn', 'openclamdfft_check_fn', '')
 
-sys.stdout = open('../clamdfft_runtime.cpp', 'w')
-ProcessTemplate('template/clamdfft_runtime.cpp.in', ctx)
+sys.stdout = open('../ocl_clamdfft_runtime.cpp', 'w')
+ProcessTemplate('template/ocl_clamdfft_runtime.cpp.in', ctx)

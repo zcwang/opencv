@@ -94,8 +94,8 @@ ctx['CLAMDBLAS_REMAP_ORIGIN'] = generateRemapOrigin(fns)
 ctx['CLAMDBLAS_REMAP_DYNAMIC'] = generateRemapDynamic(fns)
 ctx['CLAMDBLAS_FN_DECLARATIONS'] = generateFnDeclaration(fns)
 
-sys.stdout = open('../../../include/opencv2/ocl/cl_runtime/clamdblas_runtime.hpp', 'w')
-ProcessTemplate('template/clamdblas_runtime.hpp.in', ctx)
+sys.stdout = open('../../../include/opencv2/core/ocl_runtime/clamdblas_runtime.hpp', 'w')
+ProcessTemplate('template/ocl_clamdblas_runtime.hpp.in', ctx)
 
 ctx['CL_FN_ENUMS'] = generateEnums(fns, 'OPENCLAMDBLAS_FN')
 ctx['CL_FN_NAMES'] = generateNames(fns, 'openclamdblas_fn')
@@ -103,5 +103,5 @@ ctx['CL_FN_DEFINITIONS'] = generateFnDefinition(fns, 'openclamdblas_fn', 'OPENCL
 ctx['CL_FN_PTRS'] = generatePtrs(fns, 'openclamdblas_fn')
 ctx['CL_FN_SWITCH'] = generateTemplates(23, 'openclamdblas_fn', 'openclamdblas_check_fn', '')
 
-sys.stdout = open('../clamdblas_runtime.cpp', 'w')
-ProcessTemplate('template/clamdblas_runtime.cpp.in', ctx)
+sys.stdout = open('../ocl_clamdblas_runtime.cpp', 'w')
+ProcessTemplate('template/ocl_clamdblas_runtime.cpp.in', ctx)

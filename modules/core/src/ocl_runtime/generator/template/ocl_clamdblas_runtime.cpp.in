@@ -2,8 +2,10 @@
 
 #ifdef HAVE_CLAMDBLAS
 
-#include "opencv2/ocl/cl_runtime/cl_runtime.hpp"
-#include "opencv2/ocl/cl_runtime/clamdblas_runtime.hpp"
+#include <sstream> // std::ostringstream
+
+#include "opencv2/core/ocl_runtime/ocl_runtime.hpp"
+#include "opencv2/core/ocl_runtime/ocl_clamdblas_runtime.hpp"
 
 #if defined(_WIN32)
     static void* WinGetProcAddress(const char* name)
@@ -50,19 +52,7 @@
 @CL_FN_ENUMS@
 @CL_FN_NAMES@
 
-static void* openclamdblas_check_fn(int ID)
-{
-    void* func = CV_CL_GET_PROC_ADDRESS(openclamdblas_fn_names[ID]);
-    if (!func)
-    {
-        std::ostringstream msg;
-        msg << "OpenCL AMD BLAS function is not available: [" << openclamdblas_fn_names[ID] << "]";
-        CV_Error(CV_StsBadFunc, msg.str());
-    }
-    extern void* openclamdblas_fn_ptrs[];
-    *(void**)(openclamdblas_fn_ptrs[ID]) = func;
-    return func;
-}
+static void* openclamdblas_check_fn(int ID);
 
 namespace {
 @CL_FN_SWITCH@
@@ -71,5 +61,18 @@ namespace {
 @CL_FN_DEFINITIONS@
 
 @CL_FN_PTRS@
+
+static void* openclamdblas_check_fn(int ID)
+{
+    void* func = CV_CL_GET_PROC_ADDRESS(openclamdblas_fn_names[ID]);
+    if (!func)
+    {
+        std::ostringstream msg;
+        msg << "OpenCL AMD BLAS function is not available: [" << openclamdblas_fn_names[ID] << "]";
+        CV_Error(CV_StsBadFunc, msg.str().c_str());
+    }
+    *(void**)(openclamdblas_fn_ptrs[ID]) = func;
+    return func;
+}
 
 #endif

@@ -13,7 +13,7 @@
 
 #else // HAVE_OPENCL_STATIC
 
-#include "cl_runtime_opencl.hpp"
+#include "ocl_runtime_opencl.hpp"
 
 #endif // HAVE_OPENCL_STATIC
 
