@@ -57,6 +57,11 @@ project(OpenCV CXX C)
 
 if(MSVC)
   set(CMAKE_USE_RELATIVE_PATHS ON CACHE INTERNAL "" FORCE)
+
+  # force to use MSBuild instead of devenv solution/project builder
+  unset(CMAKE_MAKE_PROGRAM CACHE)
+  find_program(CMAKE_MAKE_PROGRAM MSBuild PATHS ENV PATH)
+  mark_as_advanced(CMAKE_MAKE_PROGRAM)
 endif()
 
 include(cmake/OpenCVUtils.cmake)
