@@ -585,11 +585,7 @@ void cv::ocl::oclMat::createEx(int _rows, int _cols, int _type, DevMemRW rw_type
         if (esz * cols == step)
             flags |= Mat::CONTINUOUS_FLAG;
 
-        int64 _nettosize = (int64)step * rows;
-        size_t nettosize = (size_t)_nettosize;
-
-        datastart = data = (uchar *)dev_ptr;
-        dataend = data + nettosize;
+        data = (uchar *)dev_ptr;
 
         refcount = (int *)fastMalloc(sizeof(*refcount));
         *refcount = 1;
@@ -601,9 +597,9 @@ void cv::ocl::oclMat::release()
     if( refcount && CV_XADD(refcount, -1) == 1 )
     {
         fastFree(refcount);
-        openCLFree(datastart);
+        openCLFree(data);
     }
-    data = datastart = dataend = 0;
+    data = NULL;
     step = rows = cols = 0;
     offset = wholerows = wholecols = 0;
     refcount = 0;

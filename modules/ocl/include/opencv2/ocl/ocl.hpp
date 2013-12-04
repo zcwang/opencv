@@ -408,11 +408,6 @@ namespace cv
             // when oclMatrix points to user-allocated data, the pointer is NULL
             int *refcount;
 
-            //! helper fields used in locateROI and adjustROI
-            //datastart and dataend are not used in current version
-            uchar *datastart;
-            uchar *dataend;
-
             //! OpenCL context associated with the oclMat object.
             Context *clCxt; // TODO clCtx
             //add offset for handle ROI, calculated in byte
