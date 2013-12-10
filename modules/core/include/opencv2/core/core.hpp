@@ -4821,6 +4821,24 @@ private:
     AutoLock& operator = (const AutoLock&);
 };
 
+class TLSKey
+{
+private:
+    union
+    {
+        void* handle_;
+        int id_;
+    } key_;
+protected:
+    CV_EXPORTS TLSKey();
+    CV_EXPORTS ~TLSKey(); // virtual is not required
+public:
+    virtual void* createDataInstance() const = 0;
+    virtual void deleteDataInstance(void* data) const = 0;
+
+    CV_EXPORTS void *getData() const;
+};
+
 }
 
 #endif // __cplusplus
