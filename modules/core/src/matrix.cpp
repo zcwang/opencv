@@ -2679,17 +2679,24 @@ namespace cv {
 
 static bool ocl_setIdentity( InputOutputArray _m, const Scalar& s )
 {
-    int type = _m.type(), cn = CV_MAT_CN(type);
-    if (cn == 3)
-        return false;
+    int type = _m.type(), cn = CV_MAT_CN(type), depth = CV_MAT_DEPTH(type);
 
-    ocl::Kernel k("setIdentity", ocl::core::set_identity_oclsrc,
-                  format("-D T=%s", ocl::memopTypeToStr(type)));
+    int scalarcn = cn == 3 ? 4 : cn;
+    int sctype = CV_MAKETYPE(depth, scalarcn);
+    String buildOptions = format(
+            "-D T=%s "
+            "-D PIXTYPE=%s -D PIXTYPE1=%s -D cn=%d -D ST=%s",
+            ocl::memopTypeToStr(type),
+            ocl::memopTypeToStr(type), ocl::memopTypeToStr(depth),
+            cn, ocl::memopTypeToStr(sctype)
+    );
+
+    ocl::Kernel k("setIdentity", ocl::core::set_identity_oclsrc, buildOptions);
     if (k.empty())
         return false;
 
     UMat m = _m.getUMat();
-    k.args(ocl::KernelArg::WriteOnly(m), ocl::KernelArg::Constant(Mat(1, 1, type, s)));
+    k.args(ocl::KernelArg::WriteOnly(m), ocl::KernelArg::Constant(Mat(1, 1, sctype, s)));
 
     size_t globalsize[2] = { m.cols, m.rows };
     return k.run(2, globalsize, NULL, false);

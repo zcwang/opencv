@@ -43,17 +43,28 @@
 //
 //M*/
 
+#if cn != 3
+#define storepix(val, addr)  *(__global PIXTYPE*)(addr) = (val)
+#define PIXSIZE ((int)sizeof(PIXTYPE))
+#define convertScalar(a) (a)
+#else
+#define storepix(val, addr) vstore3((val), 0, (__global PIXTYPE1*)(addr))
+#define PIXSIZE ((int)sizeof(PIXTYPE1)*3)
+#define convertScalar(a) (T)(a.x, a.y, a.z)
+#endif
+
 __kernel void setIdentity(__global uchar * srcptr, int src_step, int src_offset, int rows, int cols,
-                          T scalar)
+                          ST _scalar)
 {
     int x = get_global_id(0);
     int y = get_global_id(1);
 
+    T scalar = convertScalar(_scalar);
+
     if (x < cols && y < rows)
     {
-        int src_index = mad24(y, src_step, src_offset + x * (int)sizeof(T));
-        __global T * src = (__global T *)(srcptr + src_index);
+        int src_index = mad24(y, src_step, src_offset + x * (int)PIXSIZE);
 
-        src[0] = x == y ? scalar : (T)(0);
+        storepix(x == y ? scalar : (T)(0), srcptr + src_index);
     }
 }

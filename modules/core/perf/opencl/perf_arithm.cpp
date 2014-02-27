@@ -631,7 +631,7 @@ OCL_PERF_TEST_P(SqrtFixture, Sqrt, ::testing::Combine(
 typedef Size_MatType SetIdentityFixture;
 
 OCL_PERF_TEST_P(SetIdentityFixture, SetIdentity,
-            ::testing::Combine(OCL_TEST_SIZES, OCL_TEST_TYPES))
+            ::testing::Combine(OCL_TEST_SIZES, OCL_TEST_TYPES_134))
 {
     const Size_MatType_t params = GetParam();
     const Size srcSize = get<0>(params);
