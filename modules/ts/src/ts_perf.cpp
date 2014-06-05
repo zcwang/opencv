@@ -652,8 +652,8 @@ void TestBase::Init(const std::vector<std::string> & availableImpls,
 
     const std::string command_line_keys =
         "{   perf_max_outliers           |8        |percent of allowed outliers}"
-        "{   perf_min_samples            |10       |minimal required numer of samples}"
-        "{   perf_force_samples          |100      |force set maximum number of samples for all tests}"
+        "{   perf_min_samples            |25       |minimal required numer of samples}"
+        "{   perf_force_samples          |200      |force set maximum number of samples for all tests}"
         "{   perf_seed                   |809564   |seed for random numbers generator}"
         "{   perf_threads                |-1       |the number of worker threads, if parallel execution is enabled}"
         "{   perf_write_sanity           |false    |create new records for sanity checks}"
