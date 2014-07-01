@@ -5,6 +5,8 @@
 
 #if defined(HAVE_OPENCL_STATIC)
 
+#define CL_USE_DEPRECATED_OPENCL_1_1_APIS
+
 #if defined __APPLE__
 #include <OpenCL/cl.h>
 #else
