@@ -7,10 +7,10 @@ import java.util.ListIterator;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
+import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -88,43 +88,52 @@ public class Tutorial3Activity extends Activity implements CvCameraViewListener2
     public void onResume()
     {
         super.onResume();
-        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
+        if (!OpenCVLoader.initDebug()) {
+            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
+        } else {
+            Log.d(TAG, "OpenCV library found inside package. Using it!");
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        }
     }
 
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mOpenCvCameraView != null)
             mOpenCvCameraView.disableView();
     }
 
+    @Override
     public void onCameraViewStarted(int width, int height) {
     }
 
+    @Override
     public void onCameraViewStopped() {
     }
 
+    @Override
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
         return inputFrame.rgba();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        List<String> effects = mOpenCvCameraView.getEffectList();
-
-        if (effects == null) {
-            Log.e(TAG, "Color effects are not supported by device!");
-            return true;
-        }
-
         mColorEffectsMenu = menu.addSubMenu("Color Effect");
-        mEffectMenuItems = new MenuItem[effects.size()];
 
-        int idx = 0;
-        ListIterator<String> effectItr = effects.listIterator();
-        while(effectItr.hasNext()) {
-           String element = effectItr.next();
-           mEffectMenuItems[idx] = mColorEffectsMenu.add(1, idx, Menu.NONE, element);
-           idx++;
+        List<String> effects = mOpenCvCameraView.getEffectList();
+        if (effects != null) {
+            mEffectMenuItems = new MenuItem[effects.size()];
+
+            int idx = 0;
+            ListIterator<String> effectItr = effects.listIterator();
+            while(effectItr.hasNext()) {
+               String element = effectItr.next();
+               mEffectMenuItems[idx] = mColorEffectsMenu.add(1, idx, Menu.NONE, element);
+               idx++;
+            }
+        } else {
+            Log.e(TAG, "Color effects are not supported by device!");
         }
 
         mResolutionMenu = menu.addSubMenu("Resolution");
@@ -132,7 +141,7 @@ public class Tutorial3Activity extends Activity implements CvCameraViewListener2
         mResolutionMenuItems = new MenuItem[mResolutionList.size()];
 
         ListIterator<Size> resolutionItr = mResolutionList.listIterator();
-        idx = 0;
+        int idx = 0;
         while(resolutionItr.hasNext()) {
             Size element = resolutionItr.next();
             mResolutionMenuItems[idx] = mResolutionMenu.add(2, idx, Menu.NONE,
@@ -143,6 +152,7 @@ public class Tutorial3Activity extends Activity implements CvCameraViewListener2
         return true;
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(TAG, "called onOptionsItemSelected; selected item: " + item);
         if (item.getGroupId() == 1)

@@ -84,4 +84,14 @@ public class Tutorial3View extends JavaCameraView implements PictureCallback {
         }
 
     }
+
+    @Override
+    protected org.opencv.core.Size calculateCameraFrameSize(List<?> supportedSizes, ListItemAccessor accessor, int surfaceWidth, int surfaceHeight) {
+        if (mMaxWidth > 0) {
+            // force to use requested size
+            return new org.opencv.core.Size(mMaxWidth, mMaxHeight);
+        } else {
+            return super.calculateCameraFrameSize(supportedSizes, accessor, surfaceWidth, surfaceHeight);
+        }
+    }
 }
