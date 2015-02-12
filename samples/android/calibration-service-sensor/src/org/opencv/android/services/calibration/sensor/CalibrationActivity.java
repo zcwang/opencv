@@ -233,7 +233,7 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
     public boolean onTouch(View v, MotionEvent event) {
         Log.d(TAG, "onTouch invoked");
         if (mCalibrator != null) {
-            mCalibrator.addCorners();
+            // TODO
         }
         return false;
     }

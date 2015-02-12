@@ -16,22 +16,24 @@ public class CalibrationBoard {
         final int cn = 3;
         float positions[] = new float[mCornersSize * cn];
 
-        // 4 x 7
-        // * * * *
-        //  * * *
-        // * * * *
-        //  * * *
-        // * * * *
-        //  * * *
-        // * * * *
-        //  * * *
-        for (int i = 0; i < mPatternSize.height; i++) {
-            for (int j = 0; j < mPatternSize.width; j++) {
+        // 4 x 11
+        // *   *   *   *   *   *0  ^ Y
+        //   *   *   *   *   *4    |
+        // *   *   *   *   *   *1  |
+        //   *   *   *   *   *5    |    X
+        // *   *   *   *   *   *2  +---->
+        //   *   *   *   *   *6
+        // *   *   *   *   *   *3
+        //   *   *   *   *   *7
+        for (int i = 0; i < (int)mPatternSize.height; i++) {
+            for (int j = 0; j < (int)mPatternSize.width; j++) {
                 positions[(int) (i * mPatternSize.width * cn + j * cn + 0)] =
+                        ((int)mPatternSize.height / 2) * (float)mSquareSize
                         - // OpenCV findCorners issue
                         i * (float) mSquareSize;
                 positions[(int) (i * mPatternSize.width * cn + j * cn + 1)] =
-                        (2 * j + i % 2) * (float) mSquareSize;
+                        ((int)mPatternSize.width) * (float)mSquareSize
+                        - (2 * j + i % 2) * (float) mSquareSize;
                 positions[(int) (i * mPatternSize.width * cn + j * cn + 2)] = 0;
             }
         }

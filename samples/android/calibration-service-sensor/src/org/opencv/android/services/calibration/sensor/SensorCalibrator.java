@@ -1,8 +1,6 @@
 package org.opencv.android.services.calibration.sensor;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.opencv.android.services.Utils;
 import org.opencv.android.services.calibration.CalibrationBoard;
 import org.opencv.android.services.calibration.CameraCalibrationResult;
 import org.opencv.android.services.calibration.CameraInfo;
@@ -16,8 +14,8 @@ import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.MatOfPoint3f;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 
+import android.hardware.SensorManager;
 import android.util.Log;
 
 public class SensorCalibrator {
@@ -31,16 +29,9 @@ public class SensorCalibrator {
 
     private boolean mPatternWasFound = false;
     private MatOfPoint2f mCorners = new MatOfPoint2f();
-    private List<Mat> mCornersBuffer = new ArrayList<Mat>();
 
     private Mat mCameraMatrix = new Mat();
     private Mat mDistortionCoefficients = new Mat();
-    private int mFlags = Calib3d.CALIB_FIX_PRINCIPAL_POINT +
-                         Calib3d.CALIB_ZERO_TANGENT_DIST +
-                         Calib3d.CALIB_FIX_ASPECT_RATIO +
-                         Calib3d.CALIB_FIX_K4 +
-                         Calib3d.CALIB_FIX_K5;
-    private Double mRms;
 
     public SensorCalibrator(CameraInfo cameraInfo, SensorRecorder sensorRecorder) {
         mCameraInfo = cameraInfo;
@@ -50,104 +41,30 @@ public class SensorCalibrator {
     }
 
     public void processFrame(Mat grayFrame, Mat rgbaFrame) {
-        findPattern(grayFrame);
+        mPatternWasFound = Calib3d.findCirclesGridDefault(grayFrame, mBoard.mPatternSize,
+                mCorners, mBoard.mGridFlags);
         renderFrame(rgbaFrame);
     }
 
-    public CameraCalibrationResult calibrate() {
-        ArrayList<Mat> rvecs = new ArrayList<Mat>();
-        ArrayList<Mat> tvecs = new ArrayList<Mat>();
-        Mat reprojectionErrors = new Mat();
-        ArrayList<Mat> objectPoints = new ArrayList<Mat>();
-        objectPoints.add(Mat.zeros(mBoard.mCornersSize, 1, CvType.CV_32FC3));
-        mBoard.calcBoardCornerPositions(objectPoints.get(0));
-        for (int i = 1; i < mCornersBuffer.size(); i++) {
-            objectPoints.add(objectPoints.get(0));
-        }
-
-        Calib3d.calibrateCamera(objectPoints, mCornersBuffer,
-                new Size(mCameraInfo.mWidth, mCameraInfo.mHeight),
-                mCameraMatrix, mDistortionCoefficients, rvecs, tvecs, mFlags);
-
-        boolean isCalibrated = Core.checkRange(mCameraMatrix)
-                && Core.checkRange(mDistortionCoefficients);
-
-        if (isCalibrated) {
-            mCalibrationResult = new CameraCalibrationResult(mCameraInfo);
-            mCalibrationResult.init(mCameraMatrix, mDistortionCoefficients);
-
-            mRms = computeReprojectionErrors(objectPoints, rvecs, tvecs, reprojectionErrors);
-            Log.i(TAG, String.format("Average re-projection error: %f", mRms));
-            Log.i(TAG, "Camera matrix: " + mCameraMatrix.dump());
-            Log.i(TAG, "Distortion coefficients: " + mDistortionCoefficients.dump());
-        }
-
-        return mCalibrationResult;
-    }
-
-    public void reset() {
-        mCornersBuffer.clear();
-    }
-
-    private double computeReprojectionErrors(List<Mat> objectPoints,
-            List<Mat> rvecs, List<Mat> tvecs, Mat perViewErrors) {
-        MatOfPoint2f cornersProjected = new MatOfPoint2f();
-        double totalError = 0;
-        double error;
-        float viewErrors[] = new float[objectPoints.size()];
-
-        MatOfDouble distortionCoefficients = new MatOfDouble(mDistortionCoefficients);
-        int totalPoints = 0;
-        for (int i = 0; i < objectPoints.size(); i++) {
-            MatOfPoint3f points = new MatOfPoint3f(objectPoints.get(i));
-            Calib3d.projectPoints(points, rvecs.get(i), tvecs.get(i),
-                    mCameraMatrix, distortionCoefficients, cornersProjected);
-            error = Core.norm(mCornersBuffer.get(i), cornersProjected, Core.NORM_L2);
-
-            int n = objectPoints.get(i).rows();
-            viewErrors[i] = (float) Math.sqrt(error * error / n);
-            totalError  += error * error;
-            totalPoints += n;
-        }
-        perViewErrors.create(objectPoints.size(), 1, CvType.CV_32FC1);
-        perViewErrors.put(0, 0, viewErrors);
-
-        return Math.sqrt(totalError / totalPoints);
-    }
-
-    private void findPattern(Mat grayFrame) {
-        mPatternWasFound = Calib3d.findCirclesGridDefault(grayFrame, mBoard.mPatternSize,
-                mCorners, mBoard.mGridFlags);
-    }
-
-    public void addCorners() {
-        if (mPatternWasFound) {
-            Log.i(TAG, "Add corners: " + mCorners.dump());
-            mCornersBuffer.add(mCorners.clone());
-            mPatternWasFound = false;
-        }
-    }
-
-    public int getCornersBufferSize() {
-        return mCornersBuffer.size();
-    }
-
-    private void drawPoints(Mat rgbaFrame) {
-        Calib3d.drawChessboardCorners(rgbaFrame, mBoard.mPatternSize, mCorners, mPatternWasFound);
-    }
-
-    private static String toDeg(float rad) { return Float.valueOf((float)(rad * 180 / Math.PI)).toString(); }
-
     private void renderFrame(Mat rgbaFrame) {
-        drawPoints(rgbaFrame);
+        Calib3d.drawChessboardCorners(rgbaFrame, mBoard.mPatternSize, mCorners, mPatternWasFound);
 
         Core.putText(rgbaFrame, "Sensor calibration", new Point(50, 50),
                 Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 0), 2);
-        float sensor_pitch = mSensorRecorder.mOrientation[1];
-        float sensor_roll = mSensorRecorder.mOrientation[2] + (float)(Math.PI/2);
-        Core.putText(rgbaFrame, "Sensor values: " +
-                "pitch=" + toDeg(sensor_pitch) + " roll=" + toDeg(sensor_roll), new Point(50, 100),
-                Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(64, 128, 64), 2);
+        float[] rotM = mSensorRecorder.mRotationMatrix.clone();
+        SensorManager.remapCoordinateSystem(rotM, SensorManager.AXIS_Z, SensorManager.AXIS_MINUS_X, rotM);
+        float[] orientation = new float[3];
+        SensorManager.getOrientation(rotM, orientation);
+        float sensor_az = orientation[0];
+        float sensor_pitch = orientation[1];
+        float sensor_roll = orientation[2];
+        Core.putText(rgbaFrame, "az=", new Point(50, 150), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 0), 2);
+        Core.putText(rgbaFrame, "pitch=", new Point(50, 200), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 0), 2);
+        Core.putText(rgbaFrame, "roll=", new Point(50, 250), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 0), 2);
+        Core.putText(rgbaFrame, "Sensor", new Point(200, 100), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(64, 128, 64), 2);
+        Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg(sensor_az)), new Point(200, 150), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(64, 128, 64), 2);
+        Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg(sensor_pitch)), new Point(200, 200), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(64, 128, 64), 2);
+        Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg(sensor_roll)), new Point(200, 250), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(64, 128, 64), 2);
 
         if (mPatternWasFound && isCalibrated()) {
             MatOfPoint2f points = new MatOfPoint2f(mCorners);
@@ -172,14 +89,21 @@ public class SensorCalibrator {
             float[] Rvalues = new float[9];
             Rfloat.get(0, 0, Rvalues);
 
-            float pitch = (float)Math.atan2(-Rvalues[1], Rvalues[4]);
-            float roll = (float)Math.asin(-Rvalues[5]);
-            Core.putText(rgbaFrame,
-                    "pitch=" + toDeg(pitch) + " roll=" + toDeg(roll), new Point(50, 200),
-                    Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
-            Core.putText(rgbaFrame,
-                    "delta pitch=" + toDeg(pitch - sensor_pitch) + " roll=" + toDeg(roll - sensor_roll), new Point(50, 150),
-                    Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 0, 0), 2);
+            Log.e(TAG, Rfloat.dump().replace('\n', ' '));
+            Log.e(TAG, "tvec=" + tvec.dump().replace('\n', ' '));
+
+            float az = (float)Math.atan2(-Rvalues[2], Rvalues[8]);
+            float pitch = (float)Math.asin(Rvalues[5]);
+            float roll = (float)Math.atan2(Rvalues[3], Rvalues[4]);
+            Log.i(TAG, "o: az=" + az + " p=" + Utils.toDeg(pitch) + " r=" + Utils.toDeg(roll));
+            Core.putText(rgbaFrame, "Camera", new Point(350, 100), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
+            Core.putText(rgbaFrame, "Diff", new Point(500, 100), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 0, 0), 2);
+            Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg(az)), new Point(350, 150), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
+            Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg(pitch)), new Point(350, 200), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
+            Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg(roll)), new Point(350, 250), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
+            // don't show useless azimut diff
+            Core.putText(rgbaFrame, String.format("%.3f", Utils.toDeg(pitch - sensor_pitch)), new Point(500, 200), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 0, 0), 2);
+            Core.putText(rgbaFrame, String.format("%.3f", Utils.toDeg(roll - sensor_roll)), new Point(500, 250), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 0, 0), 2);
         }
     }
 
@@ -189,11 +113,10 @@ public class SensorCalibrator {
 
     public void setCalibrationResult(CameraCalibrationResult calibrationResult) {
         mCalibrationResult = calibrationResult;
-        mCalibrationResult.getMat(mCameraMatrix, mDistortionCoefficients);
+        mCalibrationResult.getMatInvertFy(mCameraMatrix, mDistortionCoefficients);
     }
 
     public CameraCalibrationResult getCalibrationResult() {
         return mCalibrationResult;
     }
-
 }

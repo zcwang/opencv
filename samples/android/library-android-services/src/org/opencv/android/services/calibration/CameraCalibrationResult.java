@@ -39,6 +39,12 @@ public class CameraCalibrationResult {
         cameraMatrix.put(0, 0, mCameraMatrixArray);
         distortionCoefficients.put(0, 0, mDistortionCoefficientsArray);
     }
+    public void getMatInvertFy(Mat cameraMatrix, Mat distortionCoefficients) {
+        double[] cameraMatrixArray = mCameraMatrixArray.clone();
+        cameraMatrixArray[4] = -Math.abs(cameraMatrixArray[4]);
+        cameraMatrix.put(0, 0, cameraMatrixArray);
+        distortionCoefficients.put(0, 0, mDistortionCoefficientsArray);
+    }
 
     public JSONObject getJSON() {
         try {
