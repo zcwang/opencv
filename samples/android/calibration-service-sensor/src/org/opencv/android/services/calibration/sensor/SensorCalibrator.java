@@ -169,7 +169,7 @@ public class SensorCalibrator {
                     Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
         }
 
-        Core.putText(rgbaFrame, "Captured: " + mCornersBuffer.size(), new Point(50, 50),
+        Core.putText(rgbaFrame, "Sensor calibration", new Point(50, 50),
                 Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 0), 2);
         if (mRms != null) {
             Core.putText(rgbaFrame, "Last calibration RMS: " + mRms, new Point(50, 150),

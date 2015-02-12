@@ -2,7 +2,12 @@ package org.opencv.android.services.calibration;
 
 import org.opencv.android.CameraBridgeViewBase;
 
+import android.app.Activity;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 
 public class CameraInfo {
     public static final int CAMERA_ID_ANY   = CameraBridgeViewBase.CAMERA_ID_ANY;
@@ -41,5 +46,29 @@ public class CameraInfo {
     @Override
     public String toString() {
         return String.format("camera_%d:%dx%d", mCameraIndex, mWidth, mHeight);
+    }
+
+    public void setPreferredResolution(Activity context) {
+        Display display = context.getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+        int widthPixels = outMetrics.widthPixels;
+        int heightPixels = outMetrics.heightPixels;
+        if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17)
+            try {
+                widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(display);
+                heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
+            } catch (Exception ignored) {
+            }
+        if (Build.VERSION.SDK_INT >= 17)
+            try {
+                Point realSize = new Point();
+                Display.class.getMethod("getRealSize", Point.class).invoke(display, realSize);
+                widthPixels = realSize.x;
+                heightPixels = realSize.y;
+            } catch (Exception ignored) {
+            }
+        mWidth = widthPixels;
+        mHeight = heightPixels;
     }
 }

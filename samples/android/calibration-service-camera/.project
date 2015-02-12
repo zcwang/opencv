@@ -3,8 +3,15 @@
 	<name>OpenCV Calibration Service - Camera</name>
 	<comment></comment>
 	<projects>
+		<project>OpenCV Android Services Library</project>
 	</projects>
 	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
+			<triggers>clean,full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
 		<buildCommand>
 			<name>com.android.ide.eclipse.adt.ResourceManagerBuilder</name>
 			<arguments>

@@ -6,10 +6,15 @@ import org.json.JSONObject;
 import org.opencv.core.Mat;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 public class CameraCalibrationResult {
     private static final String TAG = "CalibrationResult";
@@ -120,4 +125,45 @@ public class CameraCalibrationResult {
         }
     }
 
+    public static final String CALIBRATE_ACTION = "org.opencv.android.services.calibration.camera.calibrate";
+
+    public void requestData(final Context context, final Runnable completionCallback) {
+        Toast.makeText(context, "Requesting camera calibration data", Toast.LENGTH_SHORT).show();
+        final String responseAction = CALIBRATE_ACTION + "!" + mCameraInfo.toString();
+        new Runnable() {
+            private static final String TAG = "CalibrationResult::requestData";
+            private final BroadcastReceiver myReceiver = new BroadcastReceiver() {
+
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    context.unregisterReceiver(myReceiver);
+                    Log.e(TAG, "BroadcastReceiver::onReceive: " + intent.getAction());
+                    boolean success = false;
+                    try {
+                        String response = intent.getExtras().getString("response");
+                        CameraCalibrationResult.this.initFromJSON(new JSONObject(response));
+                        success = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Log.e(TAG, "success=" + success);
+                    if (completionCallback != null)
+                        completionCallback.run();
+                }
+            };
+
+            @Override
+            public void run() {
+                context.registerReceiver(myReceiver, new IntentFilter(responseAction));
+
+                Intent intent = new Intent(CALIBRATE_ACTION);
+                Bundle params = new Bundle();
+                mCameraInfo.saveToBundle(params);
+                intent.putExtras(params);
+                intent.putExtra("responseAction", responseAction);
+                context.startActivity(intent);
+                Log.d(TAG, "call calibration intent");
+            }
+        }.run();
+    }
 }

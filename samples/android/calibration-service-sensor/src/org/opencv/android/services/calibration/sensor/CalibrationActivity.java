@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SubMenu;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
@@ -64,32 +65,18 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
+        CameraInfo startupCameraInfo = new CameraInfo();
+        startupCameraInfo.setPreferredResolution(this);
         if (CALIBRATE_ACTION.equals(getIntent().getAction())) {
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                mCameraInfo.readFromBundle(extras);
-                CameraCalibrationResult result = new CameraCalibrationResult(mCameraInfo);
-                if (result.tryLoad(this)) {
-                    Log.e(TAG, "Return loaded calibration result");
-                    Intent data = new Intent();
-                    data.putExtra("result", result.getJSON().toString());
-                    setResult(RESULT_OK, data);
-                    finish();
-                    return;
-                }
-            } else {
-                Log.e(TAG, "No camera info. Ignore invalid request");
-                Intent data = new Intent();
-                setResult(RESULT_CANCELED, data);
-                finish();
-            }
+            finish(); // TODO !!!!
         }
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.surface_view);
         mOpenCvCameraView = (CameraView) findViewById(R.id.java_surface_view);
-        //mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
+        mOpenCvCameraView.setResolution(startupCameraInfo.mWidth, startupCameraInfo.mHeight);
+        mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
     }
 
@@ -127,16 +114,19 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         if (mCameraInfo.mWidth != width || mCameraInfo.mHeight != height) {
             Toast.makeText(this, "Camera resolution changed. Recreate calibrator", Toast.LENGTH_LONG).show();
+            mCalibrator = null;
             mCameraInfo = new CameraInfo();
             mCameraInfo.mCameraIndex = mOpenCvCameraView.getCameraIndex();
             mCameraInfo.mWidth = width;
             mCameraInfo.mHeight = height;
-            CameraCalibrationResult calibrationResult = new CameraCalibrationResult(mCameraInfo);
-            mCalibrator = new SensorCalibrator(mCameraInfo);
-            if (calibrationResult.tryLoad(this)) {
-                mCalibrator.setCalibrationResult(calibrationResult);
-                Toast.makeText(this, "Calibration data loaded from previous launch", Toast.LENGTH_LONG).show();
-            }
+            final CameraCalibrationResult calibrationResult = new CameraCalibrationResult(mCameraInfo);
+            calibrationResult.requestData(this, new Runnable() {
+                @Override
+                public void run() {
+                    mCalibrator = new SensorCalibrator(mCameraInfo);
+                    mCalibrator.setCalibrationResult(calibrationResult);
+                }
+            });
         }
     }
 

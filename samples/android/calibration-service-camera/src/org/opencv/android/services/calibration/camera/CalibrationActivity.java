@@ -17,14 +17,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Point;
 import android.hardware.Camera.Size;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -38,7 +34,7 @@ import android.widget.Toast;
 public class CalibrationActivity extends Activity implements CvCameraViewListener2, OnTouchListener {
     private static final String TAG = "Activity";
 
-    private static final String CALIBRATE_ACTION = "org.opencv.android.services.calibration.camera.calibrate";
+    private static final String CALIBRATE_ACTION = CameraCalibrationResult.CALIBRATE_ACTION;
 
     private CameraInfo mCameraInfo = new CameraInfo();
     private CameraCalibrator mCalibrator;
@@ -63,28 +59,43 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
         }
     };
 
+    private String responceResult = null;
+    protected void sendResponseResult(String response) {
+        if (response != null)
+            responceResult = response;
+        if (CALIBRATE_ACTION.equals(getIntent().getAction())) {
+            Bundle extras = getIntent().getExtras();
+            String responseAction = CalibrationActivity.class.getName() + "!response";
+            if (extras != null) {
+                responseAction = extras.getString("responseAction", responseAction);
+            }
+            Intent intent = new Intent(responseAction);
+            if (responceResult != null)
+                intent.putExtra("response", responceResult);
+            sendBroadcast(intent);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
+        CameraInfo startupCameraInfo = new CameraInfo();
+        startupCameraInfo.setPreferredResolution(this);
         if (CALIBRATE_ACTION.equals(getIntent().getAction())) {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
-                mCameraInfo.readFromBundle(extras);
-                CameraCalibrationResult result = new CameraCalibrationResult(mCameraInfo);
+                startupCameraInfo.readFromBundle(extras);
+                CameraCalibrationResult result = new CameraCalibrationResult(startupCameraInfo);
                 if (result.tryLoad(this)) {
                     Log.e(TAG, "Return loaded calibration result");
-                    Intent data = new Intent();
-                    data.putExtra("result", result.getJSON().toString());
-                    setResult(RESULT_OK, data);
+                    sendResponseResult(result.getJSON().toString());
                     finish();
                     return;
                 }
             } else {
                 Log.e(TAG, "No camera info. Ignore invalid request");
-                Intent data = new Intent();
-                setResult(RESULT_CANCELED, data);
                 finish();
             }
         }
@@ -93,30 +104,7 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
 
         setContentView(R.layout.surface_view);
         mOpenCvCameraView = (CameraView) findViewById(R.id.java_surface_view);
-        Display display = getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-        int widthPixels = outMetrics.widthPixels;
-        int heightPixels = outMetrics.heightPixels;
-        if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17)
-            try {
-                widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(display);
-                heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
-            } catch (Exception ignored) {
-            }
-        if (Build.VERSION.SDK_INT >= 17)
-            try {
-                Point realSize = new Point();
-                Display.class.getMethod("getRealSize", Point.class).invoke(display, realSize);
-                widthPixels = realSize.x;
-                heightPixels = realSize.y;
-            } catch (Exception ignored) {
-            }
-        try {
-            mOpenCvCameraView.setResolution(widthPixels, heightPixels);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mOpenCvCameraView.setResolution(startupCameraInfo.mWidth, startupCameraInfo.mHeight);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
     }
@@ -124,6 +112,7 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
     @Override
     public void onPause()
     {
+        sendResponseResult(null);
         super.onPause();
         if (mOpenCvCameraView != null)
             mOpenCvCameraView.disableView();
@@ -265,9 +254,7 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
                             calibrationResult.save(calibrationResult.getSharedPreferences(CalibrationActivity.this));
                             if (CALIBRATE_ACTION.equals(CalibrationActivity.this.getIntent().getAction())) {
                                 Log.e(TAG, "Return received calibration result");
-                                Intent data = new Intent();
-                                data.putExtra("result", calibrationResult.getJSON().toString());
-                                setResult(RESULT_OK, data);
+                                sendResponseResult(calibrationResult.getJSON().toString());
                                 finish();
                             }
                         }
