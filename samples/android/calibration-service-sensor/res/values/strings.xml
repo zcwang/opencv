@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">OpenCV Camera Calibration</string>
+    <string name="app_name">OCV Sensor Calibration</string>
     <string name="action_calibrate">Calibrate</string>
     <string name="calibration">Calibration</string>
     <string name="calibration_successful">Successfully calibrated!</string>

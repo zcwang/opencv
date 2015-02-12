@@ -54,7 +54,6 @@ public class CameraCalibrator {
     public CameraCalibrationResult calibrate() {
         ArrayList<Mat> rvecs = new ArrayList<Mat>();
         ArrayList<Mat> tvecs = new ArrayList<Mat>();
-        Mat reprojectionErrors = new Mat();
         ArrayList<Mat> objectPoints = new ArrayList<Mat>();
         objectPoints.add(Mat.zeros(mBoard.mCornersSize, 1, CvType.CV_32FC3));
         mBoard.calcBoardCornerPositions(objectPoints.get(0));
@@ -73,7 +72,7 @@ public class CameraCalibrator {
             mCalibrationResult = new CameraCalibrationResult(mCameraInfo);
             mCalibrationResult.init(mCameraMatrix, mDistortionCoefficients);
 
-            mRms = computeReprojectionErrors(objectPoints, rvecs, tvecs, reprojectionErrors);
+            mRms = computeReprojectionErrors(objectPoints, rvecs, tvecs);
             Log.i(TAG, String.format("Average re-projection error: %f", mRms));
             Log.i(TAG, "Camera matrix: " + mCameraMatrix.dump());
             Log.i(TAG, "Distortion coefficients: " + mDistortionCoefficients.dump());
@@ -87,7 +86,7 @@ public class CameraCalibrator {
     }
 
     private double computeReprojectionErrors(List<Mat> objectPoints,
-            List<Mat> rvecs, List<Mat> tvecs, Mat perViewErrors) {
+            List<Mat> rvecs, List<Mat> tvecs) {
         MatOfPoint2f cornersProjected = new MatOfPoint2f();
         double totalError = 0;
         double error;
@@ -106,8 +105,6 @@ public class CameraCalibrator {
             totalError  += error * error;
             totalPoints += n;
         }
-        perViewErrors.create(objectPoints.size(), 1, CvType.CV_32FC1);
-        perViewErrors.put(0, 0, viewErrors);
 
         return Math.sqrt(totalError / totalPoints);
     }
@@ -133,8 +130,6 @@ public class CameraCalibrator {
         Calib3d.drawChessboardCorners(rgbaFrame, mBoard.mPatternSize, mCorners, mPatternWasFound);
     }
 
-    private static String toDeg(float rad) { return Float.valueOf((float)(rad * 180 / Math.PI)).toString(); }
-
     private void renderFrame(Mat rgbaFrame) {
         drawPoints(rgbaFrame);
 
@@ -150,9 +145,8 @@ public class CameraCalibrator {
             MatOfPoint2f cornersProjected = new MatOfPoint2f();
             Calib3d.projectPoints(boardPoints3f, rvec, tvec,
                     mCameraMatrix, distortionCoefficients, cornersProjected);
-            double error = Core.norm(mCorners, cornersProjected, Core.NORM_L2);
-            Log.i(TAG, "Frame error: " + error + " rvec=" + rvec.dump() + " tvec=" + tvec.dump());
-            Core.putText(rgbaFrame, "Current frame error: " + error, new Point(50, 100),
+            double error = Core.norm(mCorners, cornersProjected, Core.NORM_L2) / mBoard.mCornersSize;
+            Core.putText(rgbaFrame, "Current frame error: " + error, new Point(50, mCameraInfo.mHeight - 100),
                     Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(0, 0, 255), 2);
         }
 
@@ -171,6 +165,8 @@ public class CameraCalibrator {
     public void setCalibrationResult(CameraCalibrationResult calibrationResult) {
         mCalibrationResult = calibrationResult;
         mCalibrationResult.getMat(mCameraMatrix, mDistortionCoefficients);
+        Log.e(TAG, "Camera matrix: " + mCameraMatrix.dump());
+        Log.e(TAG, "Distorsion coefficients: " + mDistortionCoefficients.dump());
     }
 
     public CameraCalibrationResult getCalibrationResult() {

@@ -36,6 +36,8 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
 
     private static final String CALIBRATE_ACTION = CameraCalibrationResult.CALIBRATE_ACTION;
 
+    private CameraInfo mRequestedCameraInfo = null;
+
     private CameraInfo mCameraInfo = new CameraInfo();
     private CameraCalibrator mCalibrator;
 
@@ -59,19 +61,23 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
         }
     };
 
-    private String responceResult = null;
-    protected void sendResponseResult(String response) {
-        if (response != null)
-            responceResult = response;
-        if (CALIBRATE_ACTION.equals(getIntent().getAction())) {
+    protected void sendResponse(CameraCalibrationResult calibrationResult) {
+        if (CALIBRATE_ACTION.equals(getIntent().getAction()) && mRequestedCameraInfo != null) {
             Bundle extras = getIntent().getExtras();
             String responseAction = CalibrationActivity.class.getName() + "!response";
             if (extras != null) {
                 responseAction = extras.getString("responseAction", responseAction);
             }
             Intent intent = new Intent(responseAction);
-            if (responceResult != null)
-                intent.putExtra("response", responceResult);
+            String response = null;
+            if (calibrationResult != null) {
+                if (mRequestedCameraInfo.equals(calibrationResult.mCameraInfo)) {
+                    response = calibrationResult.getJSON().toString();
+                }
+            }
+            if (response != null)
+                intent.putExtra("response", response);
+            Log.i(TAG, "Send " + (response == null ? "CANCEL" : "VALID") + " response broadcast: " + responseAction);
             sendBroadcast(intent);
         }
     }
@@ -87,10 +93,11 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 startupCameraInfo.readFromBundle(extras);
-                CameraCalibrationResult result = new CameraCalibrationResult(startupCameraInfo);
-                if (result.tryLoad(this)) {
+                mRequestedCameraInfo = startupCameraInfo;
+                CameraCalibrationResult result = new CameraCalibrationResult(mRequestedCameraInfo);
+                if (extras.getBoolean("force", false) == false && result.tryLoad(this)) {
                     Log.e(TAG, "Return loaded calibration result");
-                    sendResponseResult(result.getJSON().toString());
+                    sendResponse(result);
                     finish();
                     return;
                 }
@@ -110,17 +117,20 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
     }
 
     @Override
-    public void onPause()
-    {
-        sendResponseResult(null);
+    protected void onStop() {
+        sendResponse((mCalibrator == null) ? null : mCalibrator.getCalibrationResult());
+        super.onStop();
+    }
+
+    @Override
+    public void onPause() {
         super.onPause();
         if (mOpenCvCameraView != null)
             mOpenCvCameraView.disableView();
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         if (!OpenCVLoader.initDebug()) {
             Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
@@ -132,18 +142,12 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mOpenCvCameraView != null)
-            mOpenCvCameraView.disableView();
-    }
-
-    @Override
     public void onCameraViewStarted(int width, int height) {
         String text = Integer.valueOf(width).toString() + "x" + Integer.valueOf(height).toString();
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         if (mCameraInfo.mWidth != width || mCameraInfo.mHeight != height) {
-            Toast.makeText(this, "Camera resolution changed. Recreate calibrator", Toast.LENGTH_LONG).show();
+            if (mCalibrator != null)
+                Toast.makeText(this, "Camera resolution changed. Recreate calibrator", Toast.LENGTH_LONG).show();
             mCameraInfo = new CameraInfo();
             mCameraInfo.mCameraIndex = mOpenCvCameraView.getCameraIndex();
             mCameraInfo.mWidth = width;
@@ -179,17 +183,19 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.calibration, menu);
 
-        mResolutionMenu = menu.addSubMenu("Resolution");
-        mResolutionList = mOpenCvCameraView.getResolutionList();
-        mResolutionMenuItems = new MenuItem[mResolutionList.size()];
+        if (mRequestedCameraInfo == null) {
+            mResolutionMenu = menu.addSubMenu("Resolution");
+            mResolutionList = mOpenCvCameraView.getResolutionList();
+            mResolutionMenuItems = new MenuItem[mResolutionList.size()];
 
-        ListIterator<Size> resolutionItr = mResolutionList.listIterator();
-        int idx = 0;
-        while(resolutionItr.hasNext()) {
-            Size element = resolutionItr.next();
-            mResolutionMenuItems[idx] = mResolutionMenu.add(MENU_GROUP_RESOLUTION, idx, Menu.NONE,
-                    Integer.valueOf(element.width).toString() + "x" + Integer.valueOf(element.height).toString());
-            idx++;
+            ListIterator<Size> resolutionItr = mResolutionList.listIterator();
+            int idx = 0;
+            while(resolutionItr.hasNext()) {
+                Size element = resolutionItr.next();
+                mResolutionMenuItems[idx] = mResolutionMenu.add(MENU_GROUP_RESOLUTION, idx, Menu.NONE,
+                        Integer.valueOf(element.width).toString() + "x" + Integer.valueOf(element.height).toString());
+                idx++;
+            }
         }
 
         return true;
@@ -254,7 +260,7 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
                             calibrationResult.save(calibrationResult.getSharedPreferences(CalibrationActivity.this));
                             if (CALIBRATE_ACTION.equals(CalibrationActivity.this.getIntent().getAction())) {
                                 Log.e(TAG, "Return received calibration result");
-                                sendResponseResult(calibrationResult.getJSON().toString());
+                                sendResponse(calibrationResult);
                                 finish();
                             }
                         }

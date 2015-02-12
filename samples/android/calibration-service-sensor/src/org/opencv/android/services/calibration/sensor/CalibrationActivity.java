@@ -11,14 +11,12 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.android.services.CameraView;
 import org.opencv.android.services.calibration.CameraCalibrationResult;
 import org.opencv.android.services.calibration.CameraInfo;
+import org.opencv.android.services.sensor.SensorRecorder;
 import org.opencv.core.Mat;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.res.Resources;
+import android.content.Context;
 import android.hardware.Camera.Size;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +37,7 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
     private CameraInfo mCameraInfo = new CameraInfo();
     private CameraCalibrationResult mCameraCalibrationResult = new CameraCalibrationResult(mCameraInfo);
     private SensorCalibrator mCalibrator;
+    private SensorRecorder mSensorRecorder;
 
     private CameraView mOpenCvCameraView;
 
@@ -71,6 +70,8 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
             finish(); // TODO !!!!
         }
 
+        mSensorRecorder = new SensorRecorder(this);
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.surface_view);
@@ -86,6 +87,7 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
         super.onPause();
         if (mOpenCvCameraView != null)
             mOpenCvCameraView.disableView();
+        mSensorRecorder.stop();
     }
 
     @Override
@@ -99,6 +101,7 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
             Log.d(TAG, "OpenCV library found inside package. Using it!");
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
+        mSensorRecorder.start();
     }
 
     @Override
@@ -113,20 +116,34 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
         String text = Integer.valueOf(width).toString() + "x" + Integer.valueOf(height).toString();
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         if (mCameraInfo.mWidth != width || mCameraInfo.mHeight != height) {
-            Toast.makeText(this, "Camera resolution changed. Recreate calibrator", Toast.LENGTH_LONG).show();
-            mCalibrator = null;
+            if (mCalibrator != null) {
+                Toast.makeText(this, "Camera resolution changed. Recreate calibrator", Toast.LENGTH_LONG).show();
+                mCalibrator = null;
+            }
             mCameraInfo = new CameraInfo();
             mCameraInfo.mCameraIndex = mOpenCvCameraView.getCameraIndex();
             mCameraInfo.mWidth = width;
             mCameraInfo.mHeight = height;
             final CameraCalibrationResult calibrationResult = new CameraCalibrationResult(mCameraInfo);
-            calibrationResult.requestData(this, new Runnable() {
+            final Context context = this;
+            final Runnable request = new Runnable() {
                 @Override
                 public void run() {
-                    mCalibrator = new SensorCalibrator(mCameraInfo);
-                    mCalibrator.setCalibrationResult(calibrationResult);
+                    final Runnable self = this;
+                    calibrationResult.requestData(context, false, new CameraCalibrationResult.RequestCallback() {
+                        @Override
+                        public void onSuccess() {
+                            mCalibrator = new SensorCalibrator(mCameraInfo, mSensorRecorder);
+                            mCalibrator.setCalibrationResult(calibrationResult);
+                        }
+                        @Override
+                        public void onFailure() {
+                            self.run();
+                        }
+                    });
                 }
-            });
+            };
+            request.run();
         }
     }
 
@@ -183,59 +200,29 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
         switch (item.getItemId()) {
             case R.id.calibrate:
             {
-                if (mCalibrator == null) {
-                    return true;
-                }
-
-                final Resources res = getResources();
-                if (mCalibrator.getCornersBufferSize() < 2) {
-                    Toast.makeText(this, res.getString(R.string.more_samples), Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-
-                new AsyncTask<Void, Void, Void>() {
-                    private ProgressDialog calibrationProgress;
-
+                mCalibrator = null;
+                final CameraCalibrationResult calibrationResult = new CameraCalibrationResult(mCameraInfo);
+                final Context context = this;
+                final Runnable request = new Runnable() {
+                    public boolean force = true;
                     @Override
-                    protected void onPreExecute() {
-                        mOpenCvCameraView.disableView();
-                        calibrationProgress = new ProgressDialog(CalibrationActivity.this);
-                        calibrationProgress.setTitle(res.getString(R.string.calibrating));
-                        calibrationProgress.setMessage(res.getString(R.string.please_wait));
-                        calibrationProgress.setCancelable(false);
-                        calibrationProgress.setIndeterminate(true);
-                        calibrationProgress.show();
-                    }
-
-                    @Override
-                    protected Void doInBackground(Void... arg0) {
-                        mCalibrator.calibrate();
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        calibrationProgress.dismiss();
-                        mCalibrator.reset();
-                        String resultMessage = (mCalibrator.isCalibrated()) ?
-                                res.getString(R.string.calibration_successful) :
-                                res.getString(R.string.calibration_unsuccessful);
-                        (Toast.makeText(CalibrationActivity.this, resultMessage, Toast.LENGTH_SHORT)).show();
-
-                        if (mCalibrator.isCalibrated()) {
-                            CameraCalibrationResult calibrationResult = mCalibrator.getCalibrationResult();
-                            calibrationResult.save(calibrationResult.getSharedPreferences(CalibrationActivity.this));
-                            if (CALIBRATE_ACTION.equals(CalibrationActivity.this.getIntent().getAction())) {
-                                Log.e(TAG, "Return received calibration result");
-                                Intent data = new Intent();
-                                data.putExtra("result", calibrationResult.getJSON().toString());
-                                setResult(RESULT_OK, data);
-                                finish();
+                    public void run() {
+                        final Runnable self = this;
+                        calibrationResult.requestData(context, force, new CameraCalibrationResult.RequestCallback() {
+                            @Override
+                            public void onSuccess() {
+                                mCalibrator = new SensorCalibrator(mCameraInfo, mSensorRecorder);
+                                mCalibrator.setCalibrationResult(calibrationResult);
                             }
-                        }
-                        mOpenCvCameraView.enableView();
+                            @Override
+                            public void onFailure() {
+                                force = false;
+                                self.run();
+                            }
+                        });
                     }
-                }.execute();
+                };
+                request.run();
                 return true;
             }
         }

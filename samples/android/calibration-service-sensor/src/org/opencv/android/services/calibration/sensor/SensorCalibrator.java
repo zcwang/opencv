@@ -6,6 +6,7 @@ import java.util.List;
 import org.opencv.android.services.calibration.CalibrationBoard;
 import org.opencv.android.services.calibration.CameraCalibrationResult;
 import org.opencv.android.services.calibration.CameraInfo;
+import org.opencv.android.services.sensor.SensorRecorder;
 import org.opencv.calib3d.Calib3d;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -20,9 +21,10 @@ import org.opencv.core.Size;
 import android.util.Log;
 
 public class SensorCalibrator {
-    private static final String TAG = "CameraCalibrator";
+    private static final String TAG = "SensorCalibrator";
 
     protected CameraInfo mCameraInfo;
+    protected SensorRecorder mSensorRecorder;
     protected CameraCalibrationResult mCalibrationResult;
 
     protected CalibrationBoard mBoard = new CalibrationBoard();
@@ -40,8 +42,9 @@ public class SensorCalibrator {
                          Calib3d.CALIB_FIX_K5;
     private Double mRms;
 
-    public SensorCalibrator(CameraInfo cameraInfo) {
+    public SensorCalibrator(CameraInfo cameraInfo, SensorRecorder sensorRecorder) {
         mCameraInfo = cameraInfo;
+        mSensorRecorder = sensorRecorder;
         Mat.eye(3, 3, CvType.CV_64FC1).copyTo(mCameraMatrix);
         Mat.zeros(5, 1, CvType.CV_64FC1).copyTo(mDistortionCoefficients);
     }
@@ -138,6 +141,14 @@ public class SensorCalibrator {
     private void renderFrame(Mat rgbaFrame) {
         drawPoints(rgbaFrame);
 
+        Core.putText(rgbaFrame, "Sensor calibration", new Point(50, 50),
+                Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 0), 2);
+        float sensor_pitch = mSensorRecorder.mOrientation[1];
+        float sensor_roll = mSensorRecorder.mOrientation[2] + (float)(Math.PI/2);
+        Core.putText(rgbaFrame, "Sensor values: " +
+                "pitch=" + toDeg(sensor_pitch) + " roll=" + toDeg(sensor_roll), new Point(50, 100),
+                Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(64, 128, 64), 2);
+
         if (mPatternWasFound && isCalibrated()) {
             MatOfPoint2f points = new MatOfPoint2f(mCorners);
             MatOfDouble distortionCoefficients = new MatOfDouble(mDistortionCoefficients);
@@ -150,9 +161,8 @@ public class SensorCalibrator {
             MatOfPoint2f cornersProjected = new MatOfPoint2f();
             Calib3d.projectPoints(boardPoints3f, rvec, tvec,
                     mCameraMatrix, distortionCoefficients, cornersProjected);
-            double error = Core.norm(mCorners, cornersProjected, Core.NORM_L2);
-            Log.i(TAG, "Frame error: " + error + " rvec=" + rvec.dump() + " tvec=" + tvec.dump());
-            Core.putText(rgbaFrame, "Current frame error: " + error, new Point(50, 100),
+            double error = Core.norm(mCorners, cornersProjected, Core.NORM_L2) / mBoard.mCornersSize;
+            Core.putText(rgbaFrame, "Current frame error: " + error, new Point(50, mCameraInfo.mHeight - 100),
                     Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(0, 0, 255), 2);
 
             Mat R = new Mat();
@@ -162,18 +172,14 @@ public class SensorCalibrator {
             float[] Rvalues = new float[9];
             Rfloat.get(0, 0, Rvalues);
 
-            float pitch = (float)Math.atan2(Rvalues[1], Rvalues[4]);
+            float pitch = (float)Math.atan2(-Rvalues[1], Rvalues[4]);
             float roll = (float)Math.asin(-Rvalues[5]);
             Core.putText(rgbaFrame,
                     "pitch=" + toDeg(pitch) + " roll=" + toDeg(roll), new Point(50, 200),
                     Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
-        }
-
-        Core.putText(rgbaFrame, "Sensor calibration", new Point(50, 50),
-                Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 0), 2);
-        if (mRms != null) {
-            Core.putText(rgbaFrame, "Last calibration RMS: " + mRms, new Point(50, 150),
-                Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 0), 2);
+            Core.putText(rgbaFrame,
+                    "delta pitch=" + toDeg(pitch - sensor_pitch) + " roll=" + toDeg(roll - sensor_roll), new Point(50, 150),
+                    Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 0, 0), 2);
         }
     }
 

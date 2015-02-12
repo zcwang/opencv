@@ -24,6 +24,15 @@ public class CameraInfo {
         mHeight = -1;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof CameraInfo))
+            return super.equals(o);
+        CameraInfo check = (CameraInfo)o;
+        return check.mCameraIndex == mCameraIndex && check.mWidth == mWidth && check.mHeight == mHeight
+                && mWidth > 0 && mHeight > 0;
+    }
+
     public static final String BUNDLE_PARAMETER_CAMERA_ID = "camera_index";
     public static final String BUNDLE_PARAMETER_CAMERA_WIDTH = "camera_width";
     public static final String BUNDLE_PARAMETER_CAMERA_HEIGHT = "camera_height";

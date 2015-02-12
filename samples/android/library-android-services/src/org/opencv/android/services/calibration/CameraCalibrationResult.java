@@ -127,7 +127,11 @@ public class CameraCalibrationResult {
 
     public static final String CALIBRATE_ACTION = "org.opencv.android.services.calibration.camera.calibrate";
 
-    public void requestData(final Context context, final Runnable completionCallback) {
+    public interface RequestCallback {
+        void onSuccess();
+        void onFailure();
+    }
+    public void requestData(final Context context, final boolean force, final RequestCallback callbacks) {
         Toast.makeText(context, "Requesting camera calibration data", Toast.LENGTH_SHORT).show();
         final String responseAction = CALIBRATE_ACTION + "!" + mCameraInfo.toString();
         new Runnable() {
@@ -147,8 +151,12 @@ public class CameraCalibrationResult {
                         e.printStackTrace();
                     }
                     Log.e(TAG, "success=" + success);
-                    if (completionCallback != null)
-                        completionCallback.run();
+                    if (callbacks != null) {
+                        if (success)
+                            callbacks.onSuccess();
+                        else
+                            callbacks.onFailure();
+                    }
                 }
             };
 
@@ -161,6 +169,8 @@ public class CameraCalibrationResult {
                 mCameraInfo.saveToBundle(params);
                 intent.putExtras(params);
                 intent.putExtra("responseAction", responseAction);
+                if (force)
+                    intent.putExtra("force", true);
                 context.startActivity(intent);
                 Log.d(TAG, "call calibration intent");
             }
