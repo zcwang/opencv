@@ -89,12 +89,14 @@ public class SensorCalibrator {
             float[] Rvalues = new float[9];
             Rfloat.get(0, 0, Rvalues);
 
-            Log.e(TAG, Rfloat.dump().replace('\n', ' '));
-            Log.e(TAG, "tvec=" + tvec.dump().replace('\n', ' '));
+            //Log.e(TAG, Rfloat.dump().replace('\n', ' '));
+            Log.d(TAG, "tvec=" + tvec.dump().replace('\n', ' '));
 
-            float az = (float)Math.atan2(-Rvalues[2], Rvalues[8]);
-            float pitch = (float)Math.asin(Rvalues[5]);
-            float roll = (float)Math.atan2(Rvalues[3], Rvalues[4]);
+            // ZXY
+            float az = (float)Math.atan2(Rvalues[6], Rvalues[8]);
+            float pitch = (float)Math.asin(-Rvalues[7]);
+            float roll = (float)Math.atan2(-Rvalues[1], Rvalues[4]);
+
             Log.i(TAG, "o: az=" + az + " p=" + Utils.toDeg(pitch) + " r=" + Utils.toDeg(roll));
             Core.putText(rgbaFrame, "Camera", new Point(350, 100), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
             Core.putText(rgbaFrame, "Diff", new Point(500, 100), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 0, 0), 2);

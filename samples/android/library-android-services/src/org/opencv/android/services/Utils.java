@@ -1,7 +1,26 @@
 package org.opencv.android.services;
 
+import java.io.File;
+
+import android.os.Environment;
+
 
 public class Utils {
+
+    public static String getStorageBase() {
+        String storageBase;
+        File extSD = new File("/storage/removable/sdcard1/");
+        if (extSD.exists()) {
+            storageBase = extSD.getAbsolutePath();
+        } else {
+            extSD = new File("/storage/extSdCard");
+            if (extSD.exists())
+                storageBase = extSD.getAbsolutePath();
+            else
+                storageBase = Environment.getExternalStorageDirectory().getAbsolutePath();
+        }
+        return storageBase;
+    }
 
     public static float toDeg(float rad) { return (float)(rad * 180.0 / Math.PI); }
 

@@ -1,11 +1,17 @@
 package org.opencv.android.services.calibration;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opencv.android.services.Utils;
 import org.opencv.core.Mat;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -149,12 +155,15 @@ public class CameraCalibrationResult {
                     context.unregisterReceiver(myReceiver);
                     Log.e(TAG, "BroadcastReceiver::onReceive: " + intent.getAction());
                     boolean success = false;
-                    try {
-                        String response = intent.getExtras().getString("response");
-                        CameraCalibrationResult.this.initFromJSON(new JSONObject(response));
-                        success = true;
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    Bundle extras = intent.getExtras();
+                    if (extras != null) {
+                        try {
+                            String response = extras.getString("response");
+                            CameraCalibrationResult.this.initFromJSON(new JSONObject(response));
+                            success = true;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     Log.e(TAG, "success=" + success);
                     if (callbacks != null) {
@@ -177,9 +186,55 @@ public class CameraCalibrationResult {
                 intent.putExtra("responseAction", responseAction);
                 if (force)
                     intent.putExtra("force", true);
-                context.startActivity(intent);
-                Log.d(TAG, "call calibration intent");
+                try {
+                    context.startActivity(intent);
+                    Log.d(TAG, "call calibration intent");
+                } catch (android.content.ActivityNotFoundException e) {
+                    AlertDialog ad = new AlertDialog.Builder(context).create();
+                    ad.setCancelable(false); // This blocks the 'BACK' button
+                    ad.setMessage("It seems that camera calibration service is not installed. Install it for proper application work");
+                    ad.show();
+                    if (callbacks != null)
+                        callbacks.onFailure();
+                }
             }
         }.run();
+    }
+
+    public void saveToStorage(Context notificationContext) {
+        String storageBase = Utils.getStorageBase();
+        try {
+            String dstDir = storageBase + "/itseez/camera_calibration";
+            if (!new File(dstDir).exists() && !new File(dstDir).mkdirs())
+            {
+                String msg = "Can't create storage dir: " + dstDir;
+                Log.e(TAG, msg);
+                if (notificationContext != null)
+                    Toast.makeText(notificationContext, msg, Toast.LENGTH_LONG).show();
+                return;
+            }
+            {
+                String dstPath = dstDir + "/camera.intrinsics."+mCameraInfo.toString()+".txt";
+                OutputStream os = new FileOutputStream(dstPath);
+                String record = "";
+                for (int i = 0; i < mCameraMatrixArray.length; i++)
+                    record = record + (i==0?"":" ") + mCameraMatrixArray[i];
+                record = record + "\n";
+                for (int i = 0; i < mDistortionCoefficientsArray.length; i++)
+                    record = record + (i==0?"":" ") + mDistortionCoefficientsArray[i];
+                record = record + "\n";
+                os.write(record.toString().getBytes());
+                os.close();
+                String msg = "Calibration data " + mCameraInfo.mWidth + "x" + mCameraInfo.mHeight + " saved:\n" + dstPath;
+                Log.i(TAG, msg);
+                if (notificationContext != null)
+                    Toast.makeText(notificationContext, msg, Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            if (notificationContext != null)
+                Toast.makeText(notificationContext, "Error", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+
     }
 }

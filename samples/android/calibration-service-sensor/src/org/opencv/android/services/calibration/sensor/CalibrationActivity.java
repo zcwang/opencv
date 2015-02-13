@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,7 +36,6 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
     private static final String CALIBRATE_ACTION = "org.opencv.android.services.calibration.sensor.calibrate_orientation";
 
     private CameraInfo mCameraInfo = new CameraInfo();
-    private CameraCalibrationResult mCameraCalibrationResult = new CameraCalibrationResult(mCameraInfo);
     private SensorCalibrator mCalibrator;
     private SensorRecorder mSensorRecorder;
 
@@ -48,8 +48,18 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
                 case LoaderCallbackInterface.SUCCESS:
                 {
                     Log.i(TAG, "OpenCV loaded successfully");
-                    mOpenCvCameraView.enableView();
-                    mOpenCvCameraView.setOnTouchListener(CalibrationActivity.this);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mOpenCvCameraView.enableView();
+                                    mOpenCvCameraView.setOnTouchListener(CalibrationActivity.this);
+                                }
+                            }, 1000);
+                        }
+                    });
                 } break;
                 default:
                 {
@@ -66,6 +76,8 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
 
         CameraInfo startupCameraInfo = new CameraInfo();
         startupCameraInfo.setPreferredResolution(this);
+        if (startupCameraInfo.mWidth > 1280) startupCameraInfo.mWidth = 1280;
+        if (startupCameraInfo.mHeight > 720) startupCameraInfo.mHeight = 720;
         if (CALIBRATE_ACTION.equals(getIntent().getAction())) {
             finish(); // TODO !!!!
         }
@@ -129,6 +141,7 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
             final Runnable request = new Runnable() {
                 @Override
                 public void run() {
+                    mOpenCvCameraView.disableView();
                     final Runnable self = this;
                     calibrationResult.requestData(context, false, new CameraCalibrationResult.RequestCallback() {
                         @Override
@@ -138,7 +151,8 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
                         }
                         @Override
                         public void onFailure() {
-                            self.run();
+                            Toast.makeText(context, "No camera calibration data", Toast.LENGTH_LONG).show();
+                            //self.run();
                         }
                     });
                 }
@@ -207,6 +221,7 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
                     public boolean force = true;
                     @Override
                     public void run() {
+                        mOpenCvCameraView.disableView();
                         final Runnable self = this;
                         calibrationResult.requestData(context, force, new CameraCalibrationResult.RequestCallback() {
                             @Override
@@ -217,7 +232,8 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
                             @Override
                             public void onFailure() {
                                 force = false;
-                                self.run();
+                                Toast.makeText(context, "No camera calibration data", Toast.LENGTH_LONG).show();
+                                //self.run();
                             }
                         });
                     }

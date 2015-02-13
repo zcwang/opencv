@@ -54,7 +54,9 @@ public class CameraInfo {
 
     @Override
     public String toString() {
-        return String.format("camera_%d:%dx%d", mCameraIndex, mWidth, mHeight);
+        if (mCameraIndex == CAMERA_ID_ANY)
+            return String.format("camera_any_%d_%d", mWidth, mHeight);
+        return String.format("camera_%d_%d_%d", mCameraIndex, mWidth, mHeight);
     }
 
     public void setPreferredResolution(Activity context) {

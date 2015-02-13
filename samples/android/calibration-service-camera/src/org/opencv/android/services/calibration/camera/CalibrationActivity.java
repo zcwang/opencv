@@ -20,6 +20,7 @@ import android.content.res.Resources;
 import android.hardware.Camera.Size;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,8 +51,18 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
                 case LoaderCallbackInterface.SUCCESS:
                 {
                     Log.i(TAG, "OpenCV loaded successfully");
-                    mOpenCvCameraView.enableView();
-                    mOpenCvCameraView.setOnTouchListener(CalibrationActivity.this);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mOpenCvCameraView.enableView();
+                                    mOpenCvCameraView.setOnTouchListener(CalibrationActivity.this);
+                                }
+                            }, 1000);
+                        }
+                    });
                 } break;
                 default:
                 {
@@ -89,6 +100,8 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
 
         CameraInfo startupCameraInfo = new CameraInfo();
         startupCameraInfo.setPreferredResolution(this);
+        if (startupCameraInfo.mWidth > 1280) startupCameraInfo.mWidth = 1280;
+        if (startupCameraInfo.mHeight > 720) startupCameraInfo.mHeight = 720;
         if (CALIBRATE_ACTION.equals(getIntent().getAction())) {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
@@ -258,8 +271,11 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
                         if (mCalibrator.isCalibrated()) {
                             CameraCalibrationResult calibrationResult = mCalibrator.getCalibrationResult();
                             calibrationResult.save(calibrationResult.getSharedPreferences(CalibrationActivity.this));
+                            calibrationResult.saveToStorage(CalibrationActivity.this);
                             if (CALIBRATE_ACTION.equals(CalibrationActivity.this.getIntent().getAction())) {
                                 Log.e(TAG, "Return received calibration result");
+                                if (mOpenCvCameraView != null)
+                                    mOpenCvCameraView.disableView();
                                 sendResponse(calibrationResult);
                                 finish();
                             }
@@ -267,6 +283,20 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
                         mOpenCvCameraView.enableView();
                     }
                 }.execute();
+                return true;
+            }
+            case R.id.save:
+            {
+                if (mCalibrator == null) {
+                    Toast.makeText(CalibrationActivity.this, "Calibrator doesn't exists", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                CameraCalibrationResult calibrationResult = mCalibrator.getCalibrationResult();
+                if (calibrationResult == null) {
+                    Toast.makeText(CalibrationActivity.this, "No calibration data for camera!", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                calibrationResult.saveToStorage(CalibrationActivity.this);
                 return true;
             }
         }

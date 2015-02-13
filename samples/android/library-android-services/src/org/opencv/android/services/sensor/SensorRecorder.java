@@ -15,16 +15,12 @@ public class SensorRecorder implements SensorEventListener {
     private Sensor mGravitySensor;
 
     public final float[] mRotationMatrix = new float[16];
-    public float[] mOrientation = new float[3];
+    public final float[] mRotationMatrixVertical = new float[16];
+    public float[] mOrientationVertical = new float[3];
     public float[] mGravity;
-
-    public long mOrientationTimestamp = 0;
-    public long mRotationMatrixTimestamp = 0;
-    public long mGravityTimestamp = 0;
-
     private OutputStream osRotation;
     private OutputStream osGravity;
-    private OutputStream osOrientation;
+    private OutputStream osOrientationVertical;
 
     public long timestampRecordStart = 0;
 
@@ -51,7 +47,7 @@ public class SensorRecorder implements SensorEventListener {
             if (fileNameBase != null) {
                 osRotation = new FileOutputStream(fileNameBase + ".rotation.txt");
                 osGravity = new FileOutputStream(fileNameBase + ".gravity.txt");
-                osOrientation = new FileOutputStream(fileNameBase + ".orientation.txt");
+                osOrientationVertical = new FileOutputStream(fileNameBase + ".orientation_v.txt");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,8 +73,8 @@ public class SensorRecorder implements SensorEventListener {
             e.printStackTrace();
         }
         try {
-            if (osOrientation != null)
-                osOrientation.close();
+            if (osOrientationVertical != null)
+                osOrientationVertical.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -96,14 +92,13 @@ public class SensorRecorder implements SensorEventListener {
     public void onSensorChanged(android.hardware.SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
             SensorManager.getRotationMatrixFromVector(mRotationMatrix, event.values);
-            SensorManager.getOrientation(mRotationMatrix, mOrientation);
-            mRotationMatrixTimestamp = event.timestamp;
-            mOrientationTimestamp = event.timestamp;
+            SensorManager.remapCoordinateSystem(mRotationMatrix, SensorManager.AXIS_Z, SensorManager.AXIS_MINUS_X, mRotationMatrixVertical);
+            SensorManager.getOrientation(mRotationMatrixVertical, mOrientationVertical);
             //Log.d("Sensor", "Rotation +" + String.format("%.3f", ts * 1e-9) + "s [" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + "]");
-            //Log.d("Sensor", "Orientation [" + toDeg(mOrientation[0]) + ", " + toDeg(mOrientation[1]) + ", " + toDeg(mOrientation[2]) + "]");
+            //Log.d("Sensor", "Orientation [" + toDeg(mOrientationVertical[0]) + ", " + toDeg(mOrientationVertical[1]) + ", " + toDeg(mOrientationVertical[2]) + "]");
             if (timestampRecordStart == 0)
                 return;
-            long ts = event.timestamp - timestampRecordStart;
+            long ts = System.nanoTime() - timestampRecordStart; // don't use event.timestamp - base is not specified!
             if (osRotation != null) {
                 String record = String.format("%d", ts / 1000000) + " :";
                 for (int i = 0; i < mRotationMatrix.length; i++)
@@ -115,13 +110,13 @@ public class SensorRecorder implements SensorEventListener {
                     e.printStackTrace();
                 }
             }
-            if (osOrientation != null) {
+            if (osOrientationVertical != null) {
                 String record = String.format("%d", ts / 1000000) + " :";
-                for (int i = 0; i < mOrientation.length; i++)
-                    record = record + " " + mOrientation[i];
+                for (int i = 0; i < mOrientationVertical.length; i++)
+                    record = record + " " + mOrientationVertical[i];
                 record = record + "\n";
                 try {
-                    osOrientation.write(record.getBytes("UTF-8"));
+                    osOrientationVertical.write(record.getBytes("UTF-8"));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -129,7 +124,6 @@ public class SensorRecorder implements SensorEventListener {
         }
         else if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
             mGravity = event.values.clone();
-            mGravityTimestamp = event.timestamp;
             //Log.d("Sensor", "Gravity [" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + "]");
             if (timestampRecordStart == 0)
                 return;
