@@ -73,7 +73,7 @@ public class SensorCalibrator {
             Mat boardPoints = Mat.zeros(mBoard.mCornersSize, 1, CvType.CV_32FC3);
             mBoard.calcBoardCornerPositions(boardPoints);
             MatOfPoint3f boardPoints3f = new MatOfPoint3f(boardPoints);
-            Calib3d.solvePnPRansac(boardPoints3f, points, mCameraMatrix, distortionCoefficients, rvec, tvec);
+            Calib3d.solvePnP(boardPoints3f, points, mCameraMatrix, distortionCoefficients, rvec, tvec);
 
             MatOfPoint2f cornersProjected = new MatOfPoint2f();
             Calib3d.projectPoints(boardPoints3f, rvec, tvec,
