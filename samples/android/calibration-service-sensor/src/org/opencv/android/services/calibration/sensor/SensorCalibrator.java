@@ -1,9 +1,12 @@
 package org.opencv.android.services.calibration.sensor;
 
+import java.util.ArrayList;
+
 import org.opencv.android.services.Utils;
 import org.opencv.android.services.calibration.CalibrationBoard;
 import org.opencv.android.services.calibration.CameraCalibrationResult;
 import org.opencv.android.services.calibration.CameraInfo;
+import org.opencv.android.services.sensor.SensorCalibrationResult;
 import org.opencv.android.services.sensor.SensorRecorder;
 import org.opencv.calib3d.Calib3d;
 import org.opencv.core.Core;
@@ -23,7 +26,8 @@ public class SensorCalibrator {
 
     protected CameraInfo mCameraInfo;
     protected SensorRecorder mSensorRecorder;
-    protected CameraCalibrationResult mCalibrationResult;
+    protected CameraCalibrationResult mCameraCalibrationResult;
+    protected SensorCalibrationResult mSensorCalibrationResult;
 
     protected CalibrationBoard mBoard = new CalibrationBoard();
 
@@ -32,6 +36,17 @@ public class SensorCalibrator {
 
     private Mat mCameraMatrix = new Mat();
     private Mat mDistortionCoefficients = new Mat();
+
+    public interface CompletionCallback {
+        void onProgress(int value, int total);
+        void onCompleted();
+    }
+    private boolean mStartCalibration = false;
+    private CompletionCallback mCompletionCallback = null;
+    private ArrayList<Double> mPitchDifferences = new ArrayList<Double>();
+    private ArrayList<Double> mRollDifferences = new ArrayList<Double>();
+
+    private final int mTotalCalibrationSamples = 50;
 
     public SensorCalibrator(CameraInfo cameraInfo, SensorRecorder sensorRecorder) {
         mCameraInfo = cameraInfo;
@@ -47,6 +62,9 @@ public class SensorCalibrator {
     }
 
     private void renderFrame(Mat rgbaFrame) {
+        Core.line(rgbaFrame, new Point(0, rgbaFrame.rows()/2), new Point(rgbaFrame.cols(), rgbaFrame.rows()/2), new Scalar(255,255,255), 1);
+        Core.line(rgbaFrame, new Point(rgbaFrame.cols()/2, 0), new Point(rgbaFrame.cols()/2, rgbaFrame.rows()), new Scalar(255,255,255), 1);
+
         Calib3d.drawChessboardCorners(rgbaFrame, mBoard.mPatternSize, mCorners, mPatternWasFound);
 
         Core.putText(rgbaFrame, "Sensor calibration", new Point(50, 50),
@@ -66,7 +84,16 @@ public class SensorCalibrator {
         Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg(sensor_pitch)), new Point(200, 200), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(64, 128, 64), 2);
         Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg(sensor_roll)), new Point(200, 250), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(64, 128, 64), 2);
 
-        if (mPatternWasFound && isCalibrated()) {
+        if (mStartCalibration || mSensorCalibrationResult != null) {
+            Core.putText(rgbaFrame, "calibrated pitch", new Point(50, 300), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(128, 255, 0), 2);
+            Core.putText(rgbaFrame, "calibrated roll", new Point(50, 350), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(128, 255, 0), 2);
+            if (mSensorCalibrationResult != null) {
+                Core.putText(rgbaFrame, String.format("%.3f", Utils.toDeg((float)mSensorCalibrationResult.mPitchDiff)), new Point(350, 300), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(128, 255, 0), 2);
+                Core.putText(rgbaFrame, String.format("%.3f", Utils.toDeg((float)mSensorCalibrationResult.mRollDiff)), new Point(350, 350), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(128, 255, 0), 2);
+            }
+        }
+
+        if (mPatternWasFound && isCameraCalibrated()) {
             MatOfPoint2f points = new MatOfPoint2f(mCorners);
             MatOfDouble distortionCoefficients = new MatOfDouble(mDistortionCoefficients);
             Mat rvec = new Mat(), tvec = new Mat();
@@ -93,32 +120,78 @@ public class SensorCalibrator {
             Log.d(TAG, "tvec=" + tvec.dump().replace('\n', ' '));
 
             // ZXY
-            float az = (float)Math.atan2(Rvalues[6], Rvalues[8]);
-            float pitch = (float)Math.asin(-Rvalues[7]);
-            float roll = (float)Math.atan2(-Rvalues[1], Rvalues[4]);
+            double az = Math.atan2(Rvalues[6], Rvalues[8]);
+            double pitch = Math.asin(-Rvalues[7]);
+            double roll = Math.atan2(-Rvalues[1], Rvalues[4]);
 
-            Log.i(TAG, "o: az=" + az + " p=" + Utils.toDeg(pitch) + " r=" + Utils.toDeg(roll));
+            Log.i(TAG, "o: az=" + az + " p=" + Utils.toDeg((float)pitch) + " r=" + Utils.toDeg((float)roll));
             Core.putText(rgbaFrame, "Camera", new Point(350, 100), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
             Core.putText(rgbaFrame, "Diff", new Point(500, 100), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 0, 0), 2);
-            Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg(az)), new Point(350, 150), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
-            Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg(pitch)), new Point(350, 200), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
-            Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg(roll)), new Point(350, 250), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
+            Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg((float)az)), new Point(350, 150), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
+            Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg((float)pitch)), new Point(350, 200), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
+            Core.putText(rgbaFrame, String.format("%.1f", Utils.toDeg((float)roll)), new Point(350, 250), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 255, 255), 2);
+            double pitch_diff = pitch - sensor_pitch;
+            double roll_diff = roll - sensor_roll;
             // don't show useless azimut diff
-            Core.putText(rgbaFrame, String.format("%.3f", Utils.toDeg(pitch - sensor_pitch)), new Point(500, 200), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 0, 0), 2);
-            Core.putText(rgbaFrame, String.format("%.3f", Utils.toDeg(roll - sensor_roll)), new Point(500, 250), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 0, 0), 2);
+            Core.putText(rgbaFrame, String.format("%.3f", Utils.toDeg((float)pitch_diff)), new Point(500, 200), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 0, 0), 2);
+            Core.putText(rgbaFrame, String.format("%.3f", Utils.toDeg((float)roll_diff)), new Point(500, 250), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(255, 0, 0), 2);
+
+            if (mStartCalibration) {
+                mPitchDifferences.add(pitch_diff);
+                mRollDifferences.add(roll_diff);
+                Double calibrated_pitch = Utils.medianFilter(mPitchDifferences);
+                Double calibrated_roll = Utils.medianFilter(mRollDifferences);
+                Core.putText(rgbaFrame, String.format("(%.3f)", Utils.toDeg(calibrated_pitch.floatValue())), new Point(500, 300), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(192, 0, 0), 2);
+                Core.putText(rgbaFrame, String.format("(%.3f)", Utils.toDeg(calibrated_roll.floatValue())), new Point(500, 350), Core.FONT_HERSHEY_SIMPLEX, 1.0, new Scalar(192, 0, 0), 2);
+                if (mCompletionCallback != null)
+                    mCompletionCallback.onProgress(mPitchDifferences.size(), mTotalCalibrationSamples);
+                if (mPitchDifferences.size() == mTotalCalibrationSamples) {
+                    mSensorCalibrationResult = new SensorCalibrationResult(mCameraInfo);
+                    mSensorCalibrationResult.mPitchDiff = calibrated_pitch.doubleValue();
+                    mSensorCalibrationResult.mRollDiff = calibrated_roll.doubleValue();
+                    mCompletionCallback.onCompleted();
+                    mStartCalibration = false;
+                }
+            }
         }
     }
 
-    public boolean isCalibrated() {
-        return mCalibrationResult != null;
+    public boolean isCameraCalibrated() {
+        return mCameraCalibrationResult != null;
     }
 
-    public void setCalibrationResult(CameraCalibrationResult calibrationResult) {
-        mCalibrationResult = calibrationResult;
-        mCalibrationResult.getMatInvertFy(mCameraMatrix, mDistortionCoefficients);
+    public void setCameraCalibrationResult(CameraCalibrationResult calibrationResult) {
+        mCameraCalibrationResult = calibrationResult;
+        mCameraCalibrationResult.getMatInvertFy(mCameraMatrix, mDistortionCoefficients);
     }
 
-    public CameraCalibrationResult getCalibrationResult() {
-        return mCalibrationResult;
+    public CameraCalibrationResult getCameraCalibrationResult() {
+        return mCameraCalibrationResult;
+    }
+
+    public SensorCalibrationResult getSensorCalibrationResult() {
+        return mSensorCalibrationResult;
+    }
+
+    public void setSensorCalibrationResult(SensorCalibrationResult calibrationResult) {
+        mSensorCalibrationResult = calibrationResult;
+        Log.e(TAG, "Pitch diff: " + mSensorCalibrationResult.mPitchDiff);
+        Log.e(TAG, "Roll diff: " + mSensorCalibrationResult.mRollDiff);
+    }
+
+    public void start(CompletionCallback completionCallback) {
+        mCompletionCallback = completionCallback;
+        mStartCalibration = true;
+        mPitchDifferences.clear();
+        mRollDifferences.clear();
+        if (mCompletionCallback != null)
+            mCompletionCallback.onProgress(0, mTotalCalibrationSamples);
+    }
+
+    public void stop() {
+        mCompletionCallback = null;
+        mStartCalibration = false;
+        mPitchDifferences.clear();
+        mRollDifferences.clear();
     }
 }

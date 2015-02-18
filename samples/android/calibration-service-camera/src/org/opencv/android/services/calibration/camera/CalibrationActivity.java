@@ -270,12 +270,10 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
 
                         if (mCalibrator.isCalibrated()) {
                             CameraCalibrationResult calibrationResult = mCalibrator.getCalibrationResult();
-                            calibrationResult.save(calibrationResult.getSharedPreferences(CalibrationActivity.this));
+                            calibrationResult.save(CalibrationActivity.this);
                             calibrationResult.saveToStorage(CalibrationActivity.this);
                             if (CALIBRATE_ACTION.equals(CalibrationActivity.this.getIntent().getAction())) {
                                 Log.e(TAG, "Return received calibration result");
-                                if (mOpenCvCameraView != null)
-                                    mOpenCvCameraView.disableView();
                                 sendResponse(calibrationResult);
                                 finish();
                             }

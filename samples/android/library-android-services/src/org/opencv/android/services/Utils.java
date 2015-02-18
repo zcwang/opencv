@@ -1,6 +1,8 @@
 package org.opencv.android.services;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.os.Environment;
 
@@ -23,6 +25,10 @@ public class Utils {
     }
 
     public static float toDeg(float rad) { return (float)(rad * 180.0 / Math.PI); }
+    public static double toDeg(double rad) { return (rad * 180.0 / Math.PI); }
+
+    public static float toRad(float deg) { return (float)(deg / 180.0 * Math.PI); }
+    public static double toRad(double deg) { return (deg / 180.0 * Math.PI); }
 
     public static String toStringArray(float[] v) {
         StringBuffer sb = new StringBuffer();
@@ -34,5 +40,16 @@ public class Utils {
         }
         sb.append("]");
         return sb.toString();
+    }
+
+    public static Double medianFilter(ArrayList<Double> values) {
+        int N = values.size();
+        Double[] v = new Double[N];
+        values.toArray(v);
+        Arrays.sort(v);
+        if ((N & 1) == 1) {
+            return v[N / 2];
+        }
+        return (v[N / 2] + v[N / 2 - 1]) / 2;
     }
 }
