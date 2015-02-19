@@ -84,6 +84,7 @@ public class CameraCalibrationResult {
                 mDistortionCoefficientsArray[i] = jsonDistortionCoefficients.getDouble(i);
             }
         } catch (JSONException e) {
+            Log.e(TAG, json.toString());
             e.printStackTrace();
             throw new AssertionError("initFromJSON");
         }
@@ -136,7 +137,7 @@ public class CameraCalibrationResult {
     @SuppressWarnings("deprecation")
     public SharedPreferences getExternalSharedPreferences(Context context) {
         try {
-            Context c = context.createPackageContext("org.opencv.android.services.calibration.camera", Context.CONTEXT_IGNORE_SECURITY|Context.CONTEXT_INCLUDE_CODE);
+            Context c = context.createPackageContext("org.opencv.android.services.calibration.camera", 0);
             return c.getSharedPreferences("calibration_" + mCameraInfo.toString(), Context.MODE_WORLD_READABLE);
         } catch (NameNotFoundException e) {
             e.printStackTrace();
@@ -151,20 +152,20 @@ public class CameraCalibrationResult {
         void onFailure();
     }
     public void requestData(final Context context, final boolean force, final RequestCallback callbacks) {
-        try {
-            SharedPreferences sp = getExternalSharedPreferences(context);
-            if (sp != null) {
-                if (tryLoad(sp)) {
-                    Toast.makeText(context, "Camera calibration data loaded from shared preferences", Toast.LENGTH_SHORT).show();
-                    if (callbacks != null) {
-                        callbacks.onSuccess();
-                    }
-                    return;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            SharedPreferences sp = getExternalSharedPreferences(context);
+//            if (sp != null) {
+//                if (tryLoad(sp)) {
+//                    Toast.makeText(context, "Camera calibration data loaded from shared preferences", Toast.LENGTH_SHORT).show();
+//                    if (callbacks != null) {
+//                        callbacks.onSuccess();
+//                    }
+//                    return;
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         Toast.makeText(context, "Requesting camera calibration data", Toast.LENGTH_SHORT).show();
         final String responseAction = CALIBRATE_ACTION + "!" + mCameraInfo.toString();
         new Runnable() {

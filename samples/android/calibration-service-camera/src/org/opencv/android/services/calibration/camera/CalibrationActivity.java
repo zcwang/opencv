@@ -22,6 +22,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -127,6 +129,8 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
         mOpenCvCameraView.setResolution(startupCameraInfo.mWidth, startupCameraInfo.mHeight);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
+
+        registerForContextMenu(mOpenCvCameraView);
     }
 
     @Override
@@ -191,9 +195,12 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
     private List<Size> mResolutionList;
     private MenuItem[] mResolutionMenuItems;
     private SubMenu mResolutionMenu;
+    private static final int MENU_GROUP_CALIBRATOR = 1000;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        menu.setHeaderTitle("Camera calibration");
+
         getMenuInflater().inflate(R.menu.calibration, menu);
 
         if (mRequestedCameraInfo == null) {
@@ -211,11 +218,13 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
             }
         }
 
-        return true;
+        if (mCalibrator != null) {
+            mCalibrator.onCreateMenu(menu, MENU_GROUP_CALIBRATOR);
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(MenuItem item) {
         Log.i(TAG, "called onOptionsItemSelected; selected item: " + item);
         if (item.getGroupId() == MENU_GROUP_RESOLUTION)
         {
@@ -298,15 +307,23 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
                 return true;
             }
         }
+        if (mCalibrator != null) {
+            if (mCalibrator.onMenuItemSelected(this, item))
+                return true;
+        }
         return false;
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         Log.d(TAG, "onTouch invoked");
-        if (mCalibrator != null) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN && mCalibrator != null) {
             mCalibrator.addCorners();
         }
         return false;
+    }
+
+    public void onOpenMenuClick(View v) {
+        openContextMenu(mOpenCvCameraView);
     }
 }

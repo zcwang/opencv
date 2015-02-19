@@ -17,7 +17,10 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 
+import android.content.Context;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class CameraCalibrator {
     private static final String TAG = "CameraCalibrator";
@@ -116,7 +119,7 @@ public class CameraCalibrator {
 
     public void addCorners() {
         if (mPatternWasFound) {
-            Log.i(TAG, "Add corners: " + mCorners.dump());
+            //Log.d(TAG, "Add corners: " + mCorners.dump());
             mCornersBuffer.add(mCorners.clone());
             mPatternWasFound = false;
         }
@@ -173,4 +176,11 @@ public class CameraCalibrator {
         return mCalibrationResult;
     }
 
+
+    public void onCreateMenu(Menu menu, int menuGroupId) {
+        mBoard.onCreateMenu(menu, menuGroupId);
+    }
+    public boolean onMenuItemSelected(final Context context, MenuItem item) {
+        return mBoard.onMenuItemSelected(context, item);
+    }
 }

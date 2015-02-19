@@ -48,13 +48,14 @@ public class SensorCalibrationResult {
         }
     }
 
-    public void initFromJSON(JSONObject json) {
+    public void initFromJSON(JSONObject json) throws Exception {
         try {
             mPitchDiff = json.getDouble("pitchDiff");
             mRollDiff = json.getDouble("rollDiff");
         } catch (JSONException e) {
+            Log.e(TAG, json.toString());
             e.printStackTrace();
-            throw new AssertionError("initFromJSON");
+            throw new Exception("initFromJSON");
         }
     }
 
@@ -117,20 +118,20 @@ public class SensorCalibrationResult {
         void onFailure();
     }
     public void requestData(final Context context, final boolean force, final RequestCallback callbacks) {
-        try {
-            SharedPreferences sp = getExternalSharedPreferences(context);
-            if (sp != null) {
-                if (tryLoad(sp)) {
-                    Toast.makeText(context, "Sensor calibration data loaded from shared preferences", Toast.LENGTH_SHORT).show();
-                    if (callbacks != null) {
-                        callbacks.onSuccess();
-                    }
-                    return;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            SharedPreferences sp = getExternalSharedPreferences(context);
+//            if (sp != null) {
+//                if (tryLoad(sp)) {
+//                    Toast.makeText(context, "Sensor calibration data loaded from shared preferences", Toast.LENGTH_SHORT).show();
+//                    if (callbacks != null) {
+//                        callbacks.onSuccess();
+//                    }
+//                    return;
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         Toast.makeText(context, "Requesting sensor calibration data", Toast.LENGTH_SHORT).show();
         final String responseAction = CALIBRATE_ACTION + "!" + mCameraInfo.toString();
         new Runnable() {

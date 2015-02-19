@@ -248,20 +248,11 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
     private List<Size> mResolutionList;
     private MenuItem[] mResolutionMenuItems;
     private SubMenu mResolutionMenu;
+    private static final int MENU_GROUP_CALIBRATOR = 1000;
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         menu.setHeaderTitle("Sensor calibration");
-        onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        return onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.calibration, menu);
 
         try {
@@ -280,11 +271,14 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return true;
+
+        if (mCalibrator != null) {
+            mCalibrator.onCreateMenu(menu, MENU_GROUP_CALIBRATOR);
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(MenuItem item) {
         Log.i(TAG, "called onOptionsItemSelected; selected item: " + item);
         if (item.getGroupId() == MENU_GROUP_RESOLUTION)
         {
@@ -378,6 +372,10 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
                 ad.show();
             }
         }
+        if (mCalibrator != null) {
+            if (mCalibrator.onMenuItemSelected(this, item))
+                return true;
+        }
         return false;
     }
 
@@ -425,5 +423,9 @@ public class CalibrationActivity extends Activity implements CvCameraViewListene
                 mProgressBar.setVisibility(View.GONE);
             }
         }
+    }
+
+    public void onOpenMenuClick(View v) {
+        openContextMenu(mOpenCvCameraView);
     }
 }

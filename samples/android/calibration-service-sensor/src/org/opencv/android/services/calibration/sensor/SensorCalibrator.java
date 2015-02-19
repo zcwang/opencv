@@ -18,8 +18,11 @@ import org.opencv.core.MatOfPoint3f;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 
+import android.content.Context;
 import android.hardware.SensorManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class SensorCalibrator {
     private static final String TAG = "SensorCalibrator";
@@ -193,5 +196,13 @@ public class SensorCalibrator {
         mStartCalibration = false;
         mPitchDifferences.clear();
         mRollDifferences.clear();
+    }
+
+
+    public void onCreateMenu(Menu menu, int menuGroupId) {
+        mBoard.onCreateMenu(menu, menuGroupId);
+    }
+    public boolean onMenuItemSelected(final Context context, MenuItem item) {
+        return mBoard.onMenuItemSelected(context, item);
     }
 }
