@@ -1,0 +1,34 @@
+LOCAL_PATH := $(call my-dir)
+
+ifndef GSTREAMER_ROOT
+    $(error Specify GSTREAMER_ROOT)
+endif
+$(info GStreamer location: $(GSTREAMER_ROOT))
+
+GSTREAMER_NDK_BUILD_PATH  := $(GSTREAMER_ROOT)/share/gst-android/ndk-build/
+
+include $(GSTREAMER_NDK_BUILD_PATH)/plugins.mk
+
+GSTREAMER_PLUGINS    := $(GSTREAMER_PLUGINS_CORE) \
+                        $(GSTREAMER_PLUGINS_PLAYBACK) \
+                        $(GSTREAMER_PLUGINS_CODECS) \
+                        $(GSTREAMER_PLUGINS_CODECS_RESTRICTED) \
+                        $(GSTREAMER_PLUGINS_SYS)
+G_IO_MODULES         := gnutls
+GSTREAMER_EXTRA_DEPS := gstreamer-video-1.0
+
+OLD_BUILD_SYSTEM := $(BUILD_SYSTEM)
+BUILD_SYSTEM := $(abspath $(LOCAL_PATH)/build-system)
+include $(GSTREAMER_NDK_BUILD_PATH)/gstreamer-1.0.mk
+BUILD_SYSTEM := $(OLD_BUILD_SYSTEM)
+
+GSTREAMER_ANDROID_LIBS := $(call libtool-link, \
+-L$(GSTREAMER_ROOT)/lib -L$(GSTREAMER_STATIC_PLUGINS_PATH) $(G_IO_MODULES_PATH) \
+$(GSTREAMER_ANDROID_LIBS))
+GSTREAMER_ANDROID_LIBS := $(filter-out -L%, $(GSTREAMER_ANDROID_LIBS))
+GSTREAMER_ANDROID_LIBS := $(strip $(GSTREAMER_ANDROID_LIBS))
+
+DUMP_VARS := GSTREAMER_PLUGINS G_IO_MODULES GSTREAMER_ANDROID_CFLAGS GSTREAMER_ANDROID_LIBS
+$(foreach v, $(DUMP_VARS), \
+  $(info $(v)=$($(v))))
+$(info ALL_IS_OK=1)
