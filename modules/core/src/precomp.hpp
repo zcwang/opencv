@@ -261,7 +261,11 @@ struct ImplCollector
 
 struct CoreTLSData
 {
-    CoreTLSData() : device(0), useOpenCL(-1), useIPP(-1)
+    CoreTLSData() :
+#ifdef HAVE_OPENCL
+        device(0), useOpenCL(-1),
+#endif
+        useIPP(-1)
     {
 #ifdef HAVE_TEGRA_OPTIMIZATION
         useTegra = -1;
@@ -269,9 +273,11 @@ struct CoreTLSData
     }
 
     RNG rng;
+#ifdef HAVE_OPENCL
     int device;
     ocl::Queue oclQueue;
     int useOpenCL; // 1 - use, 0 - do not use, -1 - auto/not initialized
+#endif
     int useIPP; // 1 - use, 0 - do not use, -1 - auto/not initialized
 #ifdef HAVE_TEGRA_OPTIMIZATION
     int useTegra; // 1 - use, 0 - do not use, -1 - auto/not initialized
