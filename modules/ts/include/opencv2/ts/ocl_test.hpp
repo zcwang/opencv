@@ -86,7 +86,7 @@ inline UMat ToUMat(InputArray src)
 
 extern int test_loop_times;
 
-#define MAX_VALUE 357
+#define MAX_VALUE 8
 
 #define EXPECT_MAT_NORM(mat, eps) \
 do \

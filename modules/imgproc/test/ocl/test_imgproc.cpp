@@ -167,6 +167,16 @@ OCL_TEST_P(CopyMakeBorder, Mat)
         OCL_OFF(cv::copyMakeBorder(src_roi, dst_roi, border.top, border.bot, border.lef, border.rig, borderType, val));
         OCL_ON(cv::copyMakeBorder(usrc_roi, udst_roi, border.top, border.bot, border.lef, border.rig, borderType, val));
 
+        std::cout << src <<std::endl;
+        std::cout << src_roi <<std::endl;
+        std::cout << dst_roi <<std::endl;
+
+        std::cout << "=========" << std::endl;
+
+        std::cout << usrc.getMat(ACCESS_READ) << std::endl;
+        std::cout << usrc_roi.getMat(ACCESS_READ) << std::endl;
+        std::cout << udst_roi.getMat(ACCESS_READ) << std::endl;
+
         Near();
     }
 }

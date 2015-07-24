@@ -550,7 +550,7 @@ PARAM_TEST_CASE(UseHostPtr, int, int, Size, bool)
         type = CV_MAKE_TYPE(depth, cn);
         step = size.width * cn * CV_ELEM_SIZE1(type);
         total = step * size.height;
-        pData = new unsigned char[total];
+        pData = new unsigned char[total+5];
 
         old_val = cv::ocl::useOpenCL();
     }
@@ -568,7 +568,7 @@ TEST_P(UseHostPtr, ext_mem)
 {
     cv::ocl::setUseOpenCL(opencl_on);
 
-    Mat m = Mat(size, type, pData, step);
+    Mat m = Mat(size, type, pData+1, step);
     m.setTo(cv::Scalar::all(2));
 
     UMat u = m.getUMat(ACCESS_WRITE);
@@ -600,7 +600,12 @@ TEST_P(UseHostPtr, int_mem)
     EXPECT_EQ(0, norm);
 }
 
-INSTANTIATE_TEST_CASE_P(UMat, UseHostPtr, Combine(OCL_ALL_DEPTHS, OCL_ALL_CHANNELS, UMAT_TEST_SIZES, Bool()));
+INSTANTIATE_TEST_CASE_P(UMat, UseHostPtr, Combine(
+        Values(CV_8U), // depth
+        Values(1, 3), // channels
+        Values(cv::Size(1, 1), cv::Size(255, 255), cv::Size(256, 256)), // Size
+        Bool() // useOpenCL
+));
 
 ///////////////////////////////////////////////////////////////// OpenCL ////////////////////////////////////////////////////////////////////////////
 

@@ -591,7 +591,7 @@ Mat UMat::getMat(int accessFlags) const
     CV_Assert(u->data != 0);
     Mat hdr(dims, size.p, type(), u->data + offset, step.p);
     hdr.flags = flags;
-    if (u->refcount) // VD_FIX bug4006
+    //if (u->refcount) // VD_FIX bug4006
     {
         hdr.u = u;
         hdr.datastart = u->data;
