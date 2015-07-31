@@ -10,9 +10,9 @@ if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_LIST_DIR)
 #
 # ----------------------------------------------------------------------------
 
-add_subdirectory(cpp)
-add_subdirectory(gpu)
-add_subdirectory(tapi)
+#add_subdirectory(cpp)
+#add_subdirectory(gpu)
+#add_subdirectory(tapi)
 
 if(WIN32 AND HAVE_DIRECTX)
   add_subdirectory(directx)
