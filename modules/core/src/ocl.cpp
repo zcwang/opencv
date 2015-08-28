@@ -4128,6 +4128,16 @@ private:
 #define CV_OPENCL_DATA_PTR_ALIGNMENT 16
 #endif
 
+struct UMatDataAutoLock
+{
+    explicit UMatDataAutoLock(UMatData* u);
+    ~UMatDataAutoLock();
+    UMatData* u;
+};
+
+inline UMatDataAutoLock::UMatDataAutoLock(UMatData* _u) : u(_u) { u->lock(); }
+inline UMatDataAutoLock::~UMatDataAutoLock() { u->unlock(); }
+
 class OpenCLAllocator : public MatAllocator
 {
     mutable OpenCLBufferPoolImpl bufferPool;

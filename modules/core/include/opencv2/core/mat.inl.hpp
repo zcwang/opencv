@@ -3426,9 +3426,6 @@ inline void UMatData::markDeviceCopyObsolete(bool flag)
         flags &= ~DEVICE_COPY_OBSOLETE;
 }
 
-inline UMatDataAutoLock::UMatDataAutoLock(UMatData* _u) : u(_u) { u->lock(); }
-inline UMatDataAutoLock::~UMatDataAutoLock() { u->unlock(); }
-
 //! @endcond
 
 } //cv

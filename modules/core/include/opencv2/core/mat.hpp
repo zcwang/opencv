@@ -392,7 +392,7 @@ enum UMatUsageFlags
     __UMAT_USAGE_FLAGS_32BIT = 0x7fffffff // Binary compatibility hint
 };
 
-struct CV_EXPORTS UMatData;
+struct UMatData;
 
 /** @brief  Custom array allocator
 */
@@ -461,7 +461,7 @@ protected:
 // with the matrix data, not as a separate object.
 // therefore, it does not have constructor or destructor;
 // it should be explicitly initialized using init().
-struct CV_EXPORTS UMatData
+struct UMatData
 {
     enum { COPY_ON_MAP=1, HOST_COPY_OBSOLETE=2,
         DEVICE_COPY_OBSOLETE=4, TEMP_UMAT=8, TEMP_COPIED_UMAT=24,
@@ -495,14 +495,7 @@ struct CV_EXPORTS UMatData
     void* handle;
     void* userdata;
     int allocatorFlags_;
-};
-
-
-struct CV_EXPORTS UMatDataAutoLock
-{
-    explicit UMatDataAutoLock(UMatData* u);
-    ~UMatDataAutoLock();
-    UMatData* u;
+    int mapcount;
 };
 
 
