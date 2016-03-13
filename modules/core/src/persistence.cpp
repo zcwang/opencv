@@ -67,6 +67,10 @@
 #  include <zlib.h>
 #endif
 
+#ifdef HAVE_HDF5
+#  include "persistence_hdf5.hpp"
+#endif
+
 /****************************************************************************************\
 *                            Common macros and type definitions                          *
 \****************************************************************************************/
@@ -2736,9 +2740,31 @@ cvOpenFileStorage( const char* filename, CvMemStorage* dststorage, int flags, co
         if( fmt == CV_STORAGE_FORMAT_AUTO && filename )
         {
             const char* dot_pos = filename + fnamelen - (isGZ ? 7 : 4);
-            fs->fmt = (dot_pos >= filename && (memcmp( dot_pos, ".xml", 4) == 0 ||
-                    memcmp(dot_pos, ".XML", 4) == 0 || memcmp(dot_pos, ".Xml", 4) == 0)) ?
-                CV_STORAGE_FORMAT_XML : CV_STORAGE_FORMAT_YAML;
+            if (dot_pos >= filename && (
+                    memcmp(dot_pos, ".xml", 4) == 0 ||
+                    memcmp(dot_pos, ".XML", 4) == 0 ||
+                    memcmp(dot_pos, ".Xml", 4) == 0
+                ))
+            {
+                fs->fmt = CV_STORAGE_FORMAT_XML;
+            }
+            else if (dot_pos >= filename && (
+                    memcmp(dot_pos, ".h5", 3) == 0 ||
+                    memcmp(dot_pos, ".hdf5", 5) == 0 ||
+                    memcmp(dot_pos, ".he5", 4) == 0
+                ))
+            {
+#ifdef HAVE_HDF5
+                fs->fmt = CV_STORAGE_FORMAT_HDF5;
+                cv::hdf5_activate();
+#else
+                CV_ErrorNoReturn(cv::Error::StsBadFunc, "OpenCV was build without HDF5 support")
+#endif
+            }
+            else
+            {
+                fs->fmt = CV_STORAGE_FORMAT_YAML;
+            }
         }
         else
             fs->fmt = fmt != CV_STORAGE_FORMAT_AUTO ? fmt : CV_STORAGE_FORMAT_XML;

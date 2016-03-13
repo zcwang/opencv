@@ -1667,8 +1667,9 @@ typedef struct CvFileStorage CvFileStorage;
 #define CV_STORAGE_MEMORY        4
 #define CV_STORAGE_FORMAT_MASK   (7<<3)
 #define CV_STORAGE_FORMAT_AUTO   0
-#define CV_STORAGE_FORMAT_XML    8
-#define CV_STORAGE_FORMAT_YAML  16
+#define CV_STORAGE_FORMAT_XML    (1<<3)
+#define CV_STORAGE_FORMAT_YAML   (2<<3)
+#define CV_STORAGE_FORMAT_HDF5   (3<<3)
 
 /** @brief List of attributes. :
 
