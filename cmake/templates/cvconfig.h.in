@@ -89,6 +89,9 @@
 /* GTK+ 2.x toolkit */
 #cmakedefine HAVE_GTK
 
+/* HDF5 library */
+#cmakedefine HAVE_HDF5
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #cmakedefine HAVE_INTTYPES_H 1
 

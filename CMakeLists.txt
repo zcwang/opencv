@@ -217,6 +217,7 @@ OCV_OPTION(WITH_VA             "Include VA support"                          OFF
 OCV_OPTION(WITH_VA_INTEL       "Include Intel VA-API/OpenCL support"         OFF  IF (UNIX AND NOT ANDROID) )
 OCV_OPTION(WITH_GDAL           "Include GDAL Support"                        OFF  IF (NOT ANDROID AND NOT IOS AND NOT WINRT) )
 OCV_OPTION(WITH_GPHOTO2        "Include gPhoto2 library support"             ON   IF (UNIX AND NOT ANDROID) )
+OCV_OPTION(WITH_HDF            "Include HDF5 support"                        ON )
 
 # OpenCV build components
 # ===================================================
@@ -584,6 +585,11 @@ endif()
 # --- OpenCL ---
 if(WITH_OPENCL)
   include(cmake/OpenCVDetectOpenCL.cmake)
+endif()
+
+# --- HDF ---
+if(WITH_HDF)
+  include(cmake/OpenCVDetectHDF.cmake)
 endif()
 
 # --- DirectX ---

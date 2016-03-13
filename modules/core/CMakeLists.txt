@@ -27,8 +27,8 @@ source_group("Cuda Headers\\Detail" FILES ${lib_cuda_hdrs_detail})
 ocv_glob_module_sources(SOURCES "${OPENCV_MODULE_opencv_core_BINARY_DIR}/version_string.inc"
                         HEADERS ${lib_cuda_hdrs} ${lib_cuda_hdrs_detail})
 
-ocv_module_include_directories(${the_module} ${ZLIB_INCLUDE_DIRS} ${OPENCL_INCLUDE_DIRS})
-ocv_create_module(${extra_libs})
+ocv_module_include_directories(${the_module} ${ZLIB_INCLUDE_DIRS} ${OPENCL_INCLUDE_DIRS} ${OPENCV_HDF5_INCLUDE_DIRS})
+ocv_create_module(${extra_libs} ${OPENCV_HDF5_LIBRARIES})
 
 ocv_add_accuracy_tests()
 ocv_add_perf_tests()
