@@ -1387,6 +1387,72 @@ void CascadeClassifierImpl::detectMultiScale( InputArray _image, std::vector<Rec
     }
 }
 
+void CascadeClassifierImpl::detectSingleScale( InputArray _image, std::vector<Rect>& objects,
+                                          std::vector<int>& rejectLevels, std::vector<double>& levelWeights, Size desiredScale,
+                                          int minNeighbors, int flags, bool outputRejectLevels )
+{
+    CV_Assert( _image.depth() == CV_8U );
+
+    if( empty() )
+        return;
+
+    if( isOldFormatCascade() )
+    {
+        Mat image = _image.getMat();
+        std::vector<CvAvgComp> fakeVecAvgComp;
+        detectMultiScaleOldFormat( image, oldCascade, objects, rejectLevels, levelWeights, fakeVecAvgComp, 1.05,
+                                   minNeighbors, flags, desiredScale, desiredScale, outputRejectLevels );
+    }
+    else
+    {
+        detectMultiScaleNoGrouping( _image, objects, rejectLevels, levelWeights, 1.05, desiredScale, desiredScale,
+                                    outputRejectLevels );
+        const double GROUP_EPS = 0.2;
+        if( outputRejectLevels )
+        {
+            groupRectangles( objects, rejectLevels, levelWeights, minNeighbors, GROUP_EPS );
+        }
+        else
+        {
+            groupRectangles( objects, minNeighbors, GROUP_EPS );
+        }
+    }
+}
+
+void CascadeClassifierImpl::detectSingleScale( InputArray _image, std::vector<Rect>& objects, Size desiredScale,
+                                          int minNeighbors, int flags )
+{
+    std::vector<int> fakeLevels;
+    std::vector<double> fakeWeights;
+    detectSingleScale( _image, objects, fakeLevels, fakeWeights, desiredScale, minNeighbors, flags );
+}
+
+void CascadeClassifierImpl::detectSingleScale( InputArray _image, std::vector<Rect>& objects, std::vector<int>& numDetections,
+                                          Size desiredScale, int minNeighbors, int flags )
+{
+    Mat image = _image.getMat();
+    CV_Assert( image.depth() == CV_8U );
+
+    if( empty() )
+        return;
+
+    std::vector<int> fakeLevels;
+    std::vector<double> fakeWeights;
+    if( isOldFormatCascade() )
+    {
+        std::vector<CvAvgComp> vecAvgComp;
+        detectMultiScaleOldFormat( image, oldCascade, objects, fakeLevels, fakeWeights, vecAvgComp, 1.05,
+                                   minNeighbors, flags, desiredScale, desiredScale );
+        numDetections.resize(vecAvgComp.size());
+        std::transform(vecAvgComp.begin(), vecAvgComp.end(), numDetections.begin(), getNeighbors());
+    }
+    else
+    {
+        detectMultiScaleNoGrouping( image, objects, fakeLevels, fakeWeights, 1.05, desiredScale, desiredScale );
+        const double GROUP_EPS = 0.2;
+        groupRectangles( objects, numDetections, minNeighbors, GROUP_EPS );
+    }
+}
 
 CascadeClassifierImpl::Data::Data()
 {
@@ -1667,6 +1733,43 @@ void CascadeClassifier::detectMultiScale( InputArray image,
     cc->detectMultiScale(image, objects, rejectLevels, levelWeights,
                          scaleFactor, minNeighbors, flags,
                          minSize, maxSize, outputRejectLevels);
+    clipObjects(image.size(), objects, &rejectLevels, &levelWeights);
+}
+
+void CascadeClassifier::detectSingleScale( InputArray image,
+                      CV_OUT std::vector<Rect>& objects,
+                      Size desiredScale,
+                      int minNeighbors, int flags )
+{
+    CV_Assert(!empty());
+    cc->detectSingleScale(image, objects, desiredScale, minNeighbors, flags);
+    clipObjects(image.size(), objects, 0, 0);
+}
+
+void CascadeClassifier::detectSingleScale( InputArray image,
+                      CV_OUT std::vector<Rect>& objects,
+                      CV_OUT std::vector<int>& numDetections,
+                      Size desiredScale,
+                      int minNeighbors, int flags )
+{
+    CV_Assert(!empty());
+    cc->detectSingleScale(image, objects, numDetections,
+                         desiredScale, minNeighbors, flags);
+    clipObjects(image.size(), objects, &numDetections, 0);
+}
+
+void CascadeClassifier::detectSingleScale( InputArray image,
+                      CV_OUT std::vector<Rect>& objects,
+                      CV_OUT std::vector<int>& rejectLevels,
+                      CV_OUT std::vector<double>& levelWeights,
+                      Size desiredScale,
+                      int minNeighbors, int flags,
+                      bool outputRejectLevels )
+{
+    CV_Assert(!empty());
+    cc->detectSingleScale(image, objects, rejectLevels, levelWeights,
+                         desiredScale, minNeighbors, flags,
+                         outputRejectLevels);
     clipObjects(image.size(), objects, &rejectLevels, &levelWeights);
 }
 

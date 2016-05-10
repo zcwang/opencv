@@ -177,19 +177,21 @@ public:
     virtual ~BaseCascadeClassifier();
     virtual bool empty() const = 0;
     virtual bool load( const String& filename ) = 0;
+    // Add multi-scale cascade classifier detection interfaces
+    // INTERFACE 1: Basic interface
     virtual void detectMultiScale( InputArray image,
                            CV_OUT std::vector<Rect>& objects,
                            double scaleFactor,
                            int minNeighbors, int flags,
                            Size minSize, Size maxSize ) = 0;
-
+    // INTERFACE 2: Interface that returns numDetections for each object
     virtual void detectMultiScale( InputArray image,
                            CV_OUT std::vector<Rect>& objects,
                            CV_OUT std::vector<int>& numDetections,
                            double scaleFactor,
                            int minNeighbors, int flags,
                            Size minSize, Size maxSize ) = 0;
-
+    // INTERFACE 3: Interface that returns rejectLevels and levelWeights for each object
     virtual void detectMultiScale( InputArray image,
                                    CV_OUT std::vector<Rect>& objects,
                                    CV_OUT std::vector<int>& rejectLevels,
@@ -213,6 +215,27 @@ public:
     };
     virtual void setMaskGenerator(const Ptr<MaskGenerator>& maskGenerator) = 0;
     virtual Ptr<MaskGenerator> getMaskGenerator() = 0;
+
+    // Add single-scale cascade classifier detection interfaces
+    // INTERFACE 1: Basic interface
+    virtual void detectSingleScale( InputArray image,
+                          CV_OUT std::vector<Rect>& objects,
+                          Size desiredScale,
+                          int minNeighbors, int flags) = 0;
+    // INTERFACE 2: Interface that returns numDetections for each object
+    virtual void detectSingleScale( InputArray image,
+                          CV_OUT std::vector<Rect>& objects,
+                          CV_OUT std::vector<int>& numDetections,
+                          Size desiredScale,
+                          int minNeighbors, int flags) = 0;
+    // INTERFACE 3: Interface that returns rejectLevels and levelWeights for each object
+    virtual void detectSingleScale( InputArray image,
+                          CV_OUT std::vector<Rect>& objects,
+                          CV_OUT std::vector<int>& rejectLevels,
+                          CV_OUT std::vector<double>& levelWeights,
+                          Size desiredScale,
+                          int minNeighbors, int flags,
+                          bool outputRejectLevels) = 0;
 };
 
 /** @brief Cascade classifier class for object detection.
@@ -305,6 +328,44 @@ public:
                                   Size minSize = Size(),
                                   Size maxSize = Size(),
                                   bool outputRejectLevels = false );
+    /** @brief Detects objects of a fixed size in the input image. The detected objects are returned as a list
+    of rectangles.
+
+    @param image Matrix of the type CV_8U containing an image where objects are detected.
+    @param objects Vector of rectangles where each rectangle contains the detected object, the
+    rectangles may be partially outside the original image.
+    @param desiredScale Parameter specifying the scale on which the detection model needs to run.
+    @param minNeighbors Parameter specifying how many neighbors each candidate rectangle should have
+    to retain it.
+    @param flags Parameter with the same meaning for an old cascade as in the function
+    cvHaarDetectObjects. It is not used for a new cascade.
+
+    The function is parallelized with the TBB library.
+    */
+    CV_WRAP void detectSingleScale( InputArray image,
+                          CV_OUT std::vector<Rect>& objects,
+                          Size desiredScale = Size(),
+                          int minNeighbors = 3, int flags = 0);
+    /** @overload
+    @param numDetections Vector of detection numbers for the corresponding objects. An object's number
+    of detections is the number of neighboring positively classified rectangles that were joined
+    together to form the object using non maxima suppression.
+    */
+    CV_WRAP_AS(detectSingleScale2) void detectSingleScale( InputArray image,
+                          CV_OUT std::vector<Rect>& objects,
+                          CV_OUT std::vector<int>& numDetections,
+                          Size desiredScale = Size(),
+                          int minNeighbors=3, int flags=0);
+    /** @overload
+    if `outputRejectLevels` is `true` returns `rejectLevels` and `levelWeights`
+    */
+    CV_WRAP_AS(detectSingleScale3) void detectSingleScale( InputArray image,
+                          CV_OUT std::vector<Rect>& objects,
+                          CV_OUT std::vector<int>& rejectLevels,
+                          CV_OUT std::vector<double>& levelWeights,
+                          Size desiredScale = Size(),
+                          int minNeighbors = 3, int flags = 0,
+                          bool outputRejectLevels = false);
 
     CV_WRAP bool isOldFormatCascade() const;
     CV_WRAP Size getOriginalWindowSize() const;
