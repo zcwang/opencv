@@ -215,7 +215,12 @@ public:
     };
     virtual void setMaskGenerator(const Ptr<MaskGenerator>& maskGenerator) = 0;
     virtual Ptr<MaskGenerator> getMaskGenerator() = 0;
+};
 
+// TODO OpenCV ABI 4.x
+class CV_EXPORTS BaseCascadeClassifier2 : public BaseCascadeClassifier
+{
+public:
     // Add single-scale cascade classifier detection interfaces
     // INTERFACE 1: Basic interface
     virtual void detectSingleScale( InputArray image,

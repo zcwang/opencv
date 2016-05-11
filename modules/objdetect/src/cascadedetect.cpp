@@ -1742,7 +1742,10 @@ void CascadeClassifier::detectSingleScale( InputArray image,
                       int minNeighbors, int flags )
 {
     CV_Assert(!empty());
-    cc->detectSingleScale(image, objects, desiredScale, minNeighbors, flags);
+    BaseCascadeClassifier2* cc2 = dynamic_cast<BaseCascadeClassifier2*>(cc.get());
+    if (!cc2)
+        CV_ErrorNoReturn(Error::StsNotImplemented, "BaseCascadeClassifier2 is expected");
+    cc2->detectSingleScale(image, objects, desiredScale, minNeighbors, flags);
     clipObjects(image.size(), objects, 0, 0);
 }
 
@@ -1753,7 +1756,10 @@ void CascadeClassifier::detectSingleScale( InputArray image,
                       int minNeighbors, int flags )
 {
     CV_Assert(!empty());
-    cc->detectSingleScale(image, objects, numDetections,
+    BaseCascadeClassifier2* cc2 = dynamic_cast<BaseCascadeClassifier2*>(cc.get());
+    if (!cc2)
+        CV_ErrorNoReturn(Error::StsNotImplemented, "BaseCascadeClassifier2 is expected");
+    cc2->detectSingleScale(image, objects, numDetections,
                          desiredScale, minNeighbors, flags);
     clipObjects(image.size(), objects, &numDetections, 0);
 }
@@ -1767,7 +1773,10 @@ void CascadeClassifier::detectSingleScale( InputArray image,
                       bool outputRejectLevels )
 {
     CV_Assert(!empty());
-    cc->detectSingleScale(image, objects, rejectLevels, levelWeights,
+    BaseCascadeClassifier2* cc2 = dynamic_cast<BaseCascadeClassifier2*>(cc.get());
+    if (!cc2)
+        CV_ErrorNoReturn(Error::StsNotImplemented, "BaseCascadeClassifier2 is expected");
+    cc2->detectSingleScale(image, objects, rejectLevels, levelWeights,
                          desiredScale, minNeighbors, flags,
                          outputRejectLevels);
     clipObjects(image.size(), objects, &rejectLevels, &levelWeights);
