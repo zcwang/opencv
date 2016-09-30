@@ -7,6 +7,9 @@
 # ----------------------------------------------------------------------------
 
 
+SET(ENV{PATH} "/usr/bin/:$ENV{PATH}")
+SET(ENV{CXXFLAGS} "$ENV{CXXFLAGS} -H")
+SET(CMAKE_VERBOSE_MAKEFILE ON)
 
 include(cmake/OpenCVMinDepVersions.cmake)
 
