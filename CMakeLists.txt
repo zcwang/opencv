@@ -299,6 +299,14 @@ OCV_OPTION(CV_DISABLE_OPTIMIZATION    "Disable explicit optimized code (dispatch
 
 OCV_OPTION(DOWNLOAD_EXTERNAL_TEST_DATA "Download external test data (Python executable and OPENCV_TEST_DATA_PATH environment variable may be required)" OFF )
 
+# FIXIT Testing only
+if(DEFINED ENABLE_SSE2 AND NOT ENABLE_SSE2)
+  message("Force CV_DISABLE_OPTIMIZATION=ON")
+  set(CV_DISABLE_OPTIMIZATION ON CACHE INTERAL "" FORCE)
+  ocv_clear_vars(ENABLE_SSE2 ENABLE_SSE3)
+elseif(ENABLE_AVX2)
+  ocv_clear_vars(ENABLE_AVX ENABLE_AVX2)
+endif()
 
 if(ENABLE_IMPL_COLLECTION)
   add_definitions(-DCV_COLLECT_IMPL_DATA)
