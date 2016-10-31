@@ -874,7 +874,10 @@ int high = cvFloor(high_thresh);
     if (!m[mapstep+1])  CANNY_PUSH_SERIAL(m + mapstep + 1);
 }
 
+    {
+    CV_INSTRUMENT_REGION_META("finalPass", cv::instr::TYPE_GENERAL, cv::instr::IMPL_PLAIN)
     parallel_for_(Range(0, dst.rows), finalPass(map, dst, mapstep), dst.total()/(double)(1<<16));
+    }
 }
 
 void Canny( InputArray _dx, InputArray _dy, OutputArray _dst,
