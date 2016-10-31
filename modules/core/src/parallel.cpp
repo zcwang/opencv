@@ -144,7 +144,7 @@ namespace cv
 namespace
 {
 #ifdef CV_PARALLEL_FRAMEWORK
-    class ParallelLoopBodyWrapper
+    class ParallelLoopBodyWrapper : public cv::ParallelLoopBody
     {
     public:
         ParallelLoopBodyWrapper(const cv::ParallelLoopBody& _body, const cv::Range& _r, double _nstripes)
@@ -326,7 +326,7 @@ void cv::parallel_for_(const cv::Range& range, const cv::ParallelLoopBody& body,
 
 #elif defined HAVE_PTHREADS_PF
 
-        parallel_for_pthreads(range, body, nstripes);
+        parallel_for_pthreads(pbody.stripeRange(), pbody, pbody.stripeRange().size());
 
 #else
 
