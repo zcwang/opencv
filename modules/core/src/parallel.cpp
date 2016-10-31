@@ -166,6 +166,7 @@ namespace
                 cv::instr::InstrTLSStruct *pInstrTLS = &cv::instr::getInstrumentTLSStruct();
                 pInstrTLS->pCurrentNode = pThreadRoot; // Initialize TLS node for thread
             }
+            CV_INSTRUMENT_REGION_META("parallel_for_body", cv::instr::TYPE_GENERAL, cv::instr::IMPL_PLAIN)
 #endif
 
             cv::Range r;
