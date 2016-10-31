@@ -407,3 +407,7 @@ endif()
 if(APPLE AND NOT CMAKE_CROSSCOMPILING AND NOT DEFINED ENV{LDFLAGS} AND EXISTS "/usr/local/lib")
   link_directories("/usr/local/lib")
 endif()
+
+if(ENABLE_INSTRUMENTATION)
+  ocv_warnings_disable(CMAKE_CXX_FLAGS -Wshadow)
+endif()

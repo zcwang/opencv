@@ -1029,7 +1029,7 @@ public:
 
     Node<OBJECT>* findChild(OBJECT& payload) const
     {
-        for(int i = 0; i < this->m_childs.size(); i++)
+        for(size_t i = 0; i < this->m_childs.size(); i++)
         {
             if(this->m_childs[i]->m_payload == payload)
                 return this->m_childs[i];
@@ -1039,7 +1039,7 @@ public:
 
     int findChild(Node<OBJECT> *pNode) const
     {
-        for (int i = 0; i < this->m_childs.size(); i++)
+        for (size_t i = 0; i < this->m_childs.size(); i++)
         {
             if(this->m_childs[i] == pNode)
                 return i;
@@ -1059,7 +1059,7 @@ public:
 
     void removeChilds()
     {
-        for(int i = 0; i < m_childs.size(); i++)
+        for(size_t i = 0; i < m_childs.size(); i++)
         {
             m_childs[i]->m_pParent = 0; // avoid excessive parent vector trimming
             delete m_childs[i];

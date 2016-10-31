@@ -756,7 +756,7 @@ static void printShift(cv::instr::InstrNode *pNode, cv::instr::InstrNode* pRoot)
     {
         if(cache[i]->m_pParent)
         {
-            if(cache[i]->m_pParent->findChild(cache[i]) == cache[i]->m_pParent->m_childs.size()-1)
+            if(cache[i]->m_pParent->findChild(cache[i]) == (int)cache[i]->m_pParent->m_childs.size()-1)
                 printf("    ");
             else
                 printf("|   ");
@@ -845,7 +845,7 @@ static void printNodeRec(cv::instr::InstrNode *pNode, cv::instr::InstrNode *pRoo
             {
                 printShift(pNode->m_childs[i], pRoot);
 
-                if(pNode->m_childs.size()-1 == pNode->m_childs[i]->m_pParent->findChild(pNode->m_childs[i]))
+                if((int)pNode->m_childs.size()-1 == pNode->m_childs[i]->m_pParent->findChild(pNode->m_childs[i]))
                     printf("\\---");
                 else
                     printf("|---");
@@ -871,7 +871,7 @@ static cv::String nodeToString(cv::instr::InstrNode *pNode)
     else
     {
         string = "#";
-        string += std::to_string(pNode->m_payload.m_instrType);
+        string += std::to_string((int)pNode->m_payload.m_instrType);
         string += pNode->m_payload.m_funName;
         string += " - L:";
         string += to_string_with_precision(calcLocalWeight(pNode));
