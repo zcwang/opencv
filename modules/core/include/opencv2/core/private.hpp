@@ -460,7 +460,7 @@ public:
         useInstr         = false;
         enableMapping    = true;
 
-        rootNode.m_payload = NodeData("ROOT", NULL, 0, TYPE_GENERAL, IMPL_PLAIN);
+        rootNode.m_payload = NodeData("ROOT", NULL, 0, NULL, TYPE_GENERAL, IMPL_PLAIN);
         tlsStruct.get()->pCurrentNode = &rootNode;
     }
 
@@ -476,7 +476,7 @@ public:
 class CV_EXPORTS IntrumentationRegion
 {
 public:
-    IntrumentationRegion(const char* funName, const char* fileName, int lineNum, TYPE instrType = TYPE_GENERAL, IMPL implType = IMPL_PLAIN);
+    IntrumentationRegion(const char* funName, const char* fileName, int lineNum, void* caller, TYPE instrType = TYPE_GENERAL, IMPL implType = IMPL_PLAIN);
     ~IntrumentationRegion();
 
 private:
@@ -492,12 +492,15 @@ CV_EXPORTS InstrNode* getCurrentNode();
 
 ///// General instrumentation
 // Instrument region
-#define CV_INSTRUMENT_REGION_META(NAME, TYPE, IMPL)      ::cv::instr::IntrumentationRegion __instr_region__(NAME, __FILE__, __LINE__, TYPE, IMPL);
+#define CV_INSTRUMENT_REGION_META(NAME, TYPE, IMPL) \
+    void* const __ret_addr = __builtin_extract_return_addr(__builtin_return_address(0)); \
+    ::cv::instr::IntrumentationRegion __instr_region__(NAME, __FILE__, __LINE__, __ret_addr, TYPE, IMPL);
+
 // Instrument functions with non-void return type
 #define CV_INSTRUMENT_FUN_RT_META(TYPE, IMPL, ERROR_COND, FUN, ...) ([&]()\
 {\
     if(::cv::instr::useInstrumentation()){\
-        ::cv::instr::IntrumentationRegion __instr__(#FUN, __FILE__, __LINE__, TYPE, IMPL);\
+        ::cv::instr::IntrumentationRegion __instr__(#FUN, __FILE__, __LINE__, NULL, TYPE, IMPL);\
         try{\
             auto status = ((FUN)(__VA_ARGS__));\
             if(ERROR_COND){\
@@ -518,7 +521,7 @@ CV_EXPORTS InstrNode* getCurrentNode();
 #define CV_INSTRUMENT_FUN_RV_META(TYPE, IMPL, FUN, ...) ([&]()\
 {\
     if(::cv::instr::useInstrumentation()){\
-        ::cv::instr::IntrumentationRegion __instr__(#FUN, __FILE__, __LINE__, TYPE, IMPL);\
+        ::cv::instr::IntrumentationRegion __instr__(#FUN, __FILE__, __LINE__, NULL, TYPE, IMPL);\
         try{\
             (FUN)(__VA_ARGS__);\
         }catch(...){\
@@ -531,7 +534,9 @@ CV_EXPORTS InstrNode* getCurrentNode();
     }\
 }())
 // Instrumentation information marker
-#define CV_INSTRUMENT_MARK_META(IMPL, NAME, ...) {::cv::instr::IntrumentationRegion __instr_mark__(NAME, __FILE__, __LINE__, ::cv::instr::TYPE_MARKER, IMPL);}
+#define CV_INSTRUMENT_MARK_META(IMPL, NAME, ...) \
+    void* const __ret_addr = __builtin_extract_return_addr(__builtin_return_address(0)); \
+    ::cv::instr::IntrumentationRegion __instr_mark__(NAME, __FILE__, __LINE__, __ret_addr, ::cv::instr::TYPE_MARKER, IMPL);
 
 ///// General instrumentation
 // General OpenCV region instrumentation macro

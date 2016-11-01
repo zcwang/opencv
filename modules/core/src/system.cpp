@@ -1357,12 +1357,13 @@ FLAGS getFlags()
 #endif
 }
 
-NodeData::NodeData(const char* funName, const char* fileName, int lineNum, cv::instr::TYPE instrType, cv::instr::IMPL implType)
+NodeData::NodeData(const char* funName, const char* fileName, int lineNum, void* caller, cv::instr::TYPE instrType, cv::instr::IMPL implType)
 {
     m_instrType = TYPE_GENERAL;
     m_implType  = IMPL_PLAIN;
 
     m_funName     = funName;
+    m_caller      = caller;
     m_instrType   = instrType;
     m_implType    = implType;
     m_fileName    = fileName;
@@ -1381,6 +1382,7 @@ NodeData::NodeData(NodeData &ref)
 NodeData& NodeData::operator=(const NodeData &right)
 {
     this->m_funName     = right.m_funName;
+    this->m_caller      = right.m_caller;
     this->m_instrType   = right.m_instrType;
     this->m_implType    = right.m_implType;
     this->m_fileName    = right.m_fileName;
@@ -1396,7 +1398,7 @@ NodeData::~NodeData()
 }
 bool operator==(const NodeData& left, const NodeData& right)
 {
-    if(left.m_lineNum == right.m_lineNum && left.m_funName == right.m_funName && left.m_fileName == right.m_fileName)
+    if(left.m_lineNum == right.m_lineNum && left.m_funName == right.m_funName && left.m_fileName == right.m_fileName && left.m_caller == right.m_caller)
         return true;
     return false;
 }
@@ -1418,7 +1420,7 @@ InstrNode* getCurrentNode()
     return getInstrumentTLSStruct().pCurrentNode;
 }
 
-IntrumentationRegion::IntrumentationRegion(const char* funName, const char* fileName, int lineNum, TYPE instrType, IMPL implType)
+IntrumentationRegion::IntrumentationRegion(const char* funName, const char* fileName, int lineNum, void* caller, TYPE instrType, IMPL implType)
 {
     m_disabled    = false;
     m_regionTicks = 0;
@@ -1439,7 +1441,7 @@ IntrumentationRegion::IntrumentationRegion(const char* funName, const char* file
         if(m_disabled)
             return;
 
-        NodeData payload(funName, fileName, lineNum, instrType, implType);
+        NodeData payload(funName, fileName, lineNum, caller, instrType, implType);
         Node<NodeData>* pChild = NULL;
 
         if(pStruct->enableMapping)

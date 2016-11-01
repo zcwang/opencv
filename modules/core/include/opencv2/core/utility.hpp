@@ -1097,12 +1097,13 @@ enum IMPL
 class CV_EXPORTS NodeData
 {
 public:
-    NodeData(const char* funName = 0, const char* fileName = NULL, int lineNum = 0, cv::instr::TYPE instrType = TYPE_GENERAL, cv::instr::IMPL implType = IMPL_PLAIN);
+    NodeData(const char* funName = 0, const char* fileName = NULL, int lineNum = 0, void* caller = NULL, cv::instr::TYPE instrType = TYPE_GENERAL, cv::instr::IMPL implType = IMPL_PLAIN);
     NodeData(NodeData &ref);
     ~NodeData();
     NodeData& operator=(const NodeData&);
 
     cv::String          m_funName;
+    void*               m_caller;
     cv::instr::TYPE     m_instrType;
     cv::instr::IMPL     m_implType;
     const char*         m_fileName;
