@@ -1181,32 +1181,29 @@ FillConvexPoly( Mat& img, const Point2l* v, int npts, const void* color, int lin
             {
                 if( y >= edge[i].ye )
                 {
-                    int idx = edge[i].idx, di = edge[i].di;
-                    int64 xs = 0, xe;
+                    int idx0 = edge[i].idx, di = edge[i].di;
+                    int idx = idx0 + di;
+                    if (idx >= npts) idx -= npts;
                     int ty = 0;
 
-                    for(;;)
+                    for(; edges != 0; edges--)
                     {
                         ty = (int)((v[idx].y + delta) >> shift);
-                        if( ty > y || edges == 0 )
+                        if(ty > y)
+                        {
+                            int64 xs = v[idx0].x;
+                            int64 xe = v[idx].x;
+
+                            edge[i].ye = ty;
+                            edge[i].dx = ((xe - xs)*2 + (ty - y)) / (2 * (ty - y));
+                            edge[i].x = xs;
+                            edge[i].idx = idx;
                             break;
-                        xs = v[idx].x;
+                        }
+                        idx0 = idx;
                         idx += di;
-                        idx -= ((idx < npts) - 1) & npts;   /* idx -= idx >= npts ? npts : 0 */
-                        edges--;
+                        if (idx >= npts) idx -= npts;
                     }
-
-                    xs <<= XY_SHIFT - shift;
-                    xe = v[idx].x << (XY_SHIFT - shift);
-
-                    /* no more edges */
-                    if( y >= ty)
-                        return;
-
-                    edge[i].ye = ty;
-                    edge[i].dx = ((xe - xs)*2 + (ty - y)) / (2 * (ty - y));
-                    edge[i].x = xs;
-                    edge[i].idx = idx;
                 }
             }
         }
@@ -1217,7 +1214,6 @@ FillConvexPoly( Mat& img, const Point2l* v, int npts, const void* color, int lin
             right ^= 1;
         }
 
-        if( y >= 0 )
         {
             int xx1 = (int)((edge[left].x + delta1) >> XY_SHIFT);
             int xx2 = (int)((edge[right].x + delta2) >> XY_SHIFT);
