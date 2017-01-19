@@ -542,7 +542,9 @@ struct Hamming2
         ResultType result = 0;
         size /= (sizeof(uint64_t)/sizeof(unsigned char));
         for(size_t i = 0; i < size; ++i ) {
-            result += popcnt64(*pa ^ *pb);
+            uint64_t diff = *pa ^ *pb;
+            diff = ((diff >> 1) | diff) & 0x5555555555555555; // process pairs of bits
+            result += popcnt64(diff);
             ++pa;
             ++pb;
         }
@@ -552,7 +554,9 @@ struct Hamming2
         ResultType result = 0;
         size /= (sizeof(uint32_t)/sizeof(unsigned char));
         for(size_t i = 0; i < size; ++i ) {
-            result += popcnt32(*pa ^ *pb);
+            uint64_t diff = *pa ^ *pb;
+            diff = ((diff >> 1) | diff) & 0x55555555; // process pairs of bits
+            result += popcnt32();
             ++pa;
             ++pb;
         }
