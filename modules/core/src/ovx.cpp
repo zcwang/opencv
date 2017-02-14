@@ -14,6 +14,72 @@
 namespace cv
 {
 
+namespace ovx
+{
+#ifdef HAVE_OPENVX
+class TLOVXContextContainer : protected TLSDataContainer
+{
+public:
+    inline TLOVXContextContainer() {}
+    inline ~TLOVXContextContainer() { release(); } // Release key and delete associated data
+    inline ivx::Context* get() const { return (ivx::Context*)getData(); } // Get data assosiated with key
+
+                                                    // Get data from all threads
+    inline void gather(std::vector<ivx::Context*> &data) const
+    {
+        std::vector<void*> &dataVoid = reinterpret_cast<std::vector<void*>&>(data);
+        gatherData(dataVoid);
+    }
+
+private:
+    virtual void* createDataInstance() const { return new ivx::Context(ivx::Context::create()); }
+    virtual void  deleteDataInstance(void* pData) const { delete (ivx::Context*)pData; }
+    // Disable copy operations
+    TLOVXContextContainer(TLOVXContextContainer &) {}
+    TLOVXContextContainer& operator =(const TLOVXContextContainer &) { return *this; }
+};
+
+class TLOVXContextSingleton
+{
+public:
+    inline TLOVXContextSingleton() {}
+    inline ~TLOVXContextSingleton()
+    {
+        if (instance != NULL)
+        {
+            cv::AutoLock lock(cv::getInitializationMutex());
+            if (instance != NULL)
+            {
+                delete instance;
+                instance = NULL;
+            }
+        }
+    }
+    inline TLOVXContextContainer& getTLContextContainer()
+    {
+        if (instance == NULL)
+        {
+            cv::AutoLock lock(cv::getInitializationMutex());
+            if (instance == NULL)
+                instance = new TLOVXContextContainer();
+        }
+        return *instance;
+    }
+private:
+    static TLOVXContextContainer* volatile instance;
+    TLOVXContextSingleton(TLOVXContextSingleton &) {}
+    TLOVXContextSingleton& operator =(const TLOVXContextSingleton &) { return *this; }
+};
+TLOVXContextContainer* volatile TLOVXContextSingleton::instance = NULL;
+
+ivx::Context& getOpenVXContext()
+{
+    static TLOVXContextSingleton instance;
+    return *(instance.getTLContextContainer().get());
+}
+#endif
+}
+
 bool haveOpenVX()
 {
 #ifdef HAVE_OPENVX
@@ -22,7 +88,7 @@ bool haveOpenVX()
     {
         try
         {
-        ivx::Context context = ivx::Context::create();
+        ivx::Context context = ovx::getOpenVXContext();
         vx_uint16 vComp = ivx::compiledWithVersion();
         vx_uint16 vCurr = context.version();
         g_haveOpenVX =
