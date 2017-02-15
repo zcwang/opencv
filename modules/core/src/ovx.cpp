@@ -17,68 +17,34 @@ namespace cv
 namespace ovx
 {
 #ifdef HAVE_OPENVX
-class TLOVXContextContainer : protected TLSDataContainer
+
+// Simple TLSData<ivx::Context> doesn't work, because default constructor doesn't create any OpenVX context.
+struct OpenVXTLSData
 {
-public:
-    inline TLOVXContextContainer() {}
-    inline ~TLOVXContextContainer() { release(); } // Release key and delete associated data
-    inline ivx::Context* get() const { return (ivx::Context*)getData(); } // Get data assosiated with key
-
-                                                    // Get data from all threads
-    inline void gather(std::vector<ivx::Context*> &data) const
-    {
-        std::vector<void*> &dataVoid = reinterpret_cast<std::vector<void*>&>(data);
-        gatherData(dataVoid);
-    }
-
-private:
-    virtual void* createDataInstance() const { return new ivx::Context(ivx::Context::create()); }
-    virtual void  deleteDataInstance(void* pData) const { delete (ivx::Context*)pData; }
-    // Disable copy operations
-    TLOVXContextContainer(TLOVXContextContainer &) {}
-    TLOVXContextContainer& operator =(const TLOVXContextContainer &) { return *this; }
+    OpenVXTLSData() : ctx(ivx::Context::create()) {}
+    ivx::Context ctx;
 };
 
-class TLOVXContextSingleton
+static TLSData<OpenVXTLSData>& getOpenVXTLSData()
 {
-public:
-    inline TLOVXContextSingleton() {}
-    inline ~TLOVXContextSingleton()
-    {
-        if (instance != NULL)
-        {
-            cv::AutoLock lock(cv::getInitializationMutex());
-            if (instance != NULL)
-            {
-                delete instance;
-                instance = NULL;
-            }
-        }
-    }
-    inline TLOVXContextContainer& getTLContextContainer()
-    {
-        if (instance == NULL)
-        {
-            cv::AutoLock lock(cv::getInitializationMutex());
-            if (instance == NULL)
-                instance = new TLOVXContextContainer();
-        }
-        return *instance;
-    }
-private:
-    static TLOVXContextContainer* volatile instance;
-    TLOVXContextSingleton(TLOVXContextSingleton &) {}
-    TLOVXContextSingleton& operator =(const TLOVXContextSingleton &) { return *this; }
+    CV_SINGLETON_LAZY_INIT_REF(TLSData<OpenVXTLSData>, new TLSData<OpenVXTLSData>())
+}
+
+struct OpenVXCleanupFunctor
+{
+    ~OpenVXCleanupFunctor() { getOpenVXTLSData().cleanup(); }
 };
-TLOVXContextContainer* volatile TLOVXContextSingleton::instance = NULL;
+static OpenVXCleanupFunctor g_openvx_cleanup_functor;
 
 ivx::Context& getOpenVXContext()
 {
-    static TLOVXContextSingleton instance;
-    return *(instance.getTLContextContainer().get());
+    return getOpenVXTLSData().get()->ctx;
 }
+
 #endif
-}
+
+} // namespace
+
 
 bool haveOpenVX()
 {
