@@ -6,7 +6,7 @@
 #define __OPENCV_STITCHING_UTIL_LOG_HPP__
 
 #ifndef ENABLE_LOG
-#define ENABLE_LOG 0
+#define ENABLE_LOG 1
 #endif
 
 // TODO remove LOG macros, add logging class
@@ -33,7 +33,7 @@
     for(;;)                                    \
     {                                          \
         using namespace std;                   \
-        if ((_level) >= ::cv::detail::stitchingLogLevel()) \
+        /*if ((_level) >= ::cv::detail::stitchingLogLevel())*/ \
         {                                      \
             LOG_STITCHING_MSG(_msg);           \
         }                                      \
