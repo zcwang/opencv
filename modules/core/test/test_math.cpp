@@ -3068,4 +3068,47 @@ TEST(Core_QR_Solver, accuracy64f)
     ASSERT_FALSE(solve(A, B, solutionQR, DECOMP_QR));
 }
 
-/* End of file. */
+TEST(OCL, gemm_reuse_D)
+{
+    int M = 10, N = 10, K = 10;
+    UMat a(Size(M, K), CV_32FC1),
+         b(Size(K, N), CV_32FC1),
+         c(Size(M, N), CV_32FC1),
+         d;
+
+    RNG rng(1);
+    theRNG() = rng;
+    randu(a, Scalar(0), Scalar(1));
+    randu(b, Scalar(0), Scalar(1));
+    randu(c, Scalar(0), Scalar(1));
+
+    UMat a1, b1, c1;
+    a.copyTo(a1); b.copyTo(b1); c.copyTo(c1);
+
+    gemm(a, b, 1.0, noArray(), 0.0, d, 0);
+    UMat d1; d.copyTo(d1);
+
+#if 1
+    gemm(a, b, 1.0, noArray(), 1.0, d, 0);
+#else
+    gemm(a, b, 1.0, noArray(), 0.0, d, 0);
+#endif
+
+    UMat d2; d.copyTo(d2);
+
+    Mat diff = d2.getMat(ACCESS_READ) - d1.getMat(ACCESS_READ);
+    if (countNonZero(diff) > 0)
+    {
+        std::cout << "a=" << std::endl << a1.getMat(ACCESS_READ) << std::endl;
+        std::cout << "b=" << std::endl << b1.getMat(ACCESS_READ) << std::endl;
+        //std::cout << "c=" << std::endl << c1.getMat(ACCESS_READ) << std::endl;
+        std::cout << "d1=" << std::endl << d1.getMat(ACCESS_READ) << std::endl;
+        std::cout << "d2=" << std::endl << d2.getMat(ACCESS_READ) << std::endl;
+        std::cout << "diff=" << std::endl << diff << std::endl;
+        ASSERT_TRUE(false);
+    }
+    else
+    {
+        std::cout << "OK" << std::endl;
+    }
+}
