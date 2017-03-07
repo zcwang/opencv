@@ -32,7 +32,7 @@ ocv_glob_module_sources(SOURCES "${OPENCV_MODULE_opencv_core_BINARY_DIR}/version
 ocv_module_include_directories(${the_module} ${ZLIB_INCLUDE_DIRS} ${OPENCL_INCLUDE_DIRS})
 ocv_create_module(${extra_libs})
 
-ocv_target_link_libraries(${the_module} ${ZLIB_LIBRARIES} "${OPENCL_LIBRARIES}" "${VA_LIBRARIES}" "${LAPACK_LIBRARIES}")
+ocv_target_link_libraries(${the_module} ${ZLIB_LIBRARIES} "${OPENCL_LIBRARIES}" "${VA_LIBRARIES}" "${LAPACK_LIBRARIES}" "${HALIDE_LIBRARIES}")
 
 ocv_add_accuracy_tests()
 ocv_add_perf_tests()
