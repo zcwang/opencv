@@ -49,8 +49,8 @@
 #include <inttypes.h>
 #endif
 
-#define CV_OPENCL_ALWAYS_SHOW_BUILD_LOG 0
-#define CV_OPENCL_SHOW_RUN_ERRORS       0
+#define CV_OPENCL_ALWAYS_SHOW_BUILD_LOG 1
+#define CV_OPENCL_SHOW_RUN_ERRORS       1
 #define CV_OPENCL_SHOW_SVM_ERROR_LOG    1
 #define CV_OPENCL_SHOW_SVM_LOG          0
 
@@ -3191,9 +3191,9 @@ struct Kernel::Impl
     {
         cl_program ph = (cl_program)prog.ptr();
         cl_int retval = 0;
-#ifdef ENABLE_INSTRUMENTATION
+//#ifdef ENABLE_INSTRUMENTATION
         name = kname;
-#endif
+//#endif
         handle = ph != 0 ?
             clCreateKernel(ph, kname, &retval) : 0;
         CV_OclDbgAssert(retval == CL_SUCCESS);
@@ -3246,9 +3246,9 @@ struct Kernel::Impl
 
     IMPLEMENT_REFCOUNTABLE();
 
-#ifdef ENABLE_INSTRUMENTATION
+//#ifdef ENABLE_INSTRUMENTATION
     cv::String name;
-#endif
+//#endif
     cl_kernel handle;
     cl_event e;
     enum { MAX_ARRS = 16 };
@@ -3469,6 +3469,7 @@ bool Kernel::run(int dims, size_t _globalsize[], size_t _localsize[],
                  bool sync, bool moreWorkDone, const Queue& q)
 {
     CV_INSTRUMENT_REGION_OPENCL_RUN(p->name.c_str());
+printf("OpenCV: OCL: Kernel::run(%s)\n", p->name.c_str());
 
     if(!p || !p->handle || p->e != 0)
         return false;
