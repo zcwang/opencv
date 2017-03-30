@@ -102,6 +102,7 @@ PxMDecoder::PxMDecoder()
 {
     m_offset = -1;
     m_buf_supported = true;
+    m_description = "PXM";
     m_bpp = 0;
     m_binary = false;
     m_maxval = 0;
@@ -125,7 +126,7 @@ bool PxMDecoder::checkSignature( const String& signature ) const
            isspace(signature[2]);
 }
 
-ImageDecoder PxMDecoder::newDecoder() const
+Ptr<ImageDecoder::Impl> PxMDecoder::newDecoder() const
 {
     return makePtr<PxMDecoder>();
 }
@@ -213,6 +214,13 @@ bool PxMDecoder::readData( Mat& img )
     const int src_pitch = divUp(m_width*m_bpp*(bit_depth/8), 8);
     int  nch = CV_MAT_CN(m_type);
     int  width3 = m_width*nch;
+
+    int dst_width = color ? 3 : 1;
+    int dst_type = CV_MAKE_TYPE( img.depth(), dst_width );
+    if( !checkDest( img, dst_type ) )
+    {
+        return false;
+    }
 
     if( m_offset < 0 || !m_strm.isOpened())
         return false;
@@ -384,7 +392,7 @@ PxMEncoder::~PxMEncoder()
 }
 
 
-ImageEncoder  PxMEncoder::newEncoder() const
+Ptr<ImageEncoder::Impl>  PxMEncoder::newEncoder() const
 {
     return makePtr<PxMEncoder>();
 }
@@ -396,8 +404,9 @@ bool  PxMEncoder::isFormatSupported( int depth ) const
 }
 
 
-bool  PxMEncoder::write( const Mat& img, const std::vector<int>& params )
+bool  PxMEncoder::write( const Mat& img, InputArray _params )
 {
+    Mat_<int> params(_params.getMat());
     bool isBinary = true;
 
     int  width = img.cols, height = img.rows;
@@ -406,9 +415,9 @@ bool  PxMEncoder::write( const Mat& img, const std::vector<int>& params )
     int  fileStep = width*(int)img.elemSize();
     int  x, y;
 
-    for( size_t i = 0; i < params.size(); i += 2 )
-        if( params[i] == CV_IMWRITE_PXM_BINARY )
-            isBinary = params[i+1] != 0;
+    for( MatIterator_<int> it = params.begin(); it + 1 < params.end(); it += 2 )
+        if( *it == CV_IMWRITE_PXM_BINARY )
+            isBinary = *(it+1) != 0;
 
     WLByteStream strm;
 

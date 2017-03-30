@@ -81,6 +81,7 @@ TiffDecoder::TiffDecoder()
     m_hdr = false;
     m_buf_supported = true;
     m_buf_pos = 0;
+    m_description = "TIFF";
 }
 
 
@@ -116,7 +117,7 @@ int TiffDecoder::normalizeChannelsNumber(int channels) const
     return channels > 4 ? 4 : channels;
 }
 
-ImageDecoder TiffDecoder::newDecoder() const
+Ptr<ImageDecoder::Impl> TiffDecoder::newDecoder() const
 {
     return makePtr<TiffDecoder>();
 }
@@ -315,6 +316,13 @@ bool  TiffDecoder::readData( Mat& img )
         const int bitsPerByte = 8;
         int dst_bpp = (int)(img.elemSize1() * bitsPerByte);
         int wanted_channels = normalizeChannelsNumber(img.channels());
+
+        int dst_type = CV_MAKE_TYPE( img.depth(), wanted_channels );
+        if( !checkDest( img, dst_type ) )
+        {
+            close();
+            return false;
+        }
 
         if(dst_bpp == 8)
         {
@@ -571,7 +579,7 @@ TiffEncoder::~TiffEncoder()
 {
 }
 
-ImageEncoder TiffEncoder::newEncoder() const
+Ptr<ImageEncoder::Impl> TiffEncoder::newEncoder() const
 {
     return makePtr<TiffEncoder>();
 }
@@ -595,7 +603,7 @@ class TiffEncoderBufHelper
 {
 public:
 
-    TiffEncoderBufHelper(std::vector<uchar> *buf)
+    TiffEncoderBufHelper(std::vector<uchar>& buf)
             : m_buf(buf), m_buf_pos(0)
     {}
 
@@ -618,11 +626,11 @@ public:
         TiffEncoderBufHelper *helper = reinterpret_cast<TiffEncoderBufHelper*>(handle);
         size_t begin = (size_t)helper->m_buf_pos;
         size_t end = begin + n;
-        if ( helper->m_buf->size() < end )
+        if ( helper->m_buf.size() < end )
         {
-            helper->m_buf->resize(end);
+            helper->m_buf.resize(end);
         }
-        memcpy(&(*helper->m_buf)[begin], buffer, n);
+        memcpy(&(helper->m_buf[begin]), buffer, n);
         helper->m_buf_pos = end;
         return n;
     }
@@ -630,7 +638,7 @@ public:
     static toff_t seek( thandle_t handle, toff_t offset, int whence )
     {
         TiffEncoderBufHelper *helper = reinterpret_cast<TiffEncoderBufHelper*>(handle);
-        const toff_t size = helper->m_buf->size();
+        const toff_t size = helper->m_buf.size();
         toff_t new_pos = helper->m_buf_pos;
         switch (whence)
         {
@@ -651,7 +659,7 @@ public:
     static toff_t size( thandle_t handle )
     {
         TiffEncoderBufHelper *helper = reinterpret_cast<TiffEncoderBufHelper*>(handle);
-        return helper->m_buf->size();
+        return helper->m_buf.size();
     }
 
     static int close( thandle_t /*handle*/ )
@@ -662,21 +670,22 @@ public:
 
 private:
 
-    std::vector<uchar>* m_buf;
+    std::vector<uchar>& m_buf;
     toff_t m_buf_pos;
 };
 
-static void readParam(const std::vector<int>& params, int key, int& value)
+static void readParam(InputArray _params, int key, int& value)
 {
-    for(size_t i = 0; i + 1 < params.size(); i += 2)
-        if(params[i] == key)
+    Mat_<int> params(_params.getMat());
+    for(MatIterator_<int> it = params.begin(); it + 1 < params.end(); it += 2)
+        if(*it == key)
         {
-            value = params[i+1];
+            value = *(it+1);
             break;
         }
 }
 
-bool  TiffEncoder::writeLibTiff( const Mat& img, const std::vector<int>& params)
+bool  TiffEncoder::writeLibTiff( const Mat& img, InputArray params)
 {
     int channels = img.channels();
     int width = img.cols, height = img.rows;
@@ -718,7 +727,9 @@ bool  TiffEncoder::writeLibTiff( const Mat& img, const std::vector<int>& params)
     // http://www.remotesensing.org/libtiff/man/TIFFOpen.3tiff.html
     TIFF* pTiffHandle;
 
-    TiffEncoderBufHelper buf_helper(m_buf);
+    // !!! FIXIT
+    std::vector<uchar> m_buf_vector;
+    TiffEncoderBufHelper buf_helper(m_buf_vector);
     if ( m_buf )
     {
         pTiffHandle = buf_helper.open();
@@ -815,6 +826,9 @@ bool  TiffEncoder::writeLibTiff( const Mat& img, const std::vector<int>& params)
     }
 
     TIFFClose(pTiffHandle);
+
+    if (m_buf)
+        Mat(m_buf_vector).copyTo(*m_buf);
     return true;
 }
 
@@ -825,7 +839,8 @@ bool TiffEncoder::writeHdr(const Mat& _img)
 
     TIFF* tif;
 
-    TiffEncoderBufHelper buf_helper(m_buf);
+    std::vector<uchar> m_buf_vector;
+    TiffEncoderBufHelper buf_helper(m_buf_vector);
     if ( m_buf )
     {
         tif = buf_helper.open();
@@ -857,7 +872,7 @@ bool TiffEncoder::writeHdr(const Mat& _img)
     return true;
 }
 
-bool  TiffEncoder::write( const Mat& img, const std::vector<int>& params)
+bool  TiffEncoder::write( const Mat& img, InputArray params)
 {
     int depth = img.depth();
 

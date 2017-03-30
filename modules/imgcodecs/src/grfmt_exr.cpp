@@ -81,13 +81,13 @@ ExrDecoder::ExrDecoder()
     m_signature = "\x76\x2f\x31\x01";
     m_file = 0;
     m_red = m_green = m_blue = 0;
+    m_description = "EXR";
     m_type = ((Imf::PixelType)0);
     m_iscolor = false;
     m_bit_depth = 0;
     m_isfloat = false;
     m_ischroma = false;
     m_native_depth = false;
-
 }
 
 
@@ -207,6 +207,14 @@ bool  ExrDecoder::readData( Mat& img )
     size_t ystep = 0;
 
     xstep = m_native_depth ? 4 : 1;
+
+    int dst_width = color ? 3 : 1;
+    int dst_type = CV_MAKE_TYPE( img.depth(), dst_width );
+    if( !checkDest( img, dst_type ) )
+    {
+        close();
+        return false;
+    }
 
     AutoBuffer<char> copy_buffer;
 
@@ -559,7 +567,7 @@ void  ExrDecoder::RGBToGray( float *in, float *out )
 }
 
 
-ImageDecoder ExrDecoder::newDecoder() const
+Ptr<ImageDecoder::Impl> ExrDecoder::newDecoder() const
 {
     return makePtr<ExrDecoder>();
 }
@@ -585,7 +593,7 @@ bool  ExrEncoder::isFormatSupported( int depth ) const
 
 
 // TODO scale appropriately
-bool  ExrEncoder::write( const Mat& img, const std::vector<int>& )
+bool  ExrEncoder::write( const Mat& img, InputArray )
 {
     int width = img.cols, height = img.rows;
     int depth = img.depth(), channels = img.channels();
@@ -734,7 +742,7 @@ bool  ExrEncoder::write( const Mat& img, const std::vector<int>& )
 }
 
 
-ImageEncoder ExrEncoder::newEncoder() const
+Ptr<ImageEncoder::Impl> ExrEncoder::newEncoder() const
 {
     return makePtr<ExrEncoder>();
 }
