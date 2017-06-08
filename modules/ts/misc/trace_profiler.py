@@ -234,7 +234,7 @@ class Trace:
 
     def load(self, filename):
         self.pending_files.append(filename)
-        if DEBUG:
+        if True:
             with open(filename, 'r') as f:
                 print(f.read(), end='')
         while self.pending_files:

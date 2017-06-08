@@ -232,4 +232,33 @@ TEST(AutoBuffer, allocate_test)
     EXPECT_EQ(6u, abuf.size());
 }
 
+
+static void trace_threshold_test(int level)
+{
+    CV_TRACE_FUNCTION();
+    CV_TRACE_ARG(level);
+    if (level == 0)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Mat a = Mat::zeros(Size(10,10), CV_32F);
+        }
+    }
+    else
+    {
+        trace_threshold_test(level - 1);
+#ifdef __linux__
+        usleep(1000 / level);
+#endif
+        trace_threshold_test(level - 1);
+    }
+}
+
+TEST(Trace, threshold)
+{
+    trace_threshold_test(2);
+    trace_threshold_test(3);
+    trace_threshold_test(4);
+}
+
 } // namespace

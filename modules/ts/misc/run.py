@@ -49,8 +49,8 @@ if __name__ == "__main__":
     parser.add_argument("--serial", metavar="serial number", default="", help="Android: directs command to the USB device or emulator with the given serial number")
     parser.add_argument("--package", metavar="package", default="", help="Android: run jUnit tests for specified package")
 
-    parser.add_argument("--trace", action="store_true", default=False, help="Trace: enable OpenCV tracing")
-    parser.add_argument("--trace_dump", metavar="trace_dump", default=-1, help="Trace: dump highlight calls (specify max entries count, 0 - dump all)")
+    parser.add_argument("--trace", action="store_true", default=True, help="Trace: enable OpenCV tracing")
+    parser.add_argument("--trace_dump", metavar="trace_dump", default=0, help="Trace: dump highlight calls (specify max entries count, 0 - dump all)")
 
     args, other_args = parser.parse_known_args()
 
@@ -86,9 +86,9 @@ if __name__ == "__main__":
 
     if args.check:
         if not [a for a in test_args if a.startswith("--perf_min_samples=")] :
-            test_args.extend(["--perf_min_samples=1"])
+            test_args.extend(["--perf_min_samples=100"])
         if not [a for a in test_args if a.startswith("--perf_force_samples=")] :
-            test_args.extend(["--perf_force_samples=1"])
+            test_args.extend(["--perf_force_samples=100"])
         if not [a for a in test_args if a.startswith("--perf_verify_sanity")] :
             test_args.extend(["--perf_verify_sanity"])
 

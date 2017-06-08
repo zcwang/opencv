@@ -308,7 +308,7 @@ struct TraceManagerThreadLocal
     }
     inline void stackPop()
     {
-        CV_DbgAssert(!stack.empty());
+        CV_Assert(!stack.empty());
         stack.pop_back();
     }
     void dumpStack(std::ostream& out, bool onlyFunctions) const;

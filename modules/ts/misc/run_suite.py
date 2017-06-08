@@ -149,6 +149,7 @@ class TestSuite(object):
                 env['OPENCV_TRACE'] = '1'
                 env['OPENCV_TRACE_LOCATION'] = 'OpenCVTrace-{}'.format(self.getLogBaseName(exe))
                 env['OPENCV_TRACE_SYNC_OPENCL'] = '1'
+                cmd = cmd + ['--gtest_filter=*anny*/13']
             tempDir = TempEnvDir('OPENCV_TEMP_PATH', "__opencv_temp.")
             tempDir.init()
             log.warning("Run: %s" % " ".join(cmd))
