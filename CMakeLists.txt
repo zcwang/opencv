@@ -573,10 +573,6 @@ endif()
 #  Detect 3rd-party libraries
 # ----------------------------------------------------------------------------
 
-if(ANDROID)
-   add_subdirectory(3rdparty/cpufeatures)
-endif()
-
 include(cmake/OpenCVFindLibsGrfmt.cmake)
 include(cmake/OpenCVFindLibsGUI.cmake)
 include(cmake/OpenCVFindLibsVideo.cmake)
