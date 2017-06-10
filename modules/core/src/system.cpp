@@ -68,6 +68,7 @@ Mutex* __initialization_mutex_initializer = &getInitializationMutex();
 #  include <unistd.h>
 #  include <fcntl.h>
 #  include <elf.h>
+#  include <errno.h>
 #if defined ANDROID || defined __linux__
 #  include <linux/auxvec.h>
 #endif
@@ -209,7 +210,7 @@ std::wstring GetTempFileNameWinRT(std::wstring prefix)
 # include <android/log.h>
 #endif
 
-#ifdef __arm__
+#if defined __arm__ && defined ANDROID
 
 /* Get the size of a file by reading it until the end. This is needed
  * because files under /proc do not always return a valid size when
