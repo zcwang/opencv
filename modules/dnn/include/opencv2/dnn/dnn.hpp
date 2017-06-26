@@ -153,7 +153,7 @@ namespace dnn //! This namespace is used for dnn module functionlaity.
      * Each class, derived from Layer, must implement allocate() methods to declare own outputs and forward() to compute outputs.
      * Also before using the new layer into networks you must register your layer by using one of @ref dnnLayerFactory "LayerFactory" macros.
      */
-    class CV_EXPORTS_W Layer
+    class CV_EXPORTS_W Layer : Algorithm
     {
     public:
 
@@ -306,7 +306,7 @@ namespace dnn //! This namespace is used for dnn module functionlaity.
         /** @brief Container for strings and integers. */
         typedef DictValue LayerId;
 
-        /** @brief Returns pointer to layer with specified name which the network use. */
+        /** @brief Returns pointer to layer with specified id or name which the network use. */
         CV_WRAP Ptr<Layer> getLayer(LayerId layerId);
 
         /** @brief Returns pointers to input layers of specific layer. */
@@ -494,7 +494,7 @@ namespace dnn //! This namespace is used for dnn module functionlaity.
          /** @brief Returns list of types for layer used in model.
           * @param layersTypes output parameter for returning types.
           */
-         CV_WRAP void getLayerTypes(std::vector<String>& layersTypes) const;
+         CV_WRAP void getLayerTypes(CV_OUT std::vector<String>& layersTypes) const;
 
          /** @brief Returns count of layers of specified type.
           * @param layerType type.
@@ -509,18 +509,18 @@ namespace dnn //! This namespace is used for dnn module functionlaity.
           * @param blobs output parameter to store resulting bytes for intermediate blobs.
           */
          CV_WRAP void getMemoryConsumption(const std::vector<MatShape>& netInputShapes,
-                                           size_t& weights, size_t& blobs) const;
+                                           CV_OUT size_t& weights, CV_OUT size_t& blobs) const;
          /** @overload */
          CV_WRAP void getMemoryConsumption(const MatShape& netInputShape,
-                                           size_t& weights, size_t& blobs) const;
+                                           CV_OUT size_t& weights, CV_OUT size_t& blobs) const;
          /** @overload */
          CV_WRAP void getMemoryConsumption(const int layerId,
                                            const std::vector<MatShape>& netInputShapes,
-                                           size_t& weights, size_t& blobs) const;
+                                           CV_OUT size_t& weights, CV_OUT size_t& blobs) const;
          /** @overload */
          CV_WRAP void getMemoryConsumption(const int layerId,
                                            const MatShape& netInputShape,
-                                           size_t& weights, size_t& blobs) const;
+                                           CV_OUT size_t& weights, CV_OUT size_t& blobs) const;
 
          /** @brief Computes bytes number which are requered to store
           * all weights and intermediate blobs for each layer.
@@ -530,12 +530,12 @@ namespace dnn //! This namespace is used for dnn module functionlaity.
           * @param blobs output parameter to store resulting bytes for intermediate blobs.
           */
          CV_WRAP void getMemoryConsumption(const std::vector<MatShape>& netInputShapes,
-                                           std::vector<int>& layerIds, std::vector<size_t>& weights,
-                                           std::vector<size_t>& blobs) const;
+                                           CV_OUT std::vector<int>& layerIds, CV_OUT std::vector<size_t>& weights,
+                                           CV_OUT std::vector<size_t>& blobs) const;
          /** @overload */
          CV_WRAP void getMemoryConsumption(const MatShape& netInputShape,
-                                           std::vector<int>& layerIds, std::vector<size_t>& weights,
-                                           std::vector<size_t>& blobs) const;
+                                           CV_OUT std::vector<int>& layerIds, CV_OUT std::vector<size_t>& weights,
+                                           CV_OUT std::vector<size_t>& blobs) const;
     private:
 
         struct Impl;
@@ -543,7 +543,7 @@ namespace dnn //! This namespace is used for dnn module functionlaity.
     };
 
     /** @brief Small interface class for loading trained serialized models of different dnn-frameworks. */
-    class CV_EXPORTS_W Importer
+    class CV_EXPORTS_W Importer : Algorithm
     {
     public:
 
@@ -579,7 +579,7 @@ namespace dnn //! This namespace is used for dnn module functionlaity.
      *  @param model   path to the .pb file with binary protobuf description of the network architecture.
      *  @returns Pointer to the created importer, NULL in failure cases.
      */
-    CV_EXPORTS Ptr<Importer> createTensorflowImporter(const String &model);
+    CV_EXPORTS_W Ptr<Importer> createTensorflowImporter(const String &model);
 
     /** @brief Creates the importer of <a href="http://torch.ch">Torch7</a> framework network.
      *  @param filename path to the file, dumped from Torch by using torch.save() function.

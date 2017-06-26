@@ -7,9 +7,23 @@ if(NOT Protobuf_FOUND)
   ocv_module_disable(opencv_dnn)
 endif()
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/download_google_inception5.cmake)
+if(BUILD_TESTS)
+  set(DOWNLOAD_DIR "${OpenCV_BINARY_DIR}/downloads/dnn")
+  # download Google Inception5 Tensorflow graph used for tests and samples
+  download_google_inception5("${DOWNLOAD_DIR}" google_inception5_status)
+  if(google_inception5_status)
+    message(STATUS "Google Inception5 net and test samples are stored in build/downloads/dnn folder")
+  else()
+    message(WARNING "Failed to download Google Inception5 net and test samples - dnn autotests may not work."
+                    "Please add them manually to build/downloads/dnn/google/inception5/ and "
+                    "build/downloads/dnn/samples folders, respectively")
+  endif()
+endif()
+
 set(the_description "Deep neural network module. It allows to load models from different frameworks and to make forward pass")
 
-ocv_add_module(dnn opencv_core opencv_imgproc WRAP python matlab)
+ocv_add_module(dnn opencv_core opencv_imgproc WRAP python matlab java)
 ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-shadow -Wno-parentheses -Wmaybe-uninitialized -Wsign-promo
                                      -Wmissing-declarations -Wmissing-prototypes
 )
