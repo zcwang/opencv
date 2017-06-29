@@ -43,11 +43,14 @@
 
 #include <string>
 
-#if defined HAVE_FFMPEG && !defined WIN32
-#include "cap_ffmpeg_impl.hpp"
-#else
+#include <dlfcn.h>
+#include <stdio.h>
+
+//#if defined HAVE_FFMPEG && !defined WIN32
+//#include "cap_ffmpeg_impl.hpp"
+//#else
 #include "cap_ffmpeg_api.hpp"
-#endif
+//#endif
 
 static CvCreateFileCapture_Plugin icvCreateFileCapture_FFMPEG_p = 0;
 static CvReleaseCapture_Plugin icvReleaseCapture_FFMPEG_p = 0;
@@ -95,6 +98,17 @@ private:
             icvFFOpenCV = 0;
         }
     }
+    #elif __linux__
+    void* icvFFOpenCV;
+
+    ~icvInitFFMPEG()
+    {
+        if (icvFFOpenCV)
+        {
+            dlclose(icvFFOpenCV);
+            icvFFOpenCV = 0;
+        }
+    }
     #endif
 
     icvInitFFMPEG()
@@ -137,8 +151,11 @@ private:
                 }
             }
         }
-    # endif
-
+    #endif
+    #elif defined __linux__
+const char* filename = getenv("OPENCV_FFMPEG_BINARY");
+icvFFOpenCV = dlopen(filename, RTLD_LAZY | RTLD_GLOBAL);
+#define GetProcAddress dlsym
         if( icvFFOpenCV )
         {
             icvCreateFileCapture_FFMPEG_p =
