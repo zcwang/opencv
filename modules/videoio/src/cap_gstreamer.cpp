@@ -274,6 +274,8 @@ IplImage * CvCapture_GStreamer::retrieveFrame(int)
 #else
         GstCaps* buffer_caps = gst_sample_get_caps(sample);
 #endif
+        printf("retrieve: %s\n", gst_caps_to_string(buffer_caps));
+
         // bail out in no caps
         assert(gst_caps_get_size(buffer_caps) == 1);
         GstStructure* structure = gst_caps_get_structure(buffer_caps, 0);
@@ -496,7 +498,7 @@ void CvCapture_GStreamer::setFilter(const char *prop, int type, int v1, int v2)
 #endif
 
     gst_app_sink_set_caps(GST_APP_SINK(sink), caps);
-    //printf("filtering with %s\n", gst_caps_to_string(caps));
+    printf("filtering with %s\n", gst_caps_to_string(caps));
 }
 
 
@@ -519,6 +521,7 @@ void CvCapture_GStreamer::removeFilter(const char *filter)
     gst_structure_remove_field(s, filter);
 
     gst_app_sink_set_caps(GST_APP_SINK(sink), caps);
+    printf("removing with %s\n", gst_caps_to_string(caps));
 }
 
 /*!
@@ -814,6 +817,7 @@ bool CvCapture_GStreamer::open( int type, const char* filename )
     caps = gst_caps_from_string("video/x-raw, format=(string){BGR, GRAY8}; video/x-bayer,format=(string){rggb,bggr,grbg,gbrg}; image/jpeg");
 #endif
     gst_app_sink_set_caps(GST_APP_SINK(sink), caps);
+    printf("set SINK: %s\n", gst_caps_to_string(caps));
     gst_caps_unref(caps);
 
     {
@@ -853,6 +857,7 @@ bool CvCapture_GStreamer::open( int type, const char* filename )
 #else
         GstCaps* buffer_caps = gst_pad_get_current_caps(pad);
 #endif
+        printf("sink_buffer=%s\n", gst_caps_to_string(buffer_caps));
         const GstStructure *structure = gst_caps_get_structure (buffer_caps, 0);
 
         if (!gst_structure_get_int (structure, "width", &width))
@@ -879,6 +884,8 @@ bool CvCapture_GStreamer::open( int type, const char* filename )
     }
 
     __END__;
+
+    GST_DEBUG_BIN_TO_DOT_FILE(GST_BIN(pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "pipeline");
 
     return true;
 }
@@ -1476,6 +1483,7 @@ bool CvVideoWriter_GStreamer::open( const char * filename, int fourcc,
     }
 
     gst_app_src_set_caps(GST_APP_SRC(source), caps);
+    printf("set SOURCE: %s\n", gst_caps_to_string(caps));
     gst_app_src_set_stream_type(GST_APP_SRC(source), GST_APP_STREAM_TYPE_STREAM);
     gst_app_src_set_size (GST_APP_SRC(source), -1);
 
