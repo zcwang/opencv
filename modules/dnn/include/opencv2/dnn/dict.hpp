@@ -39,14 +39,14 @@
 //
 //M*/
 
-#ifndef OPENCV_DNN_DNN_DICT_HPP
-#define OPENCV_DNN_DNN_DICT_HPP
-
 #include <opencv2/core.hpp>
 #include <map>
 #include <ostream>
 
 #include <opencv2/dnn/dnn.hpp>
+
+#ifndef OPENCV_DNN_DNN_DICT_HPP
+#define OPENCV_DNN_DNN_DICT_HPP
 
 namespace cv {
 namespace dnn {
