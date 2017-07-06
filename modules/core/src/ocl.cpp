@@ -2007,6 +2007,7 @@ struct Kernel::Impl
 
     void finit()
     {
+usleep(100000);
         cleanupUMats();
         images.clear();
         if(e) { clReleaseEvent(e); e = 0; }
