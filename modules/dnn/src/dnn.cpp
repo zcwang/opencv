@@ -639,6 +639,10 @@ struct Net::Impl
         fusion = true;
         preferableBackend = DNN_BACKEND_DEFAULT;
         preferableTarget = DNN_TARGET_CPU;
+#ifdef HAVE_OPENCL
+        if (ocl::useOpenCL())
+            preferableTarget = DNN_TARGET_OPENCL;
+#endif
     }
 
     Ptr<DataLayer> netInputLayer;
@@ -920,7 +924,7 @@ struct Net::Impl
         backendWrapper.reset();
         if (preferableBackend == DNN_BACKEND_DEFAULT)
         {
-            CV_Assert(preferableTarget == DNN_TARGET_CPU);
+            CV_Assert(preferableTarget == DNN_TARGET_CPU || preferableTarget == DNN_TARGET_OPENCL);
             return;
         }
 
@@ -1274,8 +1278,8 @@ struct Net::Impl
         }
 
         layersTimings.resize(lastLayerId + 1, 0);
-
-        fuseLayers(blobsToKeep_);
+        if (preferableTarget == DNN_TARGET_CPU)
+            fuseLayers(blobsToKeep_);
     }
 
     void forwardLayer(LayerData &ld)
@@ -1429,7 +1433,7 @@ struct Net::Impl
         }
         else
         {
-            CV_Assert(preferableTarget == DNN_TARGET_CPU);
+            CV_Assert(preferableTarget == DNN_TARGET_CPU || preferableTarget == DNN_TARGET_OPENCL);
         }
         return ld.outputBlobs[pin.oid];
     }
