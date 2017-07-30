@@ -1828,6 +1828,7 @@ static bool ipp_meanStdDev(Mat& src, OutputArray _mean, OutputArray _sdv, Mat& m
             0;
             if( ippiMean_StdDev_C3CR )
             {
+printf("C3CR: src.ptr=%p src.end=%p step=%lld sz=%dx%d\n", src.ptr(), src.ptr(sz.height), src.step[0], sz.width, sz.height);
                 if( CV_INSTRUMENT_FUN_IPP(ippiMean_StdDev_C3CR, src.ptr(), (int)src.step[0], sz, 1, &pmean[0], &pstddev[0]) >= 0 &&
                     CV_INSTRUMENT_FUN_IPP(ippiMean_StdDev_C3CR, src.ptr(), (int)src.step[0], sz, 2, &pmean[1], &pstddev[1]) >= 0 &&
                     CV_INSTRUMENT_FUN_IPP(ippiMean_StdDev_C3CR, src.ptr(), (int)src.step[0], sz, 3, &pmean[2], &pstddev[2]) >= 0 )
