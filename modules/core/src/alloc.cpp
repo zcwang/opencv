@@ -48,6 +48,8 @@
 #include <malloc.h>
 #endif
 
+#include <sys/mman.h>
+
 namespace cv {
 
 static void* OutOfMemoryError(size_t size)
@@ -59,6 +61,19 @@ static void* OutOfMemoryError(size_t size)
 
 void* fastMalloc( size_t size )
 {
+    if (size > 4096)
+    {
+        size = alignSize(size, 4096);
+        // align with 2 guard pages
+        void* ptr = mmap(NULL, size + 4096*2, (PROT_READ | PROT_WRITE), MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
+        CV_Assert(0 == mprotect((uchar*)ptr, 4096, PROT_NONE));
+        CV_Assert(0 == mprotect((uchar*)ptr + size + 4096, 4096, PROT_NONE));
+#if 1
+        intptr_t diff = alignSize(((intptr_t)ptr) & (4096 - 1), CV_MALLOC_ALIGN);
+        ptr = diff ? (ptr + (4096 - diff)) : ptr;
+#endif
+        return (uchar*)ptr + 4096;
+    }
 #ifdef HAVE_POSIX_MEMALIGN
     void* ptr = NULL;
     if(posix_memalign(&ptr, CV_MALLOC_ALIGN, size))
@@ -83,6 +98,7 @@ void* fastMalloc( size_t size )
 
 void fastFree(void* ptr)
 {
+return;
 #if defined HAVE_POSIX_MEMALIGN || defined HAVE_MEMALIGN
     free(ptr);
 #else
