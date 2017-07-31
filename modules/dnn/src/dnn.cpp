@@ -639,10 +639,6 @@ struct Net::Impl
         fusion = true;
         preferableBackend = DNN_BACKEND_DEFAULT;
         preferableTarget = DNN_TARGET_CPU;
-#ifdef HAVE_OPENCL
-        if (ocl::useOpenCL())
-            preferableTarget = DNN_TARGET_OPENCL;
-#endif
     }
 
     Ptr<DataLayer> netInputLayer;
@@ -1070,7 +1066,7 @@ struct Net::Impl
 
     void fuseLayers(const std::vector<LayerPin>& blobsToKeep_)
     {
-        if( !fusion || preferableBackend == DNN_BACKEND_HALIDE )
+        if( !fusion || !(preferableBackend == DNN_BACKEND_DEFAULT && preferableTarget == DNN_TARGET_CPU))
             return;
 
         CV_TRACE_FUNCTION();
@@ -1278,8 +1274,7 @@ struct Net::Impl
         }
 
         layersTimings.resize(lastLayerId + 1, 0);
-        if (0)
-            fuseLayers(blobsToKeep_);
+        fuseLayers(blobsToKeep_);
     }
 
     void forwardLayer(LayerData &ld)
