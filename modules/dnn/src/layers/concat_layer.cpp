@@ -203,7 +203,7 @@ public:
             ker.set(6, (int)offset_concat_axis);
             ker.set(7, ocl::KernelArg::PtrWriteOnly(outMat));
 
-            CV_Assert(ker.run(1, &nthreads, NULL, true));
+            CV_Assert(ker.run(1, &nthreads, NULL, false));
             offset_concat_axis += bottom_concat_axis;
         }
 
