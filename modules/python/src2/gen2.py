@@ -426,6 +426,7 @@ class FuncVariant(object):
     def __init__(self, classname, name, decl, isconstructor):
         self.classname = classname
         self.name = self.wname = name
+        self.decl = decl
         self.isconstructor = isconstructor
 
         self.docstring = decl[5]
@@ -1048,6 +1049,31 @@ class PythonWrapperGenerator(object):
             return res
         for name, classinfo in self.classes.items():
             process_isalgorithm(classinfo)
+
+        # append overloaded methods from base classes like C++ does
+        def process_overloads(methodname, classinfo, base_classinfo):
+            methods = classinfo.methods
+            base_methods = base_classinfo.methods
+            if methodname in base_methods:
+                func = methods[methodname]
+                base_func = base_methods[methodname]
+                for base_variant in base_func.variants:
+                    base_args = base_variant.decl[3]
+                    for variant in func.variants:
+                        args = variant.decl[3]
+                        if args == base_args:
+                            break
+                    else:
+                        func.variants.append(base_variant)
+            if base_classinfo.base:
+                process_overloads(methodname, classinfo, self.classes[base_classinfo.base])
+
+        for name, classinfo in self.classes.items():
+            if classinfo.base:
+                for (methodname, func) in classinfo.methods.items():
+                    if func.isconstructor or func.isclassmethod:
+                        continue
+                    process_overloads(methodname, classinfo, self.classes[classinfo.base])
 
         # step 2: generate code for the classes and their methods
         classlist = list(self.classes.items())
