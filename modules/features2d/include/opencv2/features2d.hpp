@@ -215,6 +215,9 @@ public:
     //! Return true if detector object is empty
     CV_WRAP virtual bool empty() const;
     CV_WRAP virtual String getDefaultName() const;
+
+    using Algorithm::read;
+    using Algorithm::write;
 };
 
 /** Feature detectors in OpenCV have wrappers with a common interface that enables you to easily switch
@@ -972,6 +975,8 @@ public:
     CV_WRAP void radiusMatch( InputArray queryDescriptors, CV_OUT std::vector<std::vector<DMatch> >& matches, float maxDistance,
                       InputArrayOfArrays masks=noArray(), bool compactResult=false );
 
+    using Algorithm::read;
+    using Algorithm::write;
 
     CV_WRAP void write( const String& fileName ) const
     {
