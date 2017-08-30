@@ -17,6 +17,9 @@ confThreshold = 0.5
 prototxt = 'face_detector/deploy.prototxt'
 caffemodel = 'face_detector/res10_300x300_ssd_iter_140000.caffemodel'
 
+if not os.path.exists(caffemodel):
+    import resnet_ssd_face_model_downloader
+
 if __name__ == '__main__':
     net = dnn.readNetFromCaffe(prototxt, caffemodel)
     cap = cv.VideoCapture(0)
