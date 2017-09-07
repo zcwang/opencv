@@ -54,7 +54,7 @@
 #include "opencv2/core/ocl_genbase.hpp"
 #include "opencl_kernels_core.hpp"
 
-#define CV_OPENCL_ALWAYS_SHOW_BUILD_LOG 0
+#define CV_OPENCL_ALWAYS_SHOW_BUILD_LOG 1
 #define CV_OPENCL_SHOW_RUN_ERRORS       0
 #define CV_OPENCL_SHOW_SVM_ERROR_LOG    1
 #define CV_OPENCL_SHOW_SVM_LOG          0
@@ -101,7 +101,7 @@ static bool isRaiseError()
     static bool value = false;
     if (!initialized)
     {
-        value = cv::utils::getConfigurationParameterBool("OPENCV_OPENCL_RAISE_ERROR", false);
+        value = cv::utils::getConfigurationParameterBool("OPENCV_OPENCL_RAISE_ERROR", true);
         initialized = true;
     }
     return value;
