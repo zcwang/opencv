@@ -56,6 +56,8 @@
 #include <direct.h>
 #endif
 
+#define TEST_ALL_KERNELS
+
 #ifdef HAVE_OPENCL
 namespace cv { namespace dnn { namespace ocl4dnn {
 template<typename Dtype>
@@ -1514,8 +1516,8 @@ void OCL4DNNConvSpatial<Dtype>::prepareKernel(UMat &bottom, UMat &top,
         bestKernelConfig.release();
     }
 
-    if (loadCachedConfig())
-        return;
+    //if (loadCachedConfig())
+    //    return;
 
     tune(bottom, top, weight, bias, numImages);
 }
