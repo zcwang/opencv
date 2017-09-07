@@ -22,9 +22,7 @@ ocv_warnings_disable(CMAKE_CXX_FLAGS -Wno-shadow -Wno-parentheses -Wmaybe-uninit
 ocv_warnings_disable(CMAKE_CXX_FLAGS /wd4701 /wd4100)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/ocl4dnn/include ${OPENCL_INCLUDE_DIRS})
-if(NOT ENABLE_CXX11 AND HAVE_CXX11)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 if(MSVC)
   add_definitions( -D_CRT_SECURE_NO_WARNINGS=1 )
