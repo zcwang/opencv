@@ -56,6 +56,8 @@
 #include <direct.h>
 #endif
 
+#define TEST_ALL_KERNELS
+
 #ifdef HAVE_OPENCL
 namespace cv { namespace dnn { namespace ocl4dnn {
 template<typename Dtype>
