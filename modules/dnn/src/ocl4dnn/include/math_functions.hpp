@@ -63,13 +63,6 @@ bool ocl4dnnGEMMCommon(const CBLAS_TRANSPOSE TransB,
                        const size_t max_image_size);
 
 template<typename Dtype>
-void ocl4dnnGEMMCopyBufferToImage(cl_mem *image, UMat buffer, int offset,
-                                  bool is_matrix_a, bool transpose,
-                                  bool padding, int padded_height,
-                                  int padded_width, int height,
-                                  int width,  int ld);
-
-template<typename Dtype>
 bool ocl4dnnGEMV(const CBLAS_TRANSPOSE TransA,
                  const int32_t M, const int32_t N, const Dtype alpha,
                  const UMat A, const int32_t offA, const UMat x,
