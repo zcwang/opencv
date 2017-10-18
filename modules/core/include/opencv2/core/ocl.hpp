@@ -749,6 +749,10 @@ public:
 protected:
     struct Impl;
     Impl* p;
+
+private:
+    Timer(const Timer&); // disabled
+    Timer& operator=(const Timer&); // disabled
 };
 
 CV_EXPORTS MatAllocator* getOpenCLAllocator();
