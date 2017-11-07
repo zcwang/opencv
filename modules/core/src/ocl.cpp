@@ -3257,6 +3257,11 @@ struct Program::Impl
                     BinaryProgramFile file(fname, hash_str.c_str());
                     file.write(buildflags, binaryBuf);
                 }
+                { // validate
+                    clReleaseProgram(handle);
+                    handle = NULL;
+                    createFromBinary(ctx, binaryBuf);
+                }
             }
             catch (const cv::Exception& e)
             {
@@ -3405,6 +3410,15 @@ struct Program::Impl
         buf.resize(sz);
         uchar* ptr = (uchar*)&buf[0];
         CV_OCL_CHECK(clGetProgramInfo(handle, CL_PROGRAM_BINARIES, sizeof(ptr), &ptr, NULL));
+#if 1
+{
+printf("OpenCL: query kernel names (compiled)...\n"); fflush(stdout);
+size_t retsz = 0;
+char buf[4096] = {0};
+clGetProgramInfo(handle, CL_PROGRAM_KERNEL_NAMES, sizeof(buf), &buf[0], &retsz);
+printf("Kernels=%s\n", buf);
+}
+#endif
     }
 
     bool createFromBinary(const Context& ctx, const std::vector<char>& buf)
@@ -3444,6 +3458,15 @@ struct Program::Impl
                 handle = NULL;
             }
         }
+#if 1
+{
+printf("OpenCL: query kernel names (from binary)...\n"); fflush(stdout);
+size_t retsz = 0;
+char buf[4096] = {0};
+clGetProgramInfo(handle, CL_PROGRAM_KERNEL_NAMES, sizeof(buf), &buf[0], &retsz);
+printf("Kernels=%s\n", buf);
+}
+#endif
         return handle != 0;
     }
 
