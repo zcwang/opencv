@@ -2478,6 +2478,12 @@ bool Kernel::Impl::run(int dims, size_t globalsize[], size_t localsize[],
     }
     else
     {
+#if 1
+        addref();
+        isInProgress = true;
+        CV_OCL_CHECK(clSetEventCallback(asyncEvent, CL_COMPLETE, oclCleanupCallback, this));
+        CV_OCL_DBG_CHECK(clFlush(qq));
+#else
         if (haveTempSrcUMats)
         {
             addref();
@@ -2489,6 +2495,7 @@ bool Kernel::Impl::run(int dims, size_t globalsize[], size_t localsize[],
             cleanupUMats();
             images.clear();
         }
+#endif
     }
     if (asyncEvent)
         CV_OCL_DBG_CHECK(clReleaseEvent(asyncEvent));
@@ -2514,6 +2521,7 @@ bool Kernel::runTask(bool sync, const Queue& q)
         p->addref();
         p->isInProgress = true;
         CV_OCL_CHECK(clSetEventCallback(asyncEvent, CL_COMPLETE, oclCleanupCallback, p));
+        CV_OCL_DBG_CHECK(clFlush(qq));
     }
     if (asyncEvent)
         CV_OCL_DBG_CHECK(clReleaseEvent(asyncEvent));
