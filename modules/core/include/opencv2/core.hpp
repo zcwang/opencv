@@ -3098,13 +3098,13 @@ public:
      *
      * must rename it as it is overloaded in e.g Feature2D
      */
-    CV_WRAP_AS(write2) void write(const Ptr<FileStorage>& fs, const String& name = String()) const;
+    CV_WRAP void write(const Ptr<FileStorage>& fs, const String& name = String()) const;
 
     /** @brief Reads algorithm parameters from a file storage
      *
      * bindings: must rename it as it is overloaded in e.g Feature2D
      */
-    CV_WRAP_AS(read2) virtual void read(const FileNode& fn) { (void)fn; }
+    CV_WRAP virtual void read(const FileNode& fn) { (void)fn; }
 
     /** @brief Returns true if the Algorithm is empty (e.g. in the very beginning or after unsuccessful read
      */
