@@ -62,9 +62,13 @@ static bool GLOBAL_SYSTEM_LITTLE_ENDIAN =
 
 static void* EXRAllocAligned(size_t size, size_t alignment)
 {
+#ifdef __ANDROID__
+    return memalign(alignment, size);
+#else
     void* ptr = 0;
     posix_memalign(&ptr, alignment, size);
     return ptr;
+#endif
 }
 
 

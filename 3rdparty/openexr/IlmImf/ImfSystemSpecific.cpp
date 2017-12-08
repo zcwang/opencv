@@ -39,7 +39,8 @@
 OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_ENTER
 
 namespace {
-#if defined(IMF_HAVE_SSE2) &&  defined(__GNUC__)
+#if defined(IMF_HAVE_SSE2) &&  defined(__GNUC__) \
+    && !defined(__ANDROID__) /* ImfSystemSpecific.cpp:51:29: error: inconsistent operand constraints in an 'asm' */
 
     // Helper functions for gcc + SSE enabled
     void cpuid(int n, int &eax, int &ebx, int &ecx, int &edx)
