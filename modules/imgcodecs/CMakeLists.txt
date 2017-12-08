@@ -14,6 +14,10 @@ if(HAVE_WINRT_CX AND NOT WINRT)
 endif()
 
 if(HAVE_PNG OR HAVE_TIFF OR HAVE_OPENEXR)
+  ocv_warnings_disable(CMAKE_CXX_FLAGS
+    /wd4800 # vs2015 ImfVersion.h(112): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+    /wd4244 # vs2015 half.h(474): warning C4244: '=': conversion from 'int' to 'unsigned short', possible loss of data
+  )
   ocv_include_directories(${ZLIB_INCLUDE_DIRS})
   list(APPEND GRFMT_LIBS ${ZLIB_LIBRARIES})
 endif()

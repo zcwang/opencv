@@ -222,7 +222,7 @@ OCV_OPTION(WITH_HALIDE         "Include Halide support"                      OFF
 OCV_OPTION(WITH_JASPER         "Include JPEG2K support"                      ON   IF (NOT IOS) )
 OCV_OPTION(WITH_JPEG           "Include JPEG support"                        ON)
 OCV_OPTION(WITH_WEBP           "Include WebP support"                        ON   IF (NOT WINRT) )
-OCV_OPTION(WITH_OPENEXR        "Include ILM support via OpenEXR"             ON   IF (NOT IOS AND NOT WINRT) )
+OCV_OPTION(WITH_OPENEXR        "Include ILM support via OpenEXR"             (BUILD_OPENEXR OR NOT CMAKE_CROSSCOMPILING)   IF (NOT APPLE_FRAMEWORK AND NOT WINRT) )
 OCV_OPTION(WITH_OPENGL         "Include OpenGL support"                      OFF  IF (NOT ANDROID AND NOT WINRT) )
 OCV_OPTION(WITH_OPENVX         "Include OpenVX support"                      OFF)
 OCV_OPTION(WITH_OPENNI         "Include OpenNI support"                      OFF  IF (NOT ANDROID AND NOT IOS AND NOT WINRT) )
