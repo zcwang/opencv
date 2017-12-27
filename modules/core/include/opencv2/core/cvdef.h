@@ -141,6 +141,8 @@ namespace cv { namespace debug_build_guard { } using namespace debug_build_guard
 #define CV_CPU_AVX2             11
 #define CV_CPU_FMA3             12
 
+/* CV_CPU_AVX512 is an alias for 512F */
+#define CV_CPU_AVX512           13
 #define CV_CPU_AVX_512F         13
 #define CV_CPU_AVX_512BW        14
 #define CV_CPU_AVX_512CD        15
