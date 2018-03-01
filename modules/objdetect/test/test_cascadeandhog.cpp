@@ -262,7 +262,7 @@ int CV_DetectorTest::runTestCase( int detectorIdx, vector<vector<Rect> >& object
         if( image.empty() )
         {
             String msg = cv::format("image %d is empty", ii);
-            ts->printf( cvtest::TS::LOG, msg.c_str() );
+            ts->printf( cvtest::TS::LOG, "%s", msg.c_str() );
             return cvtest::TS::FAIL_INVALID_TEST_DATA;
         }
         int code = detectMultiScale( detectorIdx, image, imgObjects );

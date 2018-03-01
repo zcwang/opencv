@@ -44,12 +44,13 @@
 namespace opencv_test { namespace {
 
 void __wrap_printf_func(const char* fmt, ...)
+                                       CV_GCC_ATTRIBUTE((format (printf, 1, 2)));
+
+void __wrap_printf_func(const char* fmt, ...)
 {
     va_list args;
     va_start(args, fmt);
-    char buffer[256];
-    vsprintf (buffer, fmt, args);
-    cvtest::TS::ptr()->printf(cvtest::TS::SUMMARY, buffer);
+    cvtest::TS::ptr()->vprintf(cvtest::TS::SUMMARY, fmt, args);
     va_end(args);
 }
 

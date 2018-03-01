@@ -155,7 +155,7 @@ int Core_ReduceTest::checkOp( const Mat& src, int dstType, int opType, const Mat
 
         sprintf( msg, "bad accuracy with srcType = %s, dstType = %s, opType = %s, dim = %s",
                 srcTypeStr.c_str(), dstTypeStr.c_str(), opTypeStr, dimStr );
-        ts->printf( cvtest::TS::LOG, msg );
+        ts->printf(cvtest::TS::LOG, "%s", msg);
         return cvtest::TS::FAIL_BAD_ACCURACY;
     }
     return cvtest::TS::OK;

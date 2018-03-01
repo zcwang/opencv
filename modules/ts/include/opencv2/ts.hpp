@@ -393,8 +393,10 @@ public:
     virtual void init( const string& modulename );
 
     // low-level printing functions that are used by individual tests and by the system itself
-    virtual void printf( int streams, const char* fmt, ... );
-    virtual void vprintf( int streams, const char* fmt, va_list arglist );
+    virtual void printf( int streams, const char* fmt, ... )
+                                       CV_GCC_ATTRIBUTE((format (printf, 3, 4)));
+    virtual void vprintf( int streams, const char* fmt, va_list arglist )
+                                       CV_GCC_ATTRIBUTE((format (printf, 3, 0)));
 
     // updates the context: current test, test case, rng state
     virtual void update_context( BaseTest* test, int test_case_idx, bool update_ts_context );

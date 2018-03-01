@@ -285,6 +285,14 @@ Cv64suf;
 #  endif
 #endif
 
+#ifndef CV_GCC_ATTRIBUTE
+# ifdef __GNUC__
+#   define CV_GCC_ATTRIBUTE(...) __attribute__ (__VA_ARGS__)
+# else
+#   define CV_GCC_ATTRIBUTE(...)
+# endif
+#endif
+
 #ifndef CV_EXTERN_C
 #  ifdef __cplusplus
 #    define CV_EXTERN_C extern "C"

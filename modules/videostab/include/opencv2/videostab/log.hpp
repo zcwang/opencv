@@ -69,7 +69,7 @@ public:
 class CV_EXPORTS LogToStdout : public ILog
 {
 public:
-    virtual void print(const char *format, ...);
+    virtual void print(const char *format, ...) CV_GCC_ATTRIBUTE((format (printf, 2, 3)));
 };
 
 //! @}

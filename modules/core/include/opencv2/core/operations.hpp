@@ -371,7 +371,8 @@ The function acts like sprintf but forms and returns an STL string. It can be us
 message in the Exception constructor.
 @param fmt printf-compatible formatting specifiers.
  */
-CV_EXPORTS String format( const char* fmt, ... );
+CV_EXPORTS String format( const char* fmt, ... )
+                                       CV_GCC_ATTRIBUTE((format (printf, 1, 2)));
 
 ///////////////////////////////// Formatted output of cv::Mat /////////////////////////////////
 

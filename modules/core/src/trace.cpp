@@ -110,6 +110,7 @@ public:
         hasError(false)
     {}
 
+    CV_GCC_ATTRIBUTE((format (printf, 2, 3)))
     bool printf(const char* format, ...)
     {
         char* buf = &buffer[len];

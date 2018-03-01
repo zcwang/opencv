@@ -125,7 +125,8 @@ typedef std::vector<std::vector<Point3f> > vector_vector_Point3f;
 typedef std::vector<std::vector<DMatch> > vector_vector_DMatch;
 typedef std::vector<std::vector<KeyPoint> > vector_vector_KeyPoint;
 
-static PyObject* failmsgp(const char *fmt, ...)
+static CV_GCC_ATTRIBUTE((format (printf, 1, 2)))
+PyObject* failmsgp(const char *fmt, ...)
 {
   char str[1000];
 
