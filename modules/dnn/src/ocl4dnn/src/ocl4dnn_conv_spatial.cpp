@@ -1675,7 +1675,8 @@ void OCL4DNNConvSpatial<float>::setupConvolution(const UMat &bottom,
             }
             if (fastestKernel < 0) break;
             // Test fastest kernel
-            bool verified = verifyResult(bottom, top, weight, bias, numImages, kernelQueue[fastestKernel], verifyTop);
+            bool verified = verifyResult(bottom, top, weight, bias, numImages,
+                                         kernelQueue[fastestKernel], verifyTop);
             if (verified == true) {
                 kernelQueue[fastestKernel]->verified = true;
                 kernel_index_ = fastestKernel;
@@ -1712,7 +1713,8 @@ void OCL4DNNConvSpatial<float>::setupConvolution(const UMat &bottom,
     this->bestKernelConfig = kernelQueue[kernel_index_];
 
 
-    if (bestKernelConfig->kernelType != KERNEL_TYPE_INTEL_IDLF && bestKernelConfig->kernelType != KERNEL_TYPE_GEMM_LIKE)
+    if (bestKernelConfig->kernelType != KERNEL_TYPE_INTEL_IDLF &&
+        bestKernelConfig->kernelType != KERNEL_TYPE_GEMM_LIKE)
         if (!swizzled_weights_umat.empty())
             swizzled_weights_umat.release();
 
@@ -1772,7 +1774,7 @@ void OCL4DNNConvSpatial<Dtype>::prepareKernel(const UMat &bottom, UMat &top,
     if (loadCachedConfig()) // check in-memory cache
         return;
 
-    if (loadTunedConfig()) // check external storage
+    if (loadTunedConfig())  // check external storage
         return;
 
     UMat benchData(1, numImages * top_dim_, (use_half_) ? CV_16SC1 : CV_32FC1);
