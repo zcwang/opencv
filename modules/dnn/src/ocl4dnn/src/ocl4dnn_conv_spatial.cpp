@@ -140,9 +140,8 @@ OCL4DNNConvSpatial<Dtype>::OCL4DNNConvSpatial(OCL4DNNConvConfig config)
         }
     }
 
-    force_auto_tuning_ =
-            (use_cache_path_ && !utils::getConfigurationParameterBool("OPENCV_OCL4DNN_DISABLE_AUTO_TUNING", false))
-            || utils::getConfigurationParameterBool("OPENCV_OCL4DNN_FORCE_AUTO_TUNING", false);
+    run_auto_tuning_ = use_cache_path_ && !utils::getConfigurationParameterBool("OPENCV_OCL4DNN_DISABLE_AUTO_TUNING", false);
+    force_auto_tuning_ = utils::getConfigurationParameterBool("OPENCV_OCL4DNN_FORCE_AUTO_TUNING", false);
 }
 
 template<typename Dtype>
@@ -530,6 +529,22 @@ void OCL4DNNConvSpatial<Dtype>::calculateBenchmark(const UMat &bottom, UMat &ver
 
 #define TUNING_SIZE(x) ((x) > 256 ? 256 : (alignSize(x, 16)))
 
+static std::string sanitize(const std::string& s)
+{
+    std::string s_ = s;
+    for (size_t i = 0; i < s_.size(); i++)
+    {
+        char c = s_[i];
+        if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_'))
+        {
+            s_[i] = '_';
+        }
+    }
+    // TODO add hash?
+    // s_ = s_ + cv::format("_%08llx", crc64((uchar*)s.c_str(), s.size()));
+    return s_;
+}
+
 template<typename Dtype>
 void OCL4DNNConvSpatial<Dtype>::generateKey()
 {
@@ -550,17 +565,7 @@ void OCL4DNNConvSpatial<Dtype>::generateKey()
 
 
     key_ = ocl::Device::getDefault().vendorName() + "_EU" + cv::format("%d", ocl::Device::getDefault().maxComputeUnits()) + "_" + keyBuilder.str();
-    key_sanitized_ = key_;
-    for (size_t i = 0; i < key_sanitized_.size(); i++)
-    {
-        char c = key_sanitized_[i];
-        if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_'))
-        {
-            key_sanitized_[i] = '_';
-        }
-    }
-    // TODO add hash?
-    // key_sanitized_ = key_sanitized_ + cv::format("_%08llx", crc64((uchar*)key_.c_str(), key_.size()));
+    key_sanitized_ = sanitize(key_);
     short_key_ = keyBuilder.str();
 }
 
@@ -1781,7 +1786,7 @@ void OCL4DNNConvSpatial<Dtype>::prepareKernel(const UMat &bottom, UMat &top,
 
     calculateBenchmark(bottom, benchData, (use_half_) ? weights_half : weight, bias, numImages);
 
-    if (force_auto_tuning_)
+    if (run_auto_tuning_ || force_auto_tuning_)
     {
         setupConvolution(bottom, top, weight, bias, numImages, benchData);
     }
@@ -1796,13 +1801,21 @@ template<typename Dtype>
 bool OCL4DNNConvSpatial<Dtype>::loadCachedConfig()
 {
     cv::AutoLock lock(kernelConfigMutex);
-    if (!defaultConfigLoaded)
+    if (!defaultConfigLoaded && !force_auto_tuning_)
     {
         const size_t numConfigs = sizeof(default_kernel_config_intel)/sizeof(default_kernel_config_intel[0])/2;
         for (size_t i = 0; i < numConfigs; i++)
         {
+            std::string key = std::string("Intel(R) Corporation_") + default_kernel_config_intel[2 * i];
+            if (use_cache_path_ && !cache_path_.empty())
+            {
+                std::string cacheFile = cache_path_ + "/" + sanitize(key);
+                std::ifstream cachedKernel(cacheFile.c_str());
+                if (cachedKernel)
+                    continue;  // external configuration found, skip builtin
+            }
             std::pair<std::string, std::string> entry(
-                    std::string("Intel(R) Corporation_") + default_kernel_config_intel[2 * i],
+                    key,
                     default_kernel_config_intel[2 * i + 1]);
             kernelConfigMap.insert(entry);
         }
@@ -1880,9 +1893,12 @@ bool OCL4DNNConvSpatial<Dtype>::setupKernelByConfig(int x, int y, int z, int typ
 template<typename Dtype>
 bool OCL4DNNConvSpatial<Dtype>::loadTunedConfig()
 {
+    if (force_auto_tuning_)
+        return false;  // don't load results from external storage
+
     if (!use_cache_path_)
     {
-        if (cache_path_.empty() && !force_auto_tuning_)
+        if (cache_path_.empty())
         {
             static int warn_ = 0;
             if (!warn_)
