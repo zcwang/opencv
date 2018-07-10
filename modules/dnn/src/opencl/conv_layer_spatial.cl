@@ -467,7 +467,7 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
         int saved_y = curr_y;
 #endif
         const __global Dtype *src0_read = src0
-          + aligned_input_size * global_z                            // batch offset
+          + aligned_input_size * global_z           // batch offset
           + (curr_y - INPUT_PAD_H) * ROW_PITCH      // y offset
           + (curr_x - INPUT_PAD_W);                 // x offset
 
@@ -502,15 +502,26 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
                 const bool kernel_width_is_odd = KERNEL_WIDTH % 2 == 1;
 
 #if INPUT_PAD_W == 0 && INPUT_PAD_H == 0 && DILATION_X == 1 && DILATION_Y == 1 && INPUT_PAD_BOTTOM == 0 && INPUT_PAD_RIGHT == 0
-                Dtype_t blockA00 = ( (const __global Dtype_t*)src0_read )[  0  ];
+                Dtype_t blockA00;
                 Dtype*  pblockA00 = (Dtype*)(&blockA00);
+                int pos = 0;
+                LOOP(KERNEL_WIDTH, pos,
+                {
+                  if (curr_x + pos >= input_width)
+                    pblockA00[pos] = 0;
+                  else
+                    pblockA00[pos] = src0_read[pos];
+                })
 #else
                 Dtype_t blockA00;
                 Dtype*  pblockA00 = (Dtype*)(&blockA00);
                 int pos = 0;
                 LOOP(KERNEL_WIDTH, pos,
                 {
-                  if (curr_y >= INPUT_PAD_H && curr_y < input_height + INPUT_PAD_H && curr_x + pos * DILATION_X >= INPUT_PAD_W && curr_x + pos * DILATION_X < input_width + INPUT_PAD_W)
+                  if (curr_y >= INPUT_PAD_H &&
+                      curr_y < input_height + INPUT_PAD_H &&
+                      curr_x + pos * DILATION_X >= INPUT_PAD_W &&
+                      curr_x + pos * DILATION_X < input_width + INPUT_PAD_W)
                     pblockA00[pos] = src0_read[pos * DILATION_X];
                   else
                     pblockA00[pos] = 0;
@@ -564,17 +575,18 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
             //while( ++patch_row < 1 ); //debug
             while( ++patch_row < KERNEL_HEIGHT );
 
-            src0_read += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y); // reset to start of next slice of patch
+            // reset to start of next slice of patch
+            src0_read += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y);
         }
         //while ( ++patch_depth < 1 ); //debug
         while ( ++patch_depth < INPUT_DEPTH );
 
         // Dst resembles a cube of width x height x (output channel * batches).  Each tile writes:
         // (SIMD * TILE_M) x 1 x TILE_N.  Partial writes most likely generated if padding used.
-        int out_offset = global_z * out_pitch_z                                                   // batch offset
-         + ( group_x * TILE_N ) * out_pitch_y                                       // channel offset
+        int out_offset = global_z * out_pitch_z                                        // batch offset
+         + ( group_x * TILE_N ) * out_pitch_y                                          // channel offset
          + ( ( global_y * TILE_M ) / output_width + OUT_PADDING_HEIGHT) * OUT_PITCH_X  // y offset
-         + ( ( global_y * TILE_M ) % output_width ) + OUT_PADDING_LEFT;               // x offset
+         + ( ( global_y * TILE_M ) % output_width ) + OUT_PADDING_LEFT;                // x offset
 
         __global Dtype *out = dst + out_offset;
 #if APPLY_BIAS
@@ -621,7 +633,7 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
         int saved_y = curr_y;
 #endif
         const __global Dtype *src0_read = src0
-          + aligned_input_size * global_z                            // batch offset
+          + aligned_input_size * global_z           // batch offset
           + (curr_y - INPUT_PAD_H) * ROW_PITCH      // y offset
           + (curr_x - INPUT_PAD_W);                 // x offset
 
@@ -653,7 +665,10 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
                 int pos = 0;
                 LOOP(KERNEL_WIDTH, pos,
                 {
-                  if (curr_y >= INPUT_PAD_H && curr_y < input_height + INPUT_PAD_H && curr_x + pos * DILATION_X >= INPUT_PAD_W && curr_x + pos * DILATION_X < input_width + INPUT_PAD_W)
+                  if (curr_y >= INPUT_PAD_H &&
+                      curr_y < input_height + INPUT_PAD_H &&
+                      curr_x + pos * DILATION_X >= INPUT_PAD_W &&
+                      curr_x + pos * DILATION_X < input_width + INPUT_PAD_W)
                     pblockA00[pos] = src0_read[pos * DILATION_X];
                   else
                     pblockA00[pos] = 0;
@@ -730,17 +745,18 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
             //while( ++patch_row < 1 ); //debug
             while( ++patch_row < KERNEL_HEIGHT );
 
-            src0_read += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y ); // reset to start of next slice of patch
+            // reset to start of next slice of patch
+            src0_read += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y );
         }
         //while ( ++patch_depth < 1 );  //debug
         while ( ++patch_depth < INPUT_DEPTH );
 
         // Dst resembles a cube of width x height x (output channel * batches).  Each tile writes:
         // (SIMD * TILE_M) x 1 x TILE_N.  Partial writes most likely generated if padding used.
-        int out_offset = global_z * out_pitch_z                                                   // batch offset
-         + ( group_x * TILE_N ) * out_pitch_y                                       // channel offset
+        int out_offset = global_z * out_pitch_z                                        // batch offset
+         + ( group_x * TILE_N ) * out_pitch_y                                          // channel offset
          + ( ( global_y * TILE_M ) / output_width + OUT_PADDING_HEIGHT) * OUT_PITCH_X  // y offset
-         + ( ( global_y * TILE_M ) % output_width ) + OUT_PADDING_LEFT;               // x offset
+         + ( ( global_y * TILE_M ) % output_width ) + OUT_PADDING_LEFT;                // x offset
         __global Dtype *out = dst + out_offset;
 #if APPLY_BIAS
         Dtype bias[4];
@@ -849,11 +865,11 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
         int saved_y1 = curr_y1;
 #endif
         const __global Dtype *src0_read0 = src0
-         + aligned_input_size * global_z                                            // batch offset
+         + aligned_input_size * global_z         // batch offset
          + (curr_y0 - INPUT_PAD_H) * ROW_PITCH   // y offset
          + curr_x0 - INPUT_PAD_W;                // x offset
         const __global Dtype *src0_read1 = src0
-         + aligned_input_size * global_z                                            // batch offset
+         + aligned_input_size * global_z         // batch offset
          + (curr_y1 - INPUT_PAD_H) * ROW_PITCH   // y offset
          + curr_x1 - INPUT_PAD_W;                // x offset
 
@@ -883,17 +899,38 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
                 // ...
                 const bool kernel_width_is_odd = KERNEL_WIDTH % 2 == 1;
 #if INPUT_PAD_H == 0 && INPUT_PAD_W == 0 && DILATION_X == 1 && DILATION_Y == 1 && INPUT_PAD_BOTTOM == 0 && INPUT_PAD_RIGHT == 0
-                Dtype_t blockA00 = ( (const __global Dtype_t*)src0_read0 )[  0  ]; src0_read0 += ROW_PITCH;
-                Dtype_t blockA01 = ( (const __global Dtype_t*)src0_read1 )[  0  ]; src0_read1 += ROW_PITCH;
+                Dtype_t blockA00;
+                Dtype_t blockA01;
                 Dtype*  pblockA00 = (Dtype*)(&blockA00);
                 Dtype*  pblockA01 = (Dtype*)(&blockA01);
+                int pos = 0;
+                LOOP(KERNEL_WIDTH, pos,
+                {
+                  if (curr_x0 + pos < input_width)
+                    pblockA00[pos] = src0_read0[pos];
+                  else
+                    pblockA00[pos] = 0;
+                })
+                pos = 0;
+                LOOP(KERNEL_WIDTH, pos,
+                {
+                  if (curr_x1 + pos < input_width)
+                    pblockA01[pos] = src0_read1[pos * DILATION_X];
+                  else
+                    pblockA01[pos] = 0;
+                })
+                src0_read0 += ROW_PITCH;
+                src0_read1 += ROW_PITCH;
 #else
                 Dtype_t blockA00;
                 Dtype*  pblockA00 = (Dtype*)(&blockA00);
                 int pos = 0;
                 LOOP(KERNEL_WIDTH, pos,
                 {
-                  if (curr_y0 >= INPUT_PAD_H && curr_y0 < input_height + INPUT_PAD_H && curr_x0 + pos * DILATION_X >= INPUT_PAD_W && curr_x0 + pos * DILATION_X < input_width + INPUT_PAD_W)
+                  if (curr_y0 >= INPUT_PAD_H &&
+                      curr_y0 < input_height + INPUT_PAD_H &&
+                      curr_x0 + pos * DILATION_X >= INPUT_PAD_W &&
+                      curr_x0 + pos * DILATION_X < input_width + INPUT_PAD_W)
                     pblockA00[pos] = src0_read0[pos * DILATION_X];
                   else
                     pblockA00[pos] = 0;
@@ -904,7 +941,10 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
                 pos = 0;
                 LOOP(KERNEL_WIDTH, pos,
                 {
-                  if (curr_y1 >= INPUT_PAD_H && curr_y1 < input_height + INPUT_PAD_H && curr_x1 + pos * DILATION_X >= INPUT_PAD_W && curr_x1 + pos * DILATION_X < input_width + INPUT_PAD_W)
+                  if (curr_y1 >= INPUT_PAD_H &&
+                      curr_y1 < input_height + INPUT_PAD_H &&
+                      curr_x1 + pos * DILATION_X >= INPUT_PAD_W &&
+                      curr_x1 + pos * DILATION_X < input_width + INPUT_PAD_W)
                     pblockA01[pos] = src0_read1[pos * DILATION_X];
                   else
                     pblockA01[pos] = 0;
@@ -972,7 +1012,8 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
             curr_y0 = saved_y0;
             curr_y1 = saved_y1;
 #endif
-            src0_read0 += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y ); // reset to start of next slice of patch
+            // reset to start of next slice of patch
+            src0_read0 += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y );
             src0_read1 += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y );
         }
         //while ( ++patch_depth < 1 );  //debug
@@ -980,14 +1021,14 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
 
         // Dst resembles a cube of width x height x (output channel * batches).  Each tile writes:
         // (SIMD * TILE_M) x 1 x TILE_N.  Partial writes most likely generated if padding used.
-        int out0_offset = global_z * out_pitch_z                                                       // batch offset
-         + ( group_x * TILE_N ) * out_pitch_y                                           // channel offset
+        int out0_offset = global_z * out_pitch_z                                           // batch offset
+         + ( group_x * TILE_N ) * out_pitch_y                                              // channel offset
          + ( ( global_y * TILE_M + 0 ) / output_width + OUT_PADDING_HEIGHT ) * OUT_PITCH_X // y offset
-         + ( ( global_y * TILE_M + 0 ) % output_width ) + OUT_PADDING_LEFT;               // x offset
-        int out1_offset = global_z * out_pitch_z                                                       // batch offset
-         + ( group_x * TILE_N ) * out_pitch_y                                           // channel offset
+         + ( ( global_y * TILE_M + 0 ) % output_width ) + OUT_PADDING_LEFT;                // x offset
+        int out1_offset = global_z * out_pitch_z                                           // batch offset
+         + ( group_x * TILE_N ) * out_pitch_y                                              // channel offset
          + ( ( global_y * TILE_M + 1 ) / output_width + OUT_PADDING_HEIGHT ) * OUT_PITCH_X // y offset
-         + ( ( global_y * TILE_M + 1 ) % output_width ) + OUT_PADDING_LEFT;               // x offset
+         + ( ( global_y * TILE_M + 1 ) % output_width ) + OUT_PADDING_LEFT;                // x offset
 
 #if APPLY_BIAS
         Dtype bias[4];
@@ -1049,11 +1090,11 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
         int saved_y1 = curr_y1;
 #endif
         const __global Dtype *src0_read0 = src0
-         + aligned_input_size * global_z                                            // batch offset
+         + aligned_input_size * global_z         // batch offset
          + (curr_y0 - INPUT_PAD_H) * ROW_PITCH   // y offset
          + curr_x0 - INPUT_PAD_W;                // x offset
         const __global Dtype *src0_read1 = src0
-         + aligned_input_size * global_z                                            // batch offset
+         + aligned_input_size * global_z         // batch offset
          + (curr_y1 - INPUT_PAD_H) * ROW_PITCH   // y offset
          + curr_x1 - INPUT_PAD_W;                // x offset
 
@@ -1084,7 +1125,10 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
                 int pos = 0;
                 LOOP(KERNEL_WIDTH, pos,
                 {
-                  if (curr_y0 >= INPUT_PAD_H && curr_y0 < input_height + INPUT_PAD_H && curr_x0 + pos * DILATION_X >= INPUT_PAD_W && curr_x0 + pos * DILATION_X < input_width + INPUT_PAD_W)
+                  if (curr_y0 >= INPUT_PAD_H &&
+                      curr_y0 < input_height + INPUT_PAD_H &&
+                      curr_x0 + pos * DILATION_X >= INPUT_PAD_W &&
+                      curr_x0 + pos * DILATION_X < input_width + INPUT_PAD_W)
                     pblockA00[pos] = src0_read0[pos * DILATION_X];
                   else
                     pblockA00[pos] = 0;
@@ -1095,7 +1139,10 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
                 pos = 0;
                 LOOP(KERNEL_WIDTH, pos,
                 {
-                  if (curr_y1 >= INPUT_PAD_H && curr_y1 < input_height + INPUT_PAD_H && curr_x1 + pos * DILATION_X >= INPUT_PAD_W && curr_x1 + pos * DILATION_X < input_width + INPUT_PAD_W)
+                  if (curr_y1 >= INPUT_PAD_H &&
+                      curr_y1 < input_height + INPUT_PAD_H &&
+                      curr_x1 + pos * DILATION_X >= INPUT_PAD_W &&
+                      curr_x1 + pos * DILATION_X < input_width + INPUT_PAD_W)
                     pblockA01[pos] = src0_read1[pos * DILATION_X];
                   else
                     pblockA01[pos] = 0;
@@ -1185,7 +1232,8 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
             curr_y0 = saved_y0;
             curr_y1 = saved_y1;
 #endif
-            src0_read0 += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y ); // reset to start of next slice of patch
+            // reset to start of next slice of patch
+            src0_read0 += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y );
             src0_read1 += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y );
         }
         //while ( ++patch_depth < 1 );  //debug
@@ -1193,14 +1241,14 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
 
         // Dst resembles a cube of width x height x (output channel * batches).  Each tile writes:
         // (SIMD * TILE_M) x 1 x TILE_N.  Partial writes most likely generated if padding used.
-        int out0_offset = global_z * out_pitch_z                                                       // batch offset
-         + ( group_x * TILE_N ) * out_pitch_y                                           // channel offset
+        int out0_offset = global_z * out_pitch_z                                           // batch offset
+         + ( group_x * TILE_N ) * out_pitch_y                                              // channel offset
          + ( ( global_y * TILE_M + 0 ) / output_width + OUT_PADDING_HEIGHT ) * OUT_PITCH_X // y offset
-         + ( ( global_y * TILE_M + 0 ) % output_width ) + OUT_PADDING_LEFT;               // x offset
-        int out1_offset = global_z * out_pitch_z                                                       // batch offset
-         + ( group_x * TILE_N ) * out_pitch_y                                           // channel offset
+         + ( ( global_y * TILE_M + 0 ) % output_width ) + OUT_PADDING_LEFT;                // x offset
+        int out1_offset = global_z * out_pitch_z                                           // batch offset
+         + ( group_x * TILE_N ) * out_pitch_y                                              // channel offset
          + ( ( global_y * TILE_M + 1 ) / output_width + OUT_PADDING_HEIGHT ) * OUT_PITCH_X // y offset
-         + ( ( global_y * TILE_M + 1 ) % output_width ) + OUT_PADDING_LEFT;               // x offset
+         + ( ( global_y * TILE_M + 1 ) % output_width ) + OUT_PADDING_LEFT;                // x offset
         __global Dtype *out1 = dst + out1_offset;
 
 #if APPLY_BIAS
@@ -1352,9 +1400,9 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
     int saved_y = curr_y;
 #endif
     const __global Dtype *src0_read = src0
-     + aligned_input_size * global_z                            // batch offset
+     + aligned_input_size * global_z           // batch offset
      + (curr_y - INPUT_PAD_H) * ROW_PITCH      // y offset
-     + curr_x - INPUT_PAD_W;                 // x offset
+     + curr_x - INPUT_PAD_W;                   // x offset
      const __global Dtype *src0_read_orig = src0_read;
 
     // Src1 (filter) is directly used as btile.
@@ -1409,15 +1457,26 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
             const bool kernel_width_is_odd = KERNEL_WIDTH % 2 == 1;
 
 #if INPUT_PAD_W == 0 && INPUT_PAD_H == 0 && DILATION_X == 1 && DILATION_Y == 1 && INPUT_PAD_BOTTOM == 0 && INPUT_PAD_RIGHT == 0
-            Dtype_t blockA00 = ( (const __global Dtype_t*)src0_read )[  0  ];
+            Dtype_t blockA00;
             Dtype*  pblockA00 = (Dtype*)(&blockA00);
+            int pos = 0;
+            LOOP(KERNEL_WIDTH, pos,
+            {
+              if (curr_x + pos >= input_width)
+                pblockA00[pos] = 0;
+               else
+                pblockA00[pos] = src0_read[pos];
+            })
 #else
             Dtype_t blockA00;
             Dtype*  pblockA00 = (Dtype*)(&blockA00);
             int pos = 0;
             LOOP(KERNEL_WIDTH, pos,
             {
-              if (curr_y >= INPUT_PAD_H && curr_y < input_height + INPUT_PAD_H && curr_x + pos * DILATION_X >= INPUT_PAD_W && curr_x + pos * DILATION_X < input_width + INPUT_PAD_W)
+              if (curr_y >= INPUT_PAD_H &&
+                  curr_y < input_height + INPUT_PAD_H &&
+                  curr_x + pos * DILATION_X >= INPUT_PAD_W &&
+                  curr_x + pos * DILATION_X < input_width + INPUT_PAD_W)
                 pblockA00[pos] = src0_read[pos * DILATION_X];
               else
                 pblockA00[pos] = 0;
@@ -1463,17 +1522,18 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
         //while( ++patch_row < 1 ); //debug
         while( ++patch_row < KERNEL_HEIGHT );
 
-        src0_read += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y ); // reset to start of next slice of patch
+        // reset to start of next slice of patch
+        src0_read += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y );
     }
     //while ( ++patch_depth < 1 );  //debug
     while ( ++patch_depth < INPUT_DEPTH );
 
     // Dst resembles a cube of width x height x (output channel * batches).  Each tile writes:
     // (SIMD * TILE_M) x 1 x TILE_N.  Partial writes most likely generated if padding used.
-    int out_offset = global_z * out_pitch_z                                                   // batch offset
-     + ( group_x * TILE_N ) * out_pitch_y                                       // channel offset
+    int out_offset = global_z * out_pitch_z                                        // batch offset
+     + ( group_x * TILE_N ) * out_pitch_y                                          // channel offset
      + ( ( global_y * TILE_M ) / output_width + OUT_PADDING_HEIGHT) * OUT_PITCH_X  // y offset
-     + ( ( global_y * TILE_M ) % output_width ) + OUT_PADDING_LEFT;               // x offset
+     + ( ( global_y * TILE_M ) % output_width ) + OUT_PADDING_LEFT;                // x offset
     __global Dtype *out = dst + out_offset;
 
 #if APPLY_BIAS
@@ -1556,11 +1616,11 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
         int saved_y1 = curr_y1;
 #endif
         const __global Dtype *src0_read0 = src0
-         + aligned_input_size * global_z                                            // batch offset
+         + aligned_input_size * global_z         // batch offset
          + (curr_y0 - INPUT_PAD_H) * ROW_PITCH   // y offset
          + curr_x0 - INPUT_PAD_W;                // x offset
         const __global Dtype *src0_read1 = src0
-         + aligned_input_size * global_z                                            // batch offset
+         + aligned_input_size * global_z         // batch offset
          + (curr_y1 - INPUT_PAD_H) * ROW_PITCH   // y offset
          + curr_x1 - INPUT_PAD_W;                // x offset
 
@@ -1600,7 +1660,10 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
                 int pos = 0;
                 LOOP(KERNEL_WIDTH, pos,
                 {
-                  if (curr_y0 >= INPUT_PAD_H && curr_y0 < input_height + INPUT_PAD_H && curr_x0 + pos * DILATION_X >= INPUT_PAD_W && curr_x0 + pos * DILATION_X < input_width + INPUT_PAD_W)
+                  if (curr_y0 >= INPUT_PAD_H &&
+                      curr_y0 < input_height + INPUT_PAD_H &&
+                      curr_x0 + pos * DILATION_X >= INPUT_PAD_W &&
+                      curr_x0 + pos * DILATION_X < input_width + INPUT_PAD_W)
                     pblockA00[pos] = src0_read0[pos * DILATION_X];
                   else
                     pblockA00[pos] = 0;
@@ -1611,7 +1674,10 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
                 pos = 0;
                 LOOP(KERNEL_WIDTH, pos,
                 {
-                  if (curr_y1 >= INPUT_PAD_H && curr_y1 < input_height + INPUT_PAD_H && curr_x1 + pos * DILATION_X >= INPUT_PAD_W && curr_x1 + pos * DILATION_X < input_width + INPUT_PAD_W)
+                  if (curr_y1 >= INPUT_PAD_H &&
+                      curr_y1 < input_height + INPUT_PAD_H &&
+                      curr_x1 + pos * DILATION_X >= INPUT_PAD_W &&
+                      curr_x1 + pos * DILATION_X < input_width + INPUT_PAD_W)
                     pblockA01[pos] = src0_read1[pos * DILATION_X];
                   else
                     pblockA01[pos] = 0;
@@ -1667,7 +1733,8 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
             curr_y0 = saved_y0;
             curr_y1 = saved_y1;
 #endif
-            src0_read0 += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y); // reset to start of next slice of patch
+            // reset to start of next slice of patch
+            src0_read0 += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y);
             src0_read1 += slice_pitch - ( KERNEL_HEIGHT * ROW_PITCH * DILATION_Y);
         }
         //while ( ++patch_depth < 1 );  //debug
@@ -1675,14 +1742,14 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
 
         // Dst resembles a cube of width x height x (output channel * batches).  Each tile writes:
         // (SIMD * TILE_M) x 1 x TILE_N.  Partial writes most likely generated if padding used.
-        int out0_offset = global_z * out_pitch_z                                                       // batch offset
-         + ( group_x * TILE_N ) * out_pitch_y                                           // channel offset
+        int out0_offset = global_z * out_pitch_z                                           // batch offset
+         + ( group_x * TILE_N ) * out_pitch_y                                              // channel offset
          + ( ( global_y * TILE_M + 0 ) / output_width + OUT_PADDING_HEIGHT ) * OUT_PITCH_X // y offset
-         + ( ( global_y * TILE_M + 0 ) % output_width ) + OUT_PADDING_LEFT;               // x offset
-        int out1_offset = global_z * out_pitch_z                                                       // batch offset
-         + ( group_x * TILE_N ) * out_pitch_y                                           // channel offset
+         + ( ( global_y * TILE_M + 0 ) % output_width ) + OUT_PADDING_LEFT;                // x offset
+        int out1_offset = global_z * out_pitch_z                                           // batch offset
+         + ( group_x * TILE_N ) * out_pitch_y                                              // channel offset
          + ( ( global_y * TILE_M + 1 ) / output_width + OUT_PADDING_HEIGHT ) * OUT_PITCH_X // y offset
-         + ( ( global_y * TILE_M + 1 ) % output_width ) + OUT_PADDING_LEFT;               // x offset
+         + ( ( global_y * TILE_M + 1 ) % output_width ) + OUT_PADDING_LEFT;                // x offset
 
 #if APPLY_BIAS
         Dtype bias[2];
