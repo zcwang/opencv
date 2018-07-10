@@ -1259,6 +1259,7 @@ bool OCL4DNNConvSpatial<float>::verifyResult(const UMat &bottom,
                         {
                             CV_LOG_ERROR(NULL, "test verification failed @ image " << n << " group " << g
                                          << " out_ch " << out_ch << " h " << h << " w " << w
+                                         << " (offset=" << offset << ")"
                                          << " got " << data[offset] << " expected " << verify_data[offset]);
                             verificationFail = 1;
                             goto out;
@@ -1268,6 +1269,7 @@ bool OCL4DNNConvSpatial<float>::verifyResult(const UMat &bottom,
                         {
                             CV_LOG_ERROR(NULL, "test verification failed @ image " << n << " group " << g
                                          << " out_ch " << out_ch << " h " << h << " w " << w
+                                         << " (offset=" << offset << ")"
                                          << " got " << data[offset] << " expected " << verify_data[offset]);
                             verificationFail = 1;
                             goto out;

@@ -48,6 +48,8 @@
 #define TYPE_FLOAT  1
 #define TYPE_HALF   2
 
+#define INPUT_BOUNDS_CORRECT 1  // TODO Add proper check in host code if needed
+
 #if defined(FUSED_CONV_RELU)
 #define ACTIVATION_RELU_FUNCTION(x, c) ((Dtype)(x) > 0 ? (Dtype)(x) : ((Dtype)(x) * (negative_slope)))
 #define FUSED_ARG KERNEL_ARG_DTYPE negative_slope,
@@ -504,14 +506,31 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
 #if INPUT_PAD_W == 0 && INPUT_PAD_H == 0 && DILATION_X == 1 && DILATION_Y == 1 && INPUT_PAD_BOTTOM == 0 && INPUT_PAD_RIGHT == 0
                 Dtype_t blockA00;
                 Dtype*  pblockA00 = (Dtype*)(&blockA00);
-                int pos = 0;
-                LOOP(KERNEL_WIDTH, pos,
+#ifndef INPUT_BOUNDS_CORRECT
+                if (curr_x + KERNEL_WIDTH > input_width)
                 {
-                  if (curr_x + pos >= input_width)
-                    pblockA00[pos] = 0;
-                  else
-                    pblockA00[pos] = src0_read[pos];
-                })
+                  int pos = 0;
+                  LOOP(KERNEL_WIDTH, pos,
+                  {
+                    if (curr_x + pos >= input_width)
+                      pblockA00[pos] = 0;
+                    else
+                      pblockA00[pos] = src0_read[pos];
+                  })
+                }
+                else
+#endif
+#if KERNEL_WIDTH == 3 && Dtype == half
+                if (KERNEL_WIDTH*sizeof(Dtype) != sizeof(Dtype_t))  // half3 is represented as half4 (sizeof = 8)
+                {
+                  int pos = 0;
+                  LOOP(KERNEL_WIDTH, pos, { pblockA00[pos] = src0_read[pos]; })
+                }
+                else
+#endif
+                {
+                  blockA00 = ((const __global Dtype_t*)src0_read)[0];
+                }
 #else
                 Dtype_t blockA00;
                 Dtype*  pblockA00 = (Dtype*)(&blockA00);
@@ -903,22 +922,58 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
                 Dtype_t blockA01;
                 Dtype*  pblockA00 = (Dtype*)(&blockA00);
                 Dtype*  pblockA01 = (Dtype*)(&blockA01);
-                int pos = 0;
-                LOOP(KERNEL_WIDTH, pos,
+#ifndef INPUT_BOUNDS_CORRECT
+                if (curr_x0 + KERNEL_WIDTH > input_width)
                 {
-                  if (curr_x0 + pos < input_width)
-                    pblockA00[pos] = src0_read0[pos];
-                  else
-                    pblockA00[pos] = 0;
-                })
-                pos = 0;
-                LOOP(KERNEL_WIDTH, pos,
+                  int pos = 0;
+                  LOOP(KERNEL_WIDTH, pos,
+                  {
+                    if (curr_x0 + pos < input_width)
+                      pblockA00[pos] = src0_read0[pos];
+                    else
+                      pblockA00[pos] = 0;
+                  })
+                }
+                else
+#endif
+#if KERNEL_WIDTH == 3 && Dtype == half
+                if (KERNEL_WIDTH*sizeof(Dtype) != sizeof(Dtype_t))  // half3 is represented as half4 (sizeof = 8)
                 {
-                  if (curr_x1 + pos < input_width)
-                    pblockA01[pos] = src0_read1[pos * DILATION_X];
-                  else
-                    pblockA01[pos] = 0;
-                })
+                  int pos = 0;
+                  LOOP(KERNEL_WIDTH, pos, { pblockA00[pos] = src0_read0[pos]; })
+                }
+                else
+#endif
+                {
+                  blockA00 = ((const __global Dtype_t*)src0_read0)[0];;
+                }
+
+#ifndef INPUT_BOUNDS_CORRECT
+                if (curr_x1 + KERNEL_WIDTH > input_width)
+                {
+                  int pos = 0;
+                  LOOP(KERNEL_WIDTH, pos,
+                  {
+                    if (curr_x1 + pos < input_width)
+                      pblockA01[pos] = src0_read1[pos * DILATION_X];
+                    else
+                      pblockA01[pos] = 0;
+                  })
+                }
+                else
+#endif
+#if KERNEL_WIDTH == 3 && Dtype == half
+                if (KERNEL_WIDTH*sizeof(Dtype) != sizeof(Dtype_t))  // half3 is represented as half4 (sizeof = 8)
+                {
+                  int pos = 0;
+                  LOOP(KERNEL_WIDTH, pos, { pblockA01[pos] = src0_read1[pos]; })
+                }
+                else
+#endif
+                {
+                  blockA01 = ((const __global Dtype_t*)src0_read1)[0];
+                }
+
                 src0_read0 += ROW_PITCH;
                 src0_read1 += ROW_PITCH;
 #else
@@ -1459,14 +1514,31 @@ __kernel void Conv_Interleaved(GEMM_LIKE_KERNEL_ARGS)
 #if INPUT_PAD_W == 0 && INPUT_PAD_H == 0 && DILATION_X == 1 && DILATION_Y == 1 && INPUT_PAD_BOTTOM == 0 && INPUT_PAD_RIGHT == 0
             Dtype_t blockA00;
             Dtype*  pblockA00 = (Dtype*)(&blockA00);
-            int pos = 0;
-            LOOP(KERNEL_WIDTH, pos,
+#ifndef INPUT_BOUNDS_CORRECT
+            if (curr_x + KERNEL_WIDTH > input_width)
             {
-              if (curr_x + pos >= input_width)
-                pblockA00[pos] = 0;
-               else
-                pblockA00[pos] = src0_read[pos];
-            })
+              int pos = 0;
+              LOOP(KERNEL_WIDTH, pos,
+              {
+                if (curr_x + pos >= input_width)
+                  pblockA00[pos] = 0;
+                else
+                  pblockA00[pos] = src0_read[pos];
+              })
+            }
+            else
+#endif
+#if KERNEL_WIDTH == 3 && Dtype == half
+            if (KERNEL_WIDTH*sizeof(Dtype) != sizeof(Dtype_t))  // half3 is represented as half4 (sizeof = 8)
+            {
+              int pos = 0;
+              LOOP(KERNEL_WIDTH, pos, { pblockA00[pos] = src0_read[pos]; })
+            }
+            else
+#endif
+            {
+              blockA00 = ((const __global Dtype_t*)src0_read)[0];
+            }
 #else
             Dtype_t blockA00;
             Dtype*  pblockA00 = (Dtype*)(&blockA00);

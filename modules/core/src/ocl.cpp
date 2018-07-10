@@ -68,6 +68,8 @@
 #define CV_OPENCL_SHOW_RUN_KERNELS               0
 #define CV_OPENCL_TRACE_CHECK                    0
 
+#define CV_OPENCL_ALWAYS_SYNC_KERNELS            0  // run clFinish after kernel queue
+
 #define CV_OPENCL_VALIDATE_BINARY_PROGRAMS       1
 
 #define CV_OPENCL_SHOW_SVM_ERROR_LOG             1
@@ -3138,6 +3140,9 @@ bool Kernel::Impl::run(int dims, size_t globalsize[], size_t localsize[],
     }
     if (asyncEvent)
         CV_OCL_DBG_CHECK(clReleaseEvent(asyncEvent));
+#if CV_OPENCL_ALWAYS_SYNC_KERNELS
+    clFinish(qq);
+#endif
     return retval == CL_SUCCESS;
 }
 
@@ -3163,6 +3168,9 @@ bool Kernel::runTask(bool sync, const Queue& q)
     }
     if (asyncEvent)
         CV_OCL_DBG_CHECK(clReleaseEvent(asyncEvent));
+#if CV_OPENCL_ALWAYS_SYNC_KERNELS
+    clFinish(qq);
+#endif
     return retval == CL_SUCCESS;
 }
 
@@ -3175,6 +3183,9 @@ int64 Kernel::runProfiling(int dims, size_t globalsize[], size_t localsize[], co
     Queue profilingQueue = q.getProfilingQueue();
     int64 timeNs = -1;
     bool res = p->run(dims, globalsize, localsize, true, &timeNs, profilingQueue);
+#if CV_OPENCL_ALWAYS_SYNC_KERNELS
+    clFinish(getQueue(profilingQueue));
+#endif
     return res ? timeNs : -1;
 }
 
