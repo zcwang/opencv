@@ -60,6 +60,7 @@ namespace dnn
 
 class BaseConvolutionLayerImpl : public ConvolutionLayer
 {
+    int ngroups;
 public:
     BaseConvolutionLayerImpl(const LayerParams &params)
     {
@@ -69,7 +70,7 @@ public:
                                    dilation.width, padMode);
 
         numOutput = params.get<int>("num_output");
-        int ngroups = params.get<int>("group", 1);
+        ngroups = params.get<int>("group", 1);
 
         adjustPad.height = params.get<int>("adj_h", 0);
         adjustPad.width = params.get<int>("adj_w", 0);
@@ -103,6 +104,29 @@ public:
 
     void finalize(const std::vector<Mat*> &inputs, std::vector<Mat> &outputs) CV_OVERRIDE
     {
+        if (type == "Convolution")
+        {
+            int64 gflops = outputs[0].total()*(CV_BIG_INT(2)*kernel.area()*(inputs[0]->size[1]) + 1);
+            std::cout << "input=" << shape(*inputs[0]) << " output=" << shape(outputs[0]) << std::endl;
+            printf("CONV: /* GFLOPS %12lld */ {{%d, %d}, {{%d, %4d, %3d, %3d}}, %4d, %4d, {%d, %d}, {%d, %d}, {%d, %d}, {%d, %d}, \"%s\", %s, %12lld.},\n      // ^^^^^ %s\n",
+                (long long int)gflops,
+                kernel.width, kernel.height,
+                inputs[0]->size[0], inputs[0]->size[1], inputs[0]->size[2], inputs[0]->size[3],
+                outputs[0].size[1], ngroups,
+                stride.width, stride.height,
+                dilation.width, dilation.height,
+                pad.width, pad.height,
+                adjustPad.width, adjustPad.height,
+                padMode.empty() ? "" : padMode.c_str(),
+                hasBias() ? "true" : "false",
+                (long long int)gflops,
+                name.c_str()
+            );
+        }
+        else
+        {
+            printf("SKIP unsupported type: %s (%s)\n", type.c_str(), name.c_str());
+        }
         CV_Assert(inputs.size() > 0);
 
         CV_Assert(blobs.size() >= 1 && blobs.size() <= 2);
