@@ -3149,9 +3149,9 @@ protected:
     void writeFormat(FileStorage& fs) const;
 };
 
-struct Param {
-    enum { INT=0, BOOLEAN=1, REAL=2, STRING=3, MAT=4, MAT_VECTOR=5, ALGORITHM=6, FLOAT=7,
-           UNSIGNED_INT=8, UINT64=9, UCHAR=11, SCALAR=12 };
+enum struct Param {
+    INT=0, BOOLEAN=1, REAL=2, STRING=3, MAT=4, MAT_VECTOR=5, ALGORITHM=6, FLOAT=7,
+    UNSIGNED_INT=8, UINT64=9, UCHAR=11, SCALAR=12
 };
 
 
@@ -3161,7 +3161,7 @@ template<> struct ParamType<bool>
     typedef bool const_param_type;
     typedef bool member_type;
 
-    enum { type = Param::BOOLEAN };
+    static const Param type = Param::BOOLEAN;
 };
 
 template<> struct ParamType<int>
@@ -3169,7 +3169,7 @@ template<> struct ParamType<int>
     typedef int const_param_type;
     typedef int member_type;
 
-    enum { type = Param::INT };
+    static const Param type = Param::INT;
 };
 
 template<> struct ParamType<double>
@@ -3177,7 +3177,7 @@ template<> struct ParamType<double>
     typedef double const_param_type;
     typedef double member_type;
 
-    enum { type = Param::REAL };
+    static const Param type = Param::REAL;
 };
 
 template<> struct ParamType<String>
@@ -3185,7 +3185,7 @@ template<> struct ParamType<String>
     typedef const String& const_param_type;
     typedef String member_type;
 
-    enum { type = Param::STRING };
+    static const Param type = Param::STRING;
 };
 
 template<> struct ParamType<Mat>
@@ -3193,7 +3193,7 @@ template<> struct ParamType<Mat>
     typedef const Mat& const_param_type;
     typedef Mat member_type;
 
-    enum { type = Param::MAT };
+    static const Param type = Param::MAT;
 };
 
 template<> struct ParamType<std::vector<Mat> >
@@ -3201,7 +3201,7 @@ template<> struct ParamType<std::vector<Mat> >
     typedef const std::vector<Mat>& const_param_type;
     typedef std::vector<Mat> member_type;
 
-    enum { type = Param::MAT_VECTOR };
+    static const Param type = Param::MAT_VECTOR;
 };
 
 template<> struct ParamType<Algorithm>
@@ -3209,7 +3209,7 @@ template<> struct ParamType<Algorithm>
     typedef const Ptr<Algorithm>& const_param_type;
     typedef Ptr<Algorithm> member_type;
 
-    enum { type = Param::ALGORITHM };
+    static const Param type = Param::ALGORITHM;
 };
 
 template<> struct ParamType<float>
@@ -3217,7 +3217,7 @@ template<> struct ParamType<float>
     typedef float const_param_type;
     typedef float member_type;
 
-    enum { type = Param::FLOAT };
+    static const Param type = Param::FLOAT;
 };
 
 template<> struct ParamType<unsigned>
@@ -3225,7 +3225,7 @@ template<> struct ParamType<unsigned>
     typedef unsigned const_param_type;
     typedef unsigned member_type;
 
-    enum { type = Param::UNSIGNED_INT };
+    static const Param type = Param::UNSIGNED_INT;
 };
 
 template<> struct ParamType<uint64>
@@ -3233,7 +3233,7 @@ template<> struct ParamType<uint64>
     typedef uint64 const_param_type;
     typedef uint64 member_type;
 
-    enum { type = Param::UINT64 };
+    static const Param type = Param::UINT64;
 };
 
 template<> struct ParamType<uchar>
@@ -3241,7 +3241,7 @@ template<> struct ParamType<uchar>
     typedef uchar const_param_type;
     typedef uchar member_type;
 
-    enum { type = Param::UCHAR };
+    static const Param type = Param::UCHAR;
 };
 
 template<> struct ParamType<Scalar>
@@ -3249,7 +3249,7 @@ template<> struct ParamType<Scalar>
     typedef const Scalar& const_param_type;
     typedef Scalar member_type;
 
-    enum { type = Param::SCALAR };
+    static const Param type = Param::SCALAR;
 };
 
 //! @} core_basic

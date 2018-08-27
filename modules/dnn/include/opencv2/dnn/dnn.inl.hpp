@@ -199,6 +199,9 @@ inline void DictValue::release()
     case Param::REAL:
         delete pd;
         break;
+    /*default:
+        CV_Error_(Error::StsInternal, ("Unhandled type (%d)", static_cast<int>(type)));
+        break;*/
     }
 }
 
@@ -273,8 +276,11 @@ inline int DictValue::size() const
         return (int)ps->size();
     case Param::REAL:
         return (int)pd->size();
+    /*default:
+        CV_Error_(Error::StsInternal, ("Unhandled type (%d)", static_cast<int>(type)));
+        break;*/
     }
-    CV_Error(Error::StsInternal, "");
+    CV_Error_(Error::StsInternal, ("Unhandled type (%d)", static_cast<int>(type)));
 }
 
 inline std::ostream &operator<<(std::ostream &stream, const DictValue &dictv)
