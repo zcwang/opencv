@@ -290,7 +290,7 @@ generators:
 class CV_EXPORTS _OutputArray : public _InputArray
 {
 public:
-    enum
+    enum DepthMask
     {
         DEPTH_MASK_8U = 1 << CV_8U,
         DEPTH_MASK_8S = 1 << CV_8S,
@@ -301,7 +301,7 @@ public:
         DEPTH_MASK_64F = 1 << CV_64F,
         DEPTH_MASK_ALL = (DEPTH_MASK_64F<<1)-1,
         DEPTH_MASK_ALL_BUT_8S = DEPTH_MASK_ALL & ~DEPTH_MASK_8S,
-        DEPTH_MASK_FLT = DEPTH_MASK_32F + DEPTH_MASK_64F
+        DEPTH_MASK_FLT = DEPTH_MASK_32F | DEPTH_MASK_64F
     };
 
     _OutputArray();
@@ -357,9 +357,9 @@ public:
     std::vector<cuda::GpuMat>& getGpuMatVecRef() const;
     ogl::Buffer& getOGlBufferRef() const;
     cuda::HostMem& getHostMemRef() const;
-    void create(Size sz, int type, int i=-1, bool allowTransposed=false, int fixedDepthMask=0) const;
-    void create(int rows, int cols, int type, int i=-1, bool allowTransposed=false, int fixedDepthMask=0) const;
-    void create(int dims, const int* size, int type, int i=-1, bool allowTransposed=false, int fixedDepthMask=0) const;
+    void create(Size sz, int type, int i=-1, bool allowTransposed=false, _OutputArray::DepthMask fixedDepthMask=static_cast<_OutputArray::DepthMask>(0)) const;
+    void create(int rows, int cols, int type, int i=-1, bool allowTransposed=false, _OutputArray::DepthMask fixedDepthMask=static_cast<_OutputArray::DepthMask>(0)) const;
+    void create(int dims, const int* size, int type, int i=-1, bool allowTransposed=false, _OutputArray::DepthMask fixedDepthMask=static_cast<_OutputArray::DepthMask>(0)) const;
     void createSameSize(const _InputArray& arr, int mtype) const;
     void release() const;
     void clear() const;
