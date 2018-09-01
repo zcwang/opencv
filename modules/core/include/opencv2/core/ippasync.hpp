@@ -68,8 +68,8 @@ install the library, configure header and library build paths.
     //! convert OpenCV data type to hppDataType
     inline int toHppType(const int cvType)
     {
-        int depth = CV_MAT_DEPTH(cvType);
-        int hppType = depth == CV_8U ? HPP_DATA_TYPE_8U :
+        ElemDepth depth = CV_MAT_DEPTH(cvType);
+            int hppType = depth == CV_8U ? HPP_DATA_TYPE_8U :
                      depth == CV_16U ? HPP_DATA_TYPE_16U :
                      depth == CV_16S ? HPP_DATA_TYPE_16S :
                      depth == CV_32S ? HPP_DATA_TYPE_32S :
@@ -114,7 +114,7 @@ install the library, configure header and library build paths.
 
         CV_Assert( sts == HPP_STATUS_NO_ERROR);
 
-        int matType = CV_MAKETYPE(toCvType(type), cn);
+        ElemType matType = CV_MAKETYPE(toCvType(type), cn);
 
         CV_Assert(width%cn == 0);
 
@@ -132,7 +132,7 @@ install the library, configure header and library build paths.
     /** @brief Create Mat from hppiMatrix.
 
     This function allocates and initializes the Mat that has the same size and type as input matrix.
-    Supports CV_8U, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F.
+    Supports CV_8U, CV_16U, CV_16S, CV_32SC1, CV_32F, CV_64F.
     @param src input hppiMatrix.
     @param accel accelerator instance (see hpp::getHpp for the list of acceleration framework types).
     @param cn number of channels.
@@ -153,7 +153,7 @@ install the library, configure header and library build paths.
     If you want to use zero-copy for GPU you should to have 4KB aligned matrix data. See details
     [hppiCreateSharedMatrix](http://software.intel.com/ru-ru/node/501697).
 
-    Supports CV_8U, CV_16U, CV_16S, CV_32S, CV_32F, CV_64F.
+    Supports CV_8U, CV_16U, CV_16S, CV_32SC1, CV_32F, CV_64F.
 
     @note The hppiMatrix pointer to the image buffer in system memory refers to the src.data. Control
     the lifetime of the matrix and don't change its data, if there is no special need.

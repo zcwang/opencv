@@ -1062,7 +1062,7 @@ cvPreparePredictData( const CvArr* _sample, int dims_all,
 
 
 static void
-icvConvertDataToSparse( const uchar* src, int src_step, int src_type,
+icvConvertDataToSparse(const uchar* src, int src_step, int src_type,
                         uchar* dst, int dst_step, int dst_type,
                         CvSize size, int* idx )
 {

@@ -44,12 +44,12 @@ namespace cv
 {
 
 KalmanFilter::KalmanFilter() {}
-KalmanFilter::KalmanFilter(int dynamParams, int measureParams, int controlParams, int type)
+KalmanFilter::KalmanFilter(int dynamParams, int measureParams, int controlParams, ElemType type)
 {
     init(dynamParams, measureParams, controlParams, type);
 }
 
-void KalmanFilter::init(int DP, int MP, int CP, int type)
+void KalmanFilter::init(int DP, int MP, int CP, ElemType type)
 {
     CV_Assert( DP > 0 && MP > 0 );
     CV_Assert( type == CV_32F || type == CV_64F );

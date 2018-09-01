@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
                     // We sort distance between descriptor matches
                     Mat index;
                     int nbMatch=int(matches.size());
-                    Mat tab(nbMatch, 1, CV_32F);
+                    Mat tab(nbMatch, 1, CV_32FC1);
                     for (int i = 0; i<nbMatch; i++)
                     {
                         tab.at<float>(i, 0) = matches[i].distance;

@@ -227,7 +227,7 @@ namespace
     LinearFilter::LinearFilter(int srcType, int dstType, InputArray _kernel, Point anchor, int borderMode, Scalar borderVal) :
         anchor_(anchor), type_(srcType), borderMode_(borderMode), borderVal_(borderVal)
     {
-        const int sdepth = CV_MAT_DEPTH(srcType);
+        const ElemDepth sdepth = CV_MAT_DEPTH(srcType);
         const int scn = CV_MAT_CN(srcType);
 
         Mat kernel = _kernel.getMat();
@@ -380,9 +380,9 @@ namespace
             {0, 0, 0, 0}
         };
 
-        const int sdepth = CV_MAT_DEPTH(srcType);
+        const ElemDepth sdepth = CV_MAT_DEPTH(srcType);
         const int cn = CV_MAT_CN(srcType);
-        const int ddepth = CV_MAT_DEPTH(dstType);
+        const ElemDepth ddepth = CV_MAT_DEPTH(dstType);
 
         Mat rowKernel = _rowKernel.getMat();
         Mat columnKernel = _columnKernel.getMat();

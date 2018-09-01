@@ -390,7 +390,7 @@ namespace
                 cuda::resize(prevFlowX, curFlowX, Size(width, height), 0, 0, INTER_LINEAR, streams[0]);
                 cuda::resize(prevFlowY, curFlowY, Size(width, height), 0, 0, INTER_LINEAR, streams[1]);
                 curFlowX.convertTo(curFlowX, curFlowX.depth(), 1./pyrScale_, streams[0]);
-                curFlowY.convertTo(curFlowY, curFlowY.depth(), 1./pyrScale_, streams[1]);
+                curFlowY.convertTo(curFlowY, curFlowY.depth(), 1. / pyrScale_, streams[1]);
             }
 
             GpuMat M = allocMatFromBuf(5*height, width, CV_32F, M_);

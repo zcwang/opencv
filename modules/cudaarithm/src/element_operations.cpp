@@ -128,14 +128,14 @@ namespace
 
         GpuMat mask = getInputMat(_mask, stream);
 
-        const int sdepth = src1.empty() ? src2.depth() : src1.depth();
+        const ElemDepth sdepth = src1.empty() ? src2.depth() : src1.depth();
         const int cn = src1.empty() ? src2.channels() : src1.channels();
         const Size size = src1.empty() ? src2.size() : src1.size();
 
         if (dtype < 0)
             dtype = sdepth;
 
-        const int ddepth = CV_MAT_DEPTH(dtype);
+        const ElemDepth ddepth = CV_MAT_DEPTH(dtype);
 
         CV_Assert( sdepth <= CV_64F && ddepth <= CV_64F );
         CV_Assert( !scalar.empty() || (src2.type() == src1.type() && src2.size() == src1.size()) );

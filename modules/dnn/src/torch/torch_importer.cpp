@@ -196,7 +196,7 @@ struct TorchImporter
 
     /* Special readers */
 
-    static inline int parseTorchType(const String &str, const char *suffix, const char *prefix = "torch.")
+    static inline ElemDepth parseTorchType(const String &str, const char *suffix, const char *prefix = "torch.")
     {
         if (startsWith(str, prefix) && endsWith(str, suffix))
         {
@@ -220,25 +220,25 @@ struct TorchImporter
                CV_Error(Error::StsNotImplemented, "Unknown type \"" + typeStr + "\" of torch class \"" + str + "\"");
         }
 
-        return -1;
+        return CV_DEPTH_UNSPECIFIED;
     }
 
-    static int parseTensorType(const String &className)
+    static ElemDepth parseTensorType(const String &className)
     {
         return parseTorchType(className, "Tensor");
     }
 
-    static int parseStorageType(const String &className)
+    static ElemDepth parseStorageType(const String &className)
     {
         return parseTorchType(className, "Storage");
     }
 
-    void readTorchStorage(int index, int type = -1)
+    void readTorchStorage(int index, ElemDepth depth = CV_DEPTH_UNSPECIFIED)
     {
         long size = readLong();
-        Mat storageMat(1, size, (type != CV_USRTYPE1) ? type : CV_64F); //handle LongStorage as CV_64F Mat
+        Mat storageMat(1, size, CV_MAKETYPE((depth != CV_USRTYPE1) ? depth : CV_64F, 1)); //handle LongStorage as CV_64F Mat
 
-        switch (type)
+        switch (depth)
         {
         case CV_32F:
             THFile_readFloatRaw(file, (float*)storageMat.data, size);
@@ -365,7 +365,7 @@ struct TorchImporter
         }
     }
 
-    void readTorchTensor(int indexTensor, int typeTensor)
+    void readTorchTensor(int indexTensor, ElemDepth typeTensor)
     {
         int ndims = readInt();
         AutoBuffer<int64, 4> sizes(ndims);
@@ -388,10 +388,10 @@ struct TorchImporter
         if (readedIndexes.count(indexStorage) == 0)
         {
             String className = readTorchClassName();
-            int typeStorage = parseStorageType(className);
+            ElemDepth typeStorage = parseStorageType(className);
             CV_Assert(typeStorage >= 0 && typeTensor == typeStorage);
             readTorchStorage(indexStorage, typeStorage);
-            typeTensor = storages[indexStorage].type();
+            typeTensor = storages[indexStorage].depth();
             readedIndexes.insert(indexStorage);
         }
 
@@ -411,11 +411,11 @@ struct TorchImporter
         }
 
         //allocate Blob
-        Mat srcMat(ndims, isizes.data(), typeTensor , storages[indexStorage].ptr() + offset*CV_ELEM_SIZE(typeTensor), ssteps.data());
-        int dstType = CV_32F;
+        Mat srcMat(ndims, isizes.data(), CV_MAKETYPE(typeTensor, 1), storages[indexStorage].ptr() + offset*CV_ELEM_SIZE(typeTensor), ssteps.data());
+        ElemDepth dstDepth = CV_32F;
 
         Mat blob;
-        srcMat.convertTo(blob, dstType);
+        srcMat.convertTo(blob, dstDepth);
 
         tensors.insert(std::make_pair(indexTensor, blob));
     }
@@ -457,7 +457,7 @@ struct TorchImporter
         if (dbgPrint)
             std::cout << "Class: " << className << std::endl;
 
-        int type;
+        ElemDepth type;
         if ( (type = parseTensorType(className)) >= 0 ) //is Tensor
         {
             readTorchTensor(index, type);
@@ -629,7 +629,7 @@ struct TorchImporter
                 else
                 {
                     CV_Assert(scalarParams.has("nOutput"));
-                    layerParams.blobs.push_back(Mat::zeros(1, scalarParams.get<int>("nOutput"), CV_32F));
+                    layerParams.blobs.push_back(Mat::zeros(1, scalarParams.get<int>("nOutput"), CV_32FC1));
                 }
 
                 if (tensorParams.count("running_var"))
@@ -645,7 +645,7 @@ struct TorchImporter
                 else
                 {
                     CV_Assert(scalarParams.has("nOutput"));
-                    layerParams.blobs.push_back(Mat::ones(1, scalarParams.get<int>("nOutput"), CV_32F));
+                    layerParams.blobs.push_back(Mat::ones(1, scalarParams.get<int>("nOutput"), CV_32FC1));
                 }
 
                 if (tensorParams.count("weight"))

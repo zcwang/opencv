@@ -5,7 +5,7 @@
 
 namespace opencv_test { namespace {
 
-static SparseMat cvTsGetRandomSparseMat(int dims, const int* sz, int type,
+static SparseMat cvTsGetRandomSparseMat(int dims, const int* sz, ElemType type,
                                         int nzcount, double a, double b, RNG& rng)
 {
     SparseMat m(dims, sz, type);
@@ -41,7 +41,7 @@ static bool cvTsCheckSparse(const CvSparseMat* m1, const CvSparseMat* m2, double
 {
     CvSparseMatIterator it1;
     CvSparseNode* node1;
-    int depth = CV_MAT_DEPTH(m1->type);
+    ElemDepth depth = CV_MAT_DEPTH(m1->type);
 
     if( m1->heap->active_count != m2->heap->active_count ||
        m1->dims != m2->dims || CV_MAT_TYPE(m1->type) != CV_MAT_TYPE(m2->type) )
@@ -114,7 +114,7 @@ protected:
             double test_real = (cvtest::randInt(rng)%2?1:-1)*exp(cvtest::randReal(rng)*18-9);
             string test_string = "vw wv23424rt\"&amp;&lt;&gt;&amp;&apos;@#$@$%$%&%IJUKYILFD@#$@%$&*&() ";
 
-            int depth = cvtest::randInt(rng) % (CV_64F+1);
+            ElemDepth depth = static_cast<ElemDepth>(cvtest::randInt(rng) % (CV_64F + 1));
             int cn = cvtest::randInt(rng) % 4 + 1;
             Mat test_mat(cvtest::randInt(rng)%30+1, cvtest::randInt(rng)%30+1, CV_MAKETYPE(depth, cn));
 
@@ -145,7 +145,7 @@ protected:
                 edge->weight = (float)(i+1);
             }
 
-            depth = cvtest::randInt(rng) % (CV_64F+1);
+            depth = static_cast<ElemDepth>(cvtest::randInt(rng) % (CV_64F+1));
             cn = cvtest::randInt(rng) % 4 + 1;
             int sz[] = {
                 static_cast<int>(cvtest::randInt(rng)%10+1),
@@ -169,7 +169,8 @@ protected:
                 static_cast<int>(cvtest::randInt(rng)%10+1),
                 static_cast<int>(cvtest::randInt(rng)%10+1),
             };
-            SparseMat test_sparse_mat = cvTsGetRandomSparseMat(4, ssz, cvtest::randInt(rng)%(CV_64F+1),
+            ElemType type = static_cast<ElemType>(cvtest::randInt(rng) % (CV_64F + 1));
+            SparseMat test_sparse_mat = cvTsGetRandomSparseMat(4, ssz, type,
                                                                cvtest::randInt(rng) % 10000, 0, 100, rng);
 
             fs << "test_int" << test_int << "test_real" << test_real << "test_string" << test_string;
@@ -445,7 +446,7 @@ protected:
                 vector<int> mi, mi2, mi3, mi4;
                 vector<Mat> mv, mv2, mv3, mv4;
                 vector<UserDefinedType> vudt, vudt2, vudt3, vudt4;
-                Mat m(10, 9, CV_32F);
+                Mat m(10, 9, CV_32FC1);
                 Mat empty;
                 UserDefinedType udt = { 8, 3.3f };
                 randu(m, 0, 1);
@@ -528,7 +529,7 @@ BIGDATA_TEST(Core_InputOutput, huge)
     RNG& rng = theRNG();
     int N = 1000, M = 1200000;
     std::cout << "Allocating..." << std::endl;
-    Mat mat(M, N, CV_32F);
+    Mat mat(M, N, CV_32FC1);
     std::cout << "Initializing..." << std::endl;
     rng.fill(mat, RNG::UNIFORM, 0, 1);
     std::cout << "Writing..." << std::endl;
@@ -1037,7 +1038,7 @@ TEST(Core_InputOutput, filestorage_vec_vec_io)
         outputMats[i].resize(i+1);
         for(size_t j = 0; j < outputMats[i].size(); j++)
         {
-            outputMats[i][j] = Mat::eye((int)i + 1, (int)i + 1, CV_8U);
+            outputMats[i][j] = Mat::eye((int)i + 1, (int)i + 1, CV_8UC1);
         }
     }
 
@@ -1086,7 +1087,7 @@ TEST(Core_InputOutput, filestorage_yaml_advanvced_type_heading)
     cv::FileStorage fs(content, cv::FileStorage::READ | cv::FileStorage::MEMORY);
 
     cv::Mat inputMatrix;
-    cv::Mat actualMatrix = cv::Mat::eye(1, 1, CV_64F);
+    cv::Mat actualMatrix = cv::Mat::eye(1, 1, CV_64FC1);
     fs["cameraMatrix"] >> inputMatrix;
 
     ASSERT_EQ(cv::norm(inputMatrix, actualMatrix, NORM_INF), 0.);

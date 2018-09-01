@@ -105,7 +105,7 @@ void MatchingMethod( int, void* )
   //! [match_template]
 
   //! [normalize]
-  normalize( result, result, 0, 1, NORM_MINMAX, -1, Mat() );
+  normalize( result, result, 0, 1, NORM_MINMAX, CV_DEPTH_UNSPECIFIED, Mat() );
   //! [normalize]
 
   //! [best_match]

@@ -59,13 +59,13 @@
 
 namespace cv { namespace directx {
 
-int getTypeFromDXGI_FORMAT(const int iDXGI_FORMAT)
+ElemType getTypeFromDXGI_FORMAT(const int iDXGI_FORMAT)
 {
     CV_UNUSED(iDXGI_FORMAT);
 #if !defined(HAVE_DIRECTX)
     NO_DIRECTX_SUPPORT_ERROR;
 #else
-    const int errorType = -1;
+    const ElemType errorType = CV_TYPE_UNSPECIFIED;
     switch ((enum DXGI_FORMAT)iDXGI_FORMAT)
     {
     //case DXGI_FORMAT_UNKNOWN:
@@ -177,13 +177,13 @@ int getTypeFromDXGI_FORMAT(const int iDXGI_FORMAT)
 #endif
 }
 
-int getTypeFromD3DFORMAT(const int iD3DFORMAT)
+ElemType getTypeFromD3DFORMAT(const int iD3DFORMAT)
 {
     CV_UNUSED(iD3DFORMAT);
 #if !defined(HAVE_DIRECTX)
     NO_DIRECTX_SUPPORT_ERROR;
 #else
-    const int errorType = -1;
+    const ElemType errorType = CV_TYPE_UNSPECIFIED;
     switch ((enum _D3DFORMAT)iD3DFORMAT)
     {
     //case D3DFMT_UNKNOWN:
@@ -774,7 +774,7 @@ void convertToD3D11Texture2D(InputArray src, ID3D11Texture2D* pD3D11Texture2D)
     pD3D11Texture2D->GetDesc(&desc);
 
     int srcType = src.type();
-    int textureType = getTypeFromDXGI_FORMAT(desc.Format);
+    ElemType textureType = getTypeFromDXGI_FORMAT(desc.Format);
     CV_Assert(textureType == srcType);
 
     Size srcSize = src.size();
@@ -882,7 +882,7 @@ void convertFromD3D11Texture2D(ID3D11Texture2D* pD3D11Texture2D, OutputArray dst
     D3D11_TEXTURE2D_DESC desc = { 0 };
     pD3D11Texture2D->GetDesc(&desc);
 
-    int textureType = getTypeFromDXGI_FORMAT(desc.Format);
+    ElemType textureType = getTypeFromDXGI_FORMAT(desc.Format);
     CV_Assert(textureType >= 0);
 
     // TODO Need to specify ACCESS_WRITE here somehow to prevent useless data copying!
@@ -1014,7 +1014,7 @@ void convertToD3D10Texture2D(InputArray src, ID3D10Texture2D* pD3D10Texture2D)
     pD3D10Texture2D->GetDesc(&desc);
 
     int srcType = src.type();
-    int textureType = getTypeFromDXGI_FORMAT(desc.Format);
+    ElemType textureType = getTypeFromDXGI_FORMAT(desc.Format);
     CV_Assert(textureType == srcType);
 
     Size srcSize = src.size();
@@ -1074,7 +1074,7 @@ void convertFromD3D10Texture2D(ID3D10Texture2D* pD3D10Texture2D, OutputArray dst
     D3D10_TEXTURE2D_DESC desc = { 0 };
     pD3D10Texture2D->GetDesc(&desc);
 
-    int textureType = getTypeFromDXGI_FORMAT(desc.Format);
+    ElemType textureType = getTypeFromDXGI_FORMAT(desc.Format);
     CV_Assert(textureType >= 0);
 
     using namespace cv::ocl;
@@ -1232,7 +1232,7 @@ void convertFromDirect3DSurface9(IDirect3DSurface9* pDirect3DSurface9, OutputArr
         CV_Error(cv::Error::OpenCLApiCallError, "OpenCL: Can't get D3D surface description");
     }
 
-    int surfaceType = getTypeFromD3DFORMAT(desc.Format);
+    ElemType surfaceType = getTypeFromD3DFORMAT(desc.Format);
     CV_Assert(surfaceType >= 0);
 
     using namespace cv::ocl;

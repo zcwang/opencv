@@ -93,7 +93,7 @@ bool CV_RigidTransform_Test::testNPoints(int from)
         ts->update_context( this, k, true );
         progress = update_progress(progress, k, ntests, 0);
 
-        Mat aff(2, 3, CV_64F);
+        Mat aff(2, 3, CV_64FC1);
         rng.fill(aff, RNG::UNIFORM, Scalar(-2), Scalar(2));
 
         int n = (unsigned)rng % 100 + 10;

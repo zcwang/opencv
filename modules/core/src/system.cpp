@@ -1851,7 +1851,7 @@ IntrumentationRegion::IntrumentationRegion(const char* funName, const char* file
             return;
         }
 
-        int depth = pTLS->pCurrentNode->getDepth();
+        ElemDepth depth = pTLS->pCurrentNode->getDepth();
         if(pStruct->maxDepth && pStruct->maxDepth <= depth)
         {
             m_disabled = true;

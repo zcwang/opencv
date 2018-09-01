@@ -49,7 +49,7 @@
 */
 
 cv::Mat cv::getGaborKernel( Size ksize, double sigma, double theta,
-                            double lambd, double gamma, double psi, int ktype )
+                            double lambd, double gamma, double psi, ElemType ktype )
 {
     double sigma_x = sigma;
     double sigma_y = sigma/gamma;

@@ -250,12 +250,12 @@ void CV_CountNonZeroTest::run(int)
 TEST (Core_CountNonZero, accuracy) { CV_CountNonZeroTest test; test.safe_run(); }
 
 
-typedef testing::TestWithParam<tuple<int, int> > CountNonZeroND;
+typedef testing::TestWithParam<tuple<int, MatType> > CountNonZeroND;
 
 TEST_P (CountNonZeroND, ndim)
 {
     const int dims = get<0>(GetParam());
-    const int type = get<1>(GetParam());
+    const ElemType type = get<1>(GetParam());
     const int ONE_SIZE = 5;
 
     vector<int> sizes(dims);

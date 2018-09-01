@@ -495,7 +495,9 @@ bool findChessboardCorners(InputArray image_, Size pattern_size,
     const int min_dilations = 0;
     const int max_dilations = 7;
 
-    int type = image_.type(), depth = CV_MAT_DEPTH(type), cn = CV_MAT_CN(type);
+    ElemType type = image_.type();
+    ElemDepth depth = CV_MAT_DEPTH(type);
+    int cn = CV_MAT_CN(type);
     Mat img = image_.getMat();
 
     CV_CheckType(type, depth == CV_8U && (cn == 1 || cn == 3 || cn == 4),
@@ -2076,12 +2078,12 @@ void drawChessboardCorners( InputOutputArray image, Size patternSize,
 {
     CV_INSTRUMENT_REGION();
 
-    int type = image.type();
+    ElemType type = image.type();
     int cn = CV_MAT_CN(type);
     CV_CheckType(type, cn == 1 || cn == 3 || cn == 4,
             "Number of channels must be 1, 3 or 4" );
 
-    int depth = CV_MAT_DEPTH(type);
+    ElemDepth depth = CV_MAT_DEPTH(type);
     CV_CheckType(type, depth == CV_8U || depth == CV_16U || depth == CV_32F,
             "Only 8-bit, 16-bit or floating-point 32-bit images are supported");
 
@@ -2099,15 +2101,16 @@ void drawChessboardCorners( InputOutputArray image, Size patternSize,
     double scale = 1;
     switch (depth)
     {
-    case CV_8U:
+      case CV_8U:
         scale = 1;
         break;
-    case CV_16U:
+      case CV_16U:
         scale = 256;
         break;
-    case CV_32F:
+      case CV_32F:
         scale = 1./255;
         break;
+      default: CV_Error(cv::Error::BadDepth, "Unsupported depth");
     }
 
     int line_type = (type == CV_8UC1 || type == CV_8UC3) ? LINE_AA : LINE_8;

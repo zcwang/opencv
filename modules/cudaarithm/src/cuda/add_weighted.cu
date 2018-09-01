@@ -96,7 +96,7 @@ namespace
     }
 }
 
-void cv::cuda::addWeighted(InputArray _src1, double alpha, InputArray _src2, double beta, double gamma, OutputArray _dst, int ddepth, Stream& stream)
+void cv::cuda::addWeighted(InputArray _src1, double alpha, InputArray _src2, double beta, double gamma, OutputArray _dst, ElemDepth ddepth, Stream& stream)
 {
     typedef void (*func_t)(const GpuMat& src1, double alpha, const GpuMat& src2, double beta, double gamma, GpuMat& dst, Stream& stream);
     static const func_t funcs[7][7][7] =
@@ -561,8 +561,8 @@ void cv::cuda::addWeighted(InputArray _src1, double alpha, InputArray _src2, dou
     GpuMat src1 = getInputMat(_src1, stream);
     GpuMat src2 = getInputMat(_src2, stream);
 
-    int sdepth1 = src1.depth();
-    int sdepth2 = src2.depth();
+    ElemDepth sdepth1 = src1.depth();
+    ElemDepth sdepth2 = src2.depth();
 
     ddepth = ddepth >= 0 ? CV_MAT_DEPTH(ddepth) : std::max(sdepth1, sdepth2);
     const int cn = src1.channels();

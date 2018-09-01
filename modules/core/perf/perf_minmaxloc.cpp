@@ -11,7 +11,7 @@ PERF_TEST_P(Size_MatType, minMaxLoc, testing::Combine(
              )
 {
     Size sz = get<0>(GetParam());
-    int matType = get<1>(GetParam());
+    ElemType matType = get<1>(GetParam());
 
     Mat src(sz, matType);
     double minVal, maxVal;

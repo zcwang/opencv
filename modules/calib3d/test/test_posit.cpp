@@ -82,14 +82,14 @@ void CV_POSITTest::run( int start_from )
     RNG& rng = ts->get_rng();
     int progress = 0;
 
-    CvMat* true_rotationX = cvCreateMat( 3, 3, CV_32F );
-    CvMat* true_rotationY = cvCreateMat( 3, 3, CV_32F );
-    CvMat* true_rotationZ = cvCreateMat( 3, 3, CV_32F );
-    CvMat* tmp_matrix = cvCreateMat( 3, 3, CV_32F );
-    CvMat* true_rotation = cvCreateMat( 3, 3, CV_32F );
-    CvMat* rotation = cvCreateMat( 3, 3, CV_32F );
-    CvMat* translation = cvCreateMat( 3, 1, CV_32F );
-    CvMat* true_translation = cvCreateMat( 3, 1, CV_32F );
+    CvMat* true_rotationX = cvCreateMat( 3, 3, CV_32FC1);
+    CvMat* true_rotationY = cvCreateMat( 3, 3, CV_32FC1);
+    CvMat* true_rotationZ = cvCreateMat( 3, 3, CV_32FC1);
+    CvMat* tmp_matrix = cvCreateMat( 3, 3, CV_32FC1);
+    CvMat* true_rotation = cvCreateMat( 3, 3, CV_32FC1);
+    CvMat* rotation = cvCreateMat( 3, 3, CV_32FC1);
+    CvMat* translation = cvCreateMat( 3, 1, CV_32FC1);
+    CvMat* true_translation = cvCreateMat( 3, 1, CV_32FC1);
 
     const float flFocalLength = 760.f;
     const float flEpsilon = 0.5f;
@@ -161,8 +161,8 @@ void CV_POSITTest::run( int start_from )
         for ( i = 0; i < 8; i++ )
         {
             float vec[3];
-            CvMat Vec = cvMat( 3, 1, CV_32F, vec );
-            CvMat Obj_point = cvMat( 3, 1, CV_32F, &obj_points[i].x );
+            CvMat Vec = cvMat( 3, 1, CV_32FC1, vec );
+            CvMat Obj_point = cvMat( 3, 1, CV_32FC1, &obj_points[i].x );
 
             cvMatMul( true_rotation, &Obj_point, &Vec );
 

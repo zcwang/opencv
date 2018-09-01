@@ -1585,7 +1585,7 @@ points1 and points2 are the same input for findEssentialMat. :
     }
 
     // cametra matrix with both focal lengths = 1, and principal point = (0, 0)
-    Mat cameraMatrix = Mat::eye(3, 3, CV_64F);
+    Mat cameraMatrix = Mat::eye(3, 3, CV_64FC1);
 
     Mat E, R, t, mask;
 
@@ -1755,7 +1755,7 @@ map.
 points where the disparity was not computed). If handleMissingValues=true, then pixels with the
 minimal disparity that corresponds to the outliers (see StereoMatcher::compute ) are transformed
 to 3D points with a very large Z value (currently set to 10000).
-@param ddepth The optional output array depth. If it is -1, the output image will have CV_32F
+@param ddepth The optional output array depth. If it is CV_DEPTH_UNSPECIFIED, the output image will have CV_32F
 depth. ddepth can also be set to CV_16S, CV_32S or CV_32F.
 
 The function transforms a single-channel disparity map to a 3-channel image representing a 3D
@@ -1771,7 +1771,7 @@ perspectiveTransform .
 CV_EXPORTS_W void reprojectImageTo3D( InputArray disparity,
                                       OutputArray _3dImage, InputArray Q,
                                       bool handleMissingValues = false,
-                                      int ddepth = -1 );
+                                      ElemDepth ddepth = CV_DEPTH_UNSPECIFIED);
 
 /** @brief Calculates the Sampson Distance between two points.
 
@@ -2282,7 +2282,7 @@ namespace fisheye
     @param map2 The second output map.
      */
     CV_EXPORTS_W void initUndistortRectifyMap(InputArray K, InputArray D, InputArray R, InputArray P,
-        const cv::Size& size, int m1type, OutputArray map1, OutputArray map2);
+        const cv::Size& size, ElemType m1type, OutputArray map1, OutputArray map2);
 
     /** @brief Transforms an image to compensate for fisheye lens distortion.
 
