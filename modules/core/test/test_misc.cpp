@@ -8,14 +8,14 @@ namespace opencv_test { namespace {
 TEST(Core_OutputArrayCreate, _1997)
 {
     struct local {
-        static void create(OutputArray arr, Size submatSize, int type)
+        static void create(OutputArray arr, Size submatSize, ElemType type)
         {
             int sizes[] = {submatSize.width, submatSize.height};
             arr.create(sizeof(sizes)/sizeof(sizes[0]), sizes, type);
         }
     };
 
-    Mat mat(Size(512, 512), CV_8U);
+    Mat mat(Size(512, 512), CV_8UC1);
     Size submatSize = Size(256, 256);
 
     ASSERT_NO_THROW(local::create( mat(Rect(Point(), submatSize)), submatSize, mat.type() ));
@@ -136,7 +136,7 @@ TEST(Core_OutputArrayAssign, _Matxf_UMatd)
 
 int fixedType_handler(OutputArray dst)
 {
-    int type = CV_32FC2; // return points only {x, y}
+    ElemType type = CV_32FC2; // return points only {x, y}
     if (dst.fixedType())
     {
         type = dst.type();
@@ -611,7 +611,7 @@ TEST(Core_Check, testGT_int_pass)
 }
 
 
-void test_check_MatType_1(int src_type)
+void test_check_MatType_1(ElemType src_type)
 {
     CV_CheckTypeEQ(src_type, CV_32FC1, "Unsupported source type");
 }
@@ -648,7 +648,7 @@ TEST(Core_Check, testMatType_fail_1)
     }
 }
 
-void test_check_MatType_2(int src_type)
+void test_check_MatType_2(ElemType src_type)
 {
     CV_CheckType(src_type, src_type == CV_32FC1 || src_type == CV_32FC3, "Unsupported src");
 }
@@ -677,7 +677,7 @@ TEST(Core_Check, testMatType_fail_2)
     }
 }
 
-void test_check_MatDepth_1(int src_depth)
+void test_check_MatDepth_1(ElemDepth src_depth)
 {
     CV_CheckDepthEQ(src_depth, CV_32F, "Unsupported source depth");
 }
@@ -685,7 +685,7 @@ TEST(Core_Check, testMatDepth_pass)
 {
     EXPECT_NO_THROW(
     {
-        test_check_MatDepth_1(CV_MAKE_TYPE(CV_32F, 1));
+        test_check_MatDepth_1(CV_32F);
     });
 }
 TEST(Core_Check, testMatDepth_fail_1)
@@ -714,7 +714,7 @@ TEST(Core_Check, testMatDepth_fail_1)
     }
 }
 
-void test_check_MatDepth_2(int src_depth)
+void test_check_MatDepth_2(ElemDepth src_depth)
 {
     CV_CheckDepth(src_depth, src_depth == CV_32F || src_depth == CV_64F, "Unsupported src");
 }

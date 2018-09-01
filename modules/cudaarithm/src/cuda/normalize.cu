@@ -247,7 +247,7 @@ void cv::cuda::normalize(InputArray _src, OutputArray _dst, double a, double b, 
     const GpuMat mask = getInputMat(_mask, stream);
 
     CV_Assert( src.channels() == 1 );
-    CV_Assert( mask.empty() || (mask.size() == src.size() && mask.type() == CV_8U) );
+    CV_Assert( mask.empty() || (mask.size() == src.size() && mask.type() == CV_8UC1) );
 
     if (dtype < 0)
     {
@@ -255,14 +255,14 @@ void cv::cuda::normalize(InputArray _src, OutputArray _dst, double a, double b, 
     }
     dtype = CV_MAT_DEPTH(dtype);
 
-    const int src_depth = src.depth();
-    const int tmp_depth = src_depth <= CV_32F ? CV_32F : src_depth;
+    const ElemDepth src_depth = src.depth();
+    const ElemDepth tmp_depth = src_depth <= CV_32F ? CV_32F : src_depth;
 
     GpuMat dst;
     if (dtype == tmp_depth)
     {
         _dst.create(src.size(), tmp_depth);
-        dst = getOutputMat(_dst, src.size(), tmp_depth, stream);
+        dst = getOutputMat(_dst, src.size(), CV_MAKETYPE(tmp_depth, 1), stream);
     }
     else
     {

@@ -89,16 +89,16 @@ void CvLevMarq::init( int nparams, int nerrs, CvTermCriteria criteria0, bool _co
 {
     if( !param || param->rows != nparams || nerrs != (err ? err->rows : 0) )
         clear();
-    mask.reset(cvCreateMat( nparams, 1, CV_8U ));
+    mask.reset(cvCreateMat( nparams, 1, CV_8UC1));
     cvSet(mask, cvScalarAll(1));
-    prevParam.reset(cvCreateMat( nparams, 1, CV_64F ));
-    param.reset(cvCreateMat( nparams, 1, CV_64F ));
-    JtJ.reset(cvCreateMat( nparams, nparams, CV_64F ));
-    JtErr.reset(cvCreateMat( nparams, 1, CV_64F ));
+    prevParam.reset(cvCreateMat( nparams, 1, CV_64FC1));
+    param.reset(cvCreateMat( nparams, 1, CV_64FC1));
+    JtJ.reset(cvCreateMat( nparams, nparams, CV_64FC1));
+    JtErr.reset(cvCreateMat( nparams, 1, CV_64FC1));
     if( nerrs > 0 )
     {
-        J.reset(cvCreateMat( nerrs, nparams, CV_64F ));
-        err.reset(cvCreateMat( nerrs, 1, CV_64F ));
+        J.reset(cvCreateMat( nerrs, nparams, CV_64FC1));
+        err.reset(cvCreateMat( nerrs, 1, CV_64FC1));
     }
     errNorm = prevErrNorm = DBL_MAX;
     lambdaLg10 = -3;
@@ -298,9 +298,9 @@ void CvLevMarq::step()
     int nparams_nz = countNonZero(_mask);
     if(!JtJN || JtJN->rows != nparams_nz) {
         // prevent re-allocation in every step
-        JtJN.reset(cvCreateMat( nparams_nz, nparams_nz, CV_64F ));
-        JtJV.reset(cvCreateMat( nparams_nz, 1, CV_64F ));
-        JtJW.reset(cvCreateMat( nparams_nz, 1, CV_64F ));
+        JtJN.reset(cvCreateMat( nparams_nz, nparams_nz, CV_64FC1));
+        JtJV.reset(cvCreateMat( nparams_nz, 1, CV_64FC1));
+        JtJW.reset(cvCreateMat( nparams_nz, 1, CV_64FC1));
     }
 
     Mat _JtJN = cvarrToMat(JtJN);
@@ -360,7 +360,7 @@ CV_IMPL int cvFindHomography( const CvMat* _src, const CvMat* _dst, CvMat* __H, 
         Hz.setTo(cv::Scalar::all(0));
         return 0;
     }
-    H0.convertTo(H, H.type());
+    H0.convertTo(H, H.depth());
     return 1;
 }
 
@@ -389,7 +389,7 @@ CV_IMPL int cvFindFundamentalMat( const CvMat* points1, const CvMat* points2,
 
     CV_Assert( FM0.cols == 3 && FM0.rows % 3 == 0 && FM.cols == 3 && FM.rows % 3 == 0 && FM.channels() == 1 );
     cv::Mat FM1 = FM.rowRange(0, MIN(FM0.rows, FM.rows));
-    FM0.rowRange(0, FM1.rows).convertTo(FM1, FM1.type());
+    FM0.rowRange(0, FM1.rows).convertTo(FM1, FM1.depth());
     return FM1.rows / 3;
 }
 
@@ -417,14 +417,14 @@ CV_IMPL void cvComputeCorrespondEpilines( const CvMat* points, int pointImageID,
         else
         {
             transpose( lines, lines );
-            lines.convertTo( lines0, lines0.type() );
+            lines.convertTo( lines0, lines0.depth() );
         }
     }
     else
     {
         CV_Assert( lines.size() == lines0.size() );
         if( lines.data != lines0.data )
-            lines.convertTo(lines0, lines0.type());
+            lines.convertTo(lines0, lines0.depth());
     }
 }
 
@@ -459,13 +459,13 @@ CV_IMPL void cvConvertPointsHomogeneous( const CvMat* _src, CvMat* _dst )
         else
         {
             transpose( dst, dst );
-            dst.convertTo( dst0, dst0.type() );
+            dst.convertTo(dst0, dst0.depth());
         }
     }
     else
     {
         CV_Assert( dst.size() == dst0.size() );
         if( dst.data != dst0.data )
-            dst.convertTo(dst0, dst0.type());
+            dst.convertTo(dst0, dst0.depth());
     }
 }

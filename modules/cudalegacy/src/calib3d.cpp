@@ -85,8 +85,8 @@ namespace
     void transformPointsCaller(const GpuMat& src, const Mat& rvec, const Mat& tvec, GpuMat& dst, cudaStream_t stream)
     {
         CV_Assert(src.rows == 1 && src.cols > 0 && src.type() == CV_32FC3);
-        CV_Assert(rvec.size() == Size(3, 1) && rvec.type() == CV_32F);
-        CV_Assert(tvec.size() == Size(3, 1) && tvec.type() == CV_32F);
+        CV_Assert(rvec.size() == Size(3, 1) && rvec.type() == CV_32FC1);
+        CV_Assert(tvec.size() == Size(3, 1) && tvec.type() == CV_32FC1);
 
         // Convert rotation vector into matrix
         Mat rot;
@@ -107,9 +107,9 @@ namespace
     void projectPointsCaller(const GpuMat& src, const Mat& rvec, const Mat& tvec, const Mat& camera_mat, const Mat& dist_coef, GpuMat& dst, cudaStream_t stream)
     {
         CV_Assert(src.rows == 1 && src.cols > 0 && src.type() == CV_32FC3);
-        CV_Assert(rvec.size() == Size(3, 1) && rvec.type() == CV_32F);
-        CV_Assert(tvec.size() == Size(3, 1) && tvec.type() == CV_32F);
-        CV_Assert(camera_mat.size() == Size(3, 3) && camera_mat.type() == CV_32F);
+        CV_Assert(rvec.size() == Size(3, 1) && rvec.type() == CV_32FC1);
+        CV_Assert(tvec.size() == Size(3, 1) && tvec.type() == CV_32FC1);
+        CV_Assert(camera_mat.size() == Size(3, 3) && camera_mat.type() == CV_32FC1);
         CV_Assert(dist_coef.empty()); // Undistortion isn't supported
 
         // Convert rotation vector into matrix
@@ -217,7 +217,7 @@ void cv::cuda::solvePnPRansac(const Mat& object, const Mat& image, const Mat& ca
     CV_Assert(object.rows == 1 && object.cols > 0 && object.type() == CV_32FC3);
     CV_Assert(image.rows == 1 && image.cols > 0 && image.type() == CV_32FC2);
     CV_Assert(object.cols == image.cols);
-    CV_Assert(camera_mat.size() == Size(3, 3) && camera_mat.type() == CV_32F);
+    CV_Assert(camera_mat.size() == Size(3, 3) && camera_mat.type() == CV_32FC1);
     CV_Assert(!use_extrinsic_guess); // We don't support initial guess for now
     CV_Assert(num_iters <= solve_pnp_ransac::maxNumIters());
 

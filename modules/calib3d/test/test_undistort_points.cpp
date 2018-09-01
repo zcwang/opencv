@@ -96,10 +96,10 @@ TEST(Calib3d_Undistort, accuracy) { CV_UndistortTest test; test.safe_run(); }
 
 TEST(Calib3d_Undistort, stop_criteria)
 {
-    Mat cameraMatrix = (Mat_<double>(3,3,CV_64F) << 857.48296979, 0, 968.06224829,
+    Mat cameraMatrix = (Mat_<double>(3,3,CV_64FC1) << 857.48296979, 0, 968.06224829,
                                                         0, 876.71824265, 556.37145899,
                                                         0, 0, 1);
-    Mat distCoeffs = (Mat_<double>(5,1,CV_64F) <<
+    Mat distCoeffs = (Mat_<double>(5,1,CV_64FC1) <<
                       -2.57614020e-01, 8.77086999e-02, -2.56970803e-04, -5.93390389e-04, -1.52194091e-02);
     RNG rng(2);
     Point2d pt_distorted(rng.uniform(0.0, 1920.0), rng.uniform(0.0, 1080.0));
@@ -113,7 +113,7 @@ TEST(Calib3d_Undistort, stop_criteria)
     std::vector<Point2d> pt_redistorted_vec;
     std::vector<Point3d> pt_undist_vec_homogeneous;
     pt_undist_vec_homogeneous.push_back( Point3d(pt_undist_vec[0].x, pt_undist_vec[0].y, 1.0) );
-    projectPoints(pt_undist_vec_homogeneous, Mat::zeros(3,1,CV_64F), Mat::zeros(3,1,CV_64F), cameraMatrix, distCoeffs, pt_redistorted_vec);
+    projectPoints(pt_undist_vec_homogeneous, Mat::zeros(3,1,CV_64FC1), Mat::zeros(3,1,CV_64FC1), cameraMatrix, distCoeffs, pt_redistorted_vec);
     const double obtainedError = sqrt( pow(pt_distorted.x - pt_redistorted_vec[0].x, 2) + pow(pt_distorted.y - pt_redistorted_vec[0].y, 2) );
 
     ASSERT_LE(obtainedError, maxError);

@@ -53,7 +53,7 @@ namespace opencv_test { namespace {
 #ifdef DEBUG_CHESSBOARD
 void show_points( const Mat& gray, const Mat& expected, const vector<Point2f>& actual, bool was_found )
 {
-    Mat rgb( gray.size(), CV_8U);
+    Mat rgb( gray.size(), CV_8UC1);
     merge(vector<Mat>(3, gray), rgb);
 
     for(size_t i = 0; i < actual.size(); i++ )

@@ -85,7 +85,7 @@ namespace
     {
         CV_Assert( borderType_ == BORDER_REFLECT101 || borderType_ == BORDER_REPLICATE || borderType_ == BORDER_REFLECT );
 
-        const int sdepth = CV_MAT_DEPTH(srcType_);
+        const ElemDepth sdepth = CV_MAT_DEPTH(srcType_);
         const int cn = CV_MAT_CN(srcType_);
 
         CV_Assert( cn == 1 );

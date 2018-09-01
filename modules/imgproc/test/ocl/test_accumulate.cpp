@@ -53,7 +53,8 @@ namespace ocl {
 
 PARAM_TEST_CASE(AccumulateBase, std::pair<MatDepth, MatDepth>, Channels, bool)
 {
-    int sdepth, ddepth, channels;
+    ElemDepth sdepth, ddepth;
+    int channels;
     bool useRoi;
     double alpha;
 
@@ -72,8 +73,8 @@ PARAM_TEST_CASE(AccumulateBase, std::pair<MatDepth, MatDepth>, Channels, bool)
 
     void random_roi()
     {
-        const int stype = CV_MAKE_TYPE(sdepth, channels),
-                dtype = CV_MAKE_TYPE(ddepth, channels);
+        const ElemType stype = CV_MAKE_TYPE(sdepth, channels),
+                       dtype = CV_MAKE_TYPE(ddepth, channels);
 
         Size roiSize = randomSize(1, 10);
         Border srcBorder = randomBorder(0, useRoi ? MAX_VALUE : 0);
@@ -221,13 +222,13 @@ OCL_TEST_P(AccumulateWeighted, Mask)
 /////////////////////////////////// Instantiation ///////////////////////////////////
 
 #define OCL_DEPTH_ALL_COMBINATIONS \
-    testing::Values(std::make_pair<MatDepth, MatDepth>(CV_8U, CV_32F), \
-    std::make_pair<MatDepth, MatDepth>(CV_16U, CV_32F), \
-    std::make_pair<MatDepth, MatDepth>(CV_32F, CV_32F), \
-    std::make_pair<MatDepth, MatDepth>(CV_8U, CV_64F), \
-    std::make_pair<MatDepth, MatDepth>(CV_16U, CV_64F), \
-    std::make_pair<MatDepth, MatDepth>(CV_32F, CV_64F), \
-    std::make_pair<MatDepth, MatDepth>(CV_64F, CV_64F))
+    testing::Values(std::make_pair<MatDepth, MatDepth>(CV_8U, CV_32FC1), \
+    std::make_pair<MatDepth, MatDepth>(CV_16U, CV_32FC1), \
+    std::make_pair<MatDepth, MatDepth>(CV_32F, CV_32FC1), \
+    std::make_pair<MatDepth, MatDepth>(CV_8U, CV_64FC1), \
+    std::make_pair<MatDepth, MatDepth>(CV_16U, CV_64FC1), \
+    std::make_pair<MatDepth, MatDepth>(CV_32F, CV_64FC1), \
+    std::make_pair<MatDepth, MatDepth>(CV_64F, CV_64FC1))
 
 OCL_INSTANTIATE_TEST_CASE_P(ImgProc, Accumulate, Combine(OCL_DEPTH_ALL_COMBINATIONS, OCL_ALL_CHANNELS, Bool()));
 OCL_INSTANTIATE_TEST_CASE_P(ImgProc, AccumulateSquare, Combine(OCL_DEPTH_ALL_COMBINATIONS, OCL_ALL_CHANNELS, Bool()));

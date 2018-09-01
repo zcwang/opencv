@@ -756,7 +756,8 @@ double cv::determinant( InputArray _mat )
 
     Mat mat = _mat.getMat();
     double result = 0;
-    int type = mat.type(), rows = mat.rows;
+    ElemType type = mat.type();
+    int rows = mat.rows;
     size_t step = mat.step;
     const uchar* m = mat.ptr();
 
@@ -778,7 +779,7 @@ double cv::determinant( InputArray _mat )
         {
             size_t bufSize = rows*rows*sizeof(float);
             AutoBuffer<uchar> buffer(bufSize);
-            Mat a(rows, rows, CV_32F, buffer.data());
+            Mat a(rows, rows, CV_32FC1, buffer.data());
             mat.copyTo(a);
 
             result = hal::LU32f(a.ptr<float>(), a.step, rows, 0, 0, 0);
@@ -801,7 +802,7 @@ double cv::determinant( InputArray _mat )
         {
             size_t bufSize = rows*rows*sizeof(double);
             AutoBuffer<uchar> buffer(bufSize);
-            Mat a(rows, rows, CV_64F, buffer.data());
+            Mat a(rows, rows, CV_64FC1, buffer.data());
             mat.copyTo(a);
 
             result = hal::LU64f(a.ptr<double>(), a.step, rows, 0, 0, 0);
@@ -834,7 +835,7 @@ double cv::invert( InputArray _src, OutputArray _dst, int method )
 
     bool result = false;
     Mat src = _src.getMat();
-    int type = src.type();
+    ElemType type = src.type();
 
     CV_Assert(type == CV_32F || type == CV_64F);
 
@@ -1094,7 +1095,7 @@ bool cv::solve( InputArray _src, InputArray _src2arg, OutputArray _dst, int meth
 
     bool result = true;
     Mat src = _src.getMat(), _src2 = _src2arg.getMat();
-    int type = src.type();
+    ElemType type = src.type();
     bool is_normal = (method & DECOMP_NORMAL) != 0;
 
     CV_Assert( type == _src2.type() && (type == CV_32F || type == CV_64F) );
@@ -1392,7 +1393,7 @@ bool cv::eigen( InputArray _src, OutputArray _evals, OutputArray _evects )
     CV_INSTRUMENT_REGION()
 
     Mat src = _src.getMat();
-    int type = src.type();
+    ElemType type = src.type();
     int n = src.rows;
 
     CV_Assert( src.rows == src.cols );
@@ -1469,7 +1470,7 @@ static void _SVDcompute( InputArray _aarr, OutputArray _w,
 {
     Mat src = _aarr.getMat();
     int m = src.rows, n = src.cols;
-    int type = src.type();
+    ElemType type = src.type();
     bool compute_uv = _u.needed() || _vt.needed();
     bool full_uv = (flags & SVD::FULL_UV) != 0;
 
@@ -1557,7 +1558,8 @@ void SVD::backSubst( InputArray _w, InputArray _u, InputArray _vt,
                      InputArray _rhs, OutputArray _dst )
 {
     Mat w = _w.getMat(), u = _u.getMat(), vt = _vt.getMat(), rhs = _rhs.getMat();
-    int type = w.type(), esz = (int)w.elemSize();
+    ElemType type = w.type();
+    int esz = (int)w.elemSize();
     int m = u.rows, n = vt.cols, nb = rhs.data ? rhs.cols : m, nm = std::min(m, n);
     size_t wstep = w.rows == 1 ? (size_t)esz : w.cols == 1 ? (size_t)w.step : (size_t)w.step + esz;
     AutoBuffer<uchar> buffer(nb*sizeof(double) + 16);
@@ -1684,7 +1686,7 @@ cvEigenVV( CvArr* srcarr, CvArr* evectsarr, CvArr* evalsarr, double,
         if( evects0.data != evects.data )
         {
             const uchar* p = evects0.ptr();
-            evects.convertTo(evects0, evects0.type());
+            evects.convertTo(evects0, evects0.depth());
             CV_Assert( p == evects0.ptr() );
         }
     }
@@ -1694,11 +1696,11 @@ cvEigenVV( CvArr* srcarr, CvArr* evectsarr, CvArr* evalsarr, double,
     {
         const uchar* p = evals0.ptr();
         if( evals0.size() == evals.size() )
-            evals.convertTo(evals0, evals0.type());
+            evals.convertTo(evals0, evals0.depth());
         else if( evals0.type() == evals.type() )
             cv::transpose(evals, evals0);
         else
-            cv::Mat(evals.t()).convertTo(evals0, evals0.type());
+            cv::Mat(evals.t()).convertTo(evals0, evals0.depth());
         CV_Assert( p == evals0.ptr() );
     }
 }
@@ -1708,7 +1710,8 @@ CV_IMPL void
 cvSVD( CvArr* aarr, CvArr* warr, CvArr* uarr, CvArr* varr, int flags )
 {
     cv::Mat a = cv::cvarrToMat(aarr), w = cv::cvarrToMat(warr), u, v;
-    int m = a.rows, n = a.cols, type = a.type(), mn = std::max(m, n), nm = std::min(m, n);
+    int m = a.rows, n = a.cols, mn = std::max(m, n), nm = std::min(m, n);
+    ElemType type = a.type();
 
     CV_Assert( w.type() == type &&
         (w.size() == cv::Size(nm,1) || w.size() == cv::Size(1, nm) ||

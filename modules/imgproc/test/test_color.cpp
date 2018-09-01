@@ -53,8 +53,8 @@ public:
 protected:
     int prepare_test_case( int test_case_idx );
     void prepare_to_validation( int /*test_case_idx*/ );
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
-    void get_minmax_bounds( int i, int j, int type, Scalar& low, Scalar& high );
+    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types );
+    void get_minmax_bounds( int i, int j, ElemType type, Scalar& low, Scalar& high );
 
     // input --- fwd_transform -> ref_output[0]
     virtual void convert_forward( const Mat& src, Mat& dst );
@@ -105,12 +105,12 @@ CV_ColorCvtBaseTest::CV_ColorCvtBaseTest( bool _custom_inv_transform, bool _allo
 }
 
 
-void CV_ColorCvtBaseTest::get_minmax_bounds( int i, int j, int type, Scalar& low, Scalar& high )
+void CV_ColorCvtBaseTest::get_minmax_bounds( int i, int j, ElemType type, Scalar& low, Scalar& high )
 {
     cvtest::ArrayTest::get_minmax_bounds( i, j, type, low, high );
     if( i == INPUT )
     {
-        int depth = CV_MAT_DEPTH(type);
+        ElemDepth depth = CV_MAT_DEPTH(type);
         low = Scalar::all(0.);
         high = Scalar::all( depth == CV_8U ? 256 : depth == CV_16U ? 65536 : 1. );
     }
@@ -118,21 +118,22 @@ void CV_ColorCvtBaseTest::get_minmax_bounds( int i, int j, int type, Scalar& low
 
 
 void CV_ColorCvtBaseTest::get_test_array_types_and_sizes( int test_case_idx,
-                                                vector<vector<Size> >& sizes, vector<vector<int> >& types )
+                                                vector<vector<Size> >& sizes, vector<vector<ElemType> >& types )
 {
     RNG& rng = ts->get_rng();
-    int depth, cn;
+    ElemDepth depth;
+    int cn;
     cvtest::ArrayTest::get_test_array_types_and_sizes( test_case_idx, sizes, types );
 
     if( allow_16u && allow_32f )
     {
-        depth = cvtest::randInt(rng) % 3;
-        depth = depth == 0 ? CV_8U : depth == 1 ? CV_16U : CV_32F;
+        int _depth = cvtest::randInt(rng) % 3;
+        depth = _depth == 0 ? CV_8U : _depth == 1 ? CV_16U : CV_32F;
     }
     else if( allow_16u || allow_32f )
     {
-        depth = cvtest::randInt(rng) % 2;
-        depth = depth == 0 ? CV_8U : allow_16u ? CV_16U : CV_32F;
+        int _depth = cvtest::randInt(rng) % 2;
+        depth = _depth == 0 ? CV_8U : allow_16u ? CV_16U : CV_32F;
     }
     else
         depth = CV_8U;
@@ -186,7 +187,7 @@ void CV_ColorCvtBaseTest::prepare_to_validation( int /*test_case_idx*/ )
     convert_forward( test_mat[INPUT][0], test_mat[REF_OUTPUT][0] );
     convert_backward( test_mat[INPUT][0], test_mat[REF_OUTPUT][0],
                       test_mat[REF_OUTPUT][1] );
-    int depth = test_mat[REF_OUTPUT][0].depth();
+    ElemDepth depth = test_mat[REF_OUTPUT][0].depth();
     if( depth == CV_8U && hue_range )
     {
         for( int y = 0; y < test_mat[REF_OUTPUT][0].rows; y++ )
@@ -208,7 +209,7 @@ void CV_ColorCvtBaseTest::convert_forward( const Mat& src, Mat& dst )
 {
     const float c8u = 0.0039215686274509803f; // 1./255
     const float c16u = 1.5259021896696422e-005f; // 1./65535
-    int depth = src.depth();
+    ElemDepth depth = src.depth();
     int cn = src.channels(), dst_cn = dst.channels();
     int cols = src.cols, dst_cols_n = dst.cols*dst_cn;
     vector<float> _src_buf(src.cols*3);
@@ -303,7 +304,7 @@ void CV_ColorCvtBaseTest::convert_backward( const Mat& src, const Mat& dst, Mat&
 {
     if( custom_inv_transform )
     {
-        int depth = src.depth();
+        ElemDepth depth = src.depth();
         int src_cn = dst.channels(), cn = dst2.channels();
         int cols_n = src.cols*src_cn, dst_cols = dst.cols;
         vector<float> _src_buf(src.cols*3);
@@ -424,7 +425,7 @@ class CV_ColorGrayTest : public CV_ColorCvtBaseTest
 public:
     CV_ColorGrayTest();
 protected:
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
+    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types );
     void convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n );
     void convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n );
     double get_success_error_level( int test_case_idx, int i, int j );
@@ -437,11 +438,11 @@ CV_ColorGrayTest::CV_ColorGrayTest() : CV_ColorCvtBaseTest( true, true, true )
 }
 
 
-void CV_ColorGrayTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types )
+void CV_ColorGrayTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types )
 {
     CV_ColorCvtBaseTest::get_test_array_types_and_sizes( test_case_idx, sizes, types );
     int cn = CV_MAT_CN(types[INPUT][0]);
-    types[OUTPUT][0] = types[REF_OUTPUT][0] = types[INPUT][0] & CV_MAT_DEPTH_MASK;
+    types[OUTPUT][0] = types[REF_OUTPUT][0] = CV_MAKETYPE(CV_MAT_DEPTH(types[INPUT][0]), 1);
     inplace = false;
 
     if( cn == 3 )
@@ -463,14 +464,14 @@ void CV_ColorGrayTest::get_test_array_types_and_sizes( int test_case_idx, vector
 
 double CV_ColorGrayTest::get_success_error_level( int /*test_case_idx*/, int i, int j )
 {
-    int depth = test_mat[i][j].depth();
+    ElemDepth depth = test_mat[i][j].depth();
     return depth == CV_8U ? 2 : depth == CV_16U ? 16 : 1e-5;
 }
 
 
 void CV_ColorGrayTest::convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n )
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     double scale = depth == CV_8U ? 255 : depth == CV_16U ? 65535 : 1;
     double cr = 0.299*scale;
     double cg = 0.587*scale;
@@ -497,7 +498,7 @@ class CV_ColorYCrCbTest : public CV_ColorCvtBaseTest
 public:
     CV_ColorYCrCbTest();
 protected:
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
+    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types );
     double get_success_error_level( int test_case_idx, int i, int j );
     void convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n );
     void convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n );
@@ -510,7 +511,7 @@ CV_ColorYCrCbTest::CV_ColorYCrCbTest() : CV_ColorCvtBaseTest( true, true, true )
 }
 
 
-void CV_ColorYCrCbTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types )
+void CV_ColorYCrCbTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types )
 {
     CV_ColorCvtBaseTest::get_test_array_types_and_sizes( test_case_idx, sizes, types );
 
@@ -523,14 +524,14 @@ void CV_ColorYCrCbTest::get_test_array_types_and_sizes( int test_case_idx, vecto
 
 double CV_ColorYCrCbTest::get_success_error_level( int /*test_case_idx*/, int i, int j )
 {
-    int depth = test_mat[i][j].depth();
+    ElemDepth depth = test_mat[i][j].depth();
     return depth == CV_8U ? 2 : depth == CV_16U ? 32 : 1e-3;
 }
 
 
 void CV_ColorYCrCbTest::convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n )
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     double scale = depth == CV_8U ? 255 : depth == CV_16U ? 65535 : 1;
     double bias = depth == CV_8U ? 128 : depth == CV_16U ? 32768 : 0.5;
 
@@ -558,7 +559,7 @@ void CV_ColorYCrCbTest::convert_row_bgr2abc_32f_c3( const float* src_row, float*
 
 void CV_ColorYCrCbTest::convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n )
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     double bias = depth == CV_8U ? 128 : depth == CV_16U ? 32768 : 0.5;
     double scale = depth == CV_8U ? 1./255 : depth == CV_16U ? 1./65535 : 1;
     double M[] = { 1,   1.40252,  0,
@@ -589,7 +590,7 @@ class CV_ColorHSVTest : public CV_ColorCvtBaseTest
 public:
     CV_ColorHSVTest();
 protected:
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
+    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types );
     double get_success_error_level( int test_case_idx, int i, int j );
     void convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n );
     void convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n );
@@ -603,7 +604,7 @@ CV_ColorHSVTest::CV_ColorHSVTest() : CV_ColorCvtBaseTest( true, true, false )
 }
 
 
-void CV_ColorHSVTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types )
+void CV_ColorHSVTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types )
 {
     CV_ColorCvtBaseTest::get_test_array_types_and_sizes( test_case_idx, sizes, types );
     RNG& rng = ts->get_rng();
@@ -630,14 +631,14 @@ void CV_ColorHSVTest::get_test_array_types_and_sizes( int test_case_idx, vector<
 
 double CV_ColorHSVTest::get_success_error_level( int /*test_case_idx*/, int i, int j )
 {
-    int depth = test_mat[i][j].depth();
+    ElemDepth depth = test_mat[i][j].depth();
     return depth == CV_8U ? (j == 0 ? 4 : 16) : depth == CV_16U ? 32 : 1e-3;
 }
 
 
 void CV_ColorHSVTest::convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n )
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     float h_scale = depth == CV_8U ? hue_range*30.f/180 : 60.f;
     float scale = depth == CV_8U ? 255.f : depth == CV_16U ? 65535.f : 1.f;
     int j;
@@ -676,7 +677,7 @@ void CV_ColorHSVTest::convert_row_bgr2abc_32f_c3( const float* src_row, float* d
 // taken from http://www.cs.rit.edu/~ncs/color/t_convert.html
 void CV_ColorHSVTest::convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n )
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     float h_scale = depth == CV_8U ? 180/(hue_range*30.f) : 1.f/60;
     float scale = depth == CV_8U ? 1.f/255 : depth == CV_16U ? 1.f/65535 : 1;
     int j;
@@ -728,7 +729,7 @@ class CV_ColorHLSTest : public CV_ColorCvtBaseTest
 public:
     CV_ColorHLSTest();
 protected:
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
+    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types );
     double get_success_error_level( int test_case_idx, int i, int j );
     void convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n );
     void convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n );
@@ -742,7 +743,7 @@ CV_ColorHLSTest::CV_ColorHLSTest() : CV_ColorCvtBaseTest( true, true, false )
 }
 
 
-void CV_ColorHLSTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types )
+void CV_ColorHLSTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types )
 {
     CV_ColorCvtBaseTest::get_test_array_types_and_sizes( test_case_idx, sizes, types );
 
@@ -755,14 +756,14 @@ void CV_ColorHLSTest::get_test_array_types_and_sizes( int test_case_idx, vector<
 
 double CV_ColorHLSTest::get_success_error_level( int /*test_case_idx*/, int i, int j )
 {
-    int depth = test_mat[i][j].depth();
+    ElemDepth depth = test_mat[i][j].depth();
     return depth == CV_8U ? (j == 0 ? 4 : 16) : depth == CV_16U ? 32 : 1e-4;
 }
 
 
 void CV_ColorHLSTest::convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n )
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     float h_scale = depth == CV_8U ? 30.f : 60.f;
     float scale = depth == CV_8U ? 255.f : depth == CV_16U ? 65535.f : 1.f;
     int j;
@@ -803,7 +804,7 @@ void CV_ColorHLSTest::convert_row_bgr2abc_32f_c3( const float* src_row, float* d
 
 void CV_ColorHLSTest::convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n )
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     float h_scale = depth == CV_8U ? 1.f/30 : 1.f/60;
     float scale = depth == CV_8U ? 1.f/255 : depth == CV_16U ? 1.f/65535 : 1;
     int j;
@@ -912,7 +913,7 @@ class CV_ColorXYZTest : public CV_ColorCvtBaseTest
 public:
     CV_ColorXYZTest();
 protected:
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
+    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types );
     double get_success_error_level( int test_case_idx, int i, int j );
     void convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n );
     void convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n );
@@ -925,7 +926,7 @@ CV_ColorXYZTest::CV_ColorXYZTest() : CV_ColorCvtBaseTest( true, true, true )
 }
 
 
-void CV_ColorXYZTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types )
+void CV_ColorXYZTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types )
 {
     CV_ColorCvtBaseTest::get_test_array_types_and_sizes( test_case_idx, sizes, types );
 
@@ -938,14 +939,14 @@ void CV_ColorXYZTest::get_test_array_types_and_sizes( int test_case_idx, vector<
 
 double CV_ColorXYZTest::get_success_error_level( int /*test_case_idx*/, int i, int j )
 {
-    int depth = test_mat[i][j].depth();
+    ElemDepth depth = test_mat[i][j].depth();
     return depth == CV_8U ? (j == 0 ? 2 : 8) : depth == CV_16U ? (j == 0 ? 64 : 128) : 1e-1;
 }
 
 
 void CV_ColorXYZTest::convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n )
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     softdouble scale(depth == CV_8U  ? 255 :
                      depth == CV_16U ? 65535 : 1);
 
@@ -971,7 +972,7 @@ void CV_ColorXYZTest::convert_row_bgr2abc_32f_c3( const float* src_row, float* d
 
 void CV_ColorXYZTest::convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n )
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     softdouble scale(depth == CV_8U  ? 1./255 :
                      depth == CV_16U ? 1./65535 : 1);
 
@@ -1039,7 +1040,7 @@ class CV_ColorLabTest : public CV_ColorCvtBaseTest
 public:
     CV_ColorLabTest();
 protected:
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
+    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types );
     double get_success_error_level( int test_case_idx, int i, int j );
     void convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n );
     void convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n );
@@ -1052,7 +1053,7 @@ CV_ColorLabTest::CV_ColorLabTest() : CV_ColorCvtBaseTest( true, true, false )
 }
 
 
-void CV_ColorLabTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types )
+void CV_ColorLabTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types )
 {
     CV_ColorCvtBaseTest::get_test_array_types_and_sizes( test_case_idx, sizes, types );
 
@@ -1075,7 +1076,7 @@ void CV_ColorLabTest::get_test_array_types_and_sizes( int test_case_idx, vector<
 
 double CV_ColorLabTest::get_success_error_level( int /*test_case_idx*/, int i, int j )
 {
-    int depth = test_mat[i][j].depth();
+    ElemDepth depth = test_mat[i][j].depth();
     // j == 0 is for forward code, j == 1 is for inverse code
     return (depth ==  CV_8U) ? (srgb ? 32 : 8) :
            //(depth == CV_16U) ? 32 : // 16u is disabled
@@ -1085,7 +1086,7 @@ double CV_ColorLabTest::get_success_error_level( int /*test_case_idx*/, int i, i
 
 void CV_ColorLabTest::convert_row_bgr2abc_32f_c3(const float* src_row, float* dst_row, int n)
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     float Lscale = depth == CV_8U ? 255.f/100.f : depth == CV_16U ? 65535.f/100.f : 1.f;
     float ab_bias = depth == CV_8U ? 128.f : depth == CV_16U ? 32768.f : 0.f;
     float M[9];
@@ -1140,7 +1141,7 @@ void CV_ColorLabTest::convert_row_bgr2abc_32f_c3(const float* src_row, float* ds
 
 void CV_ColorLabTest::convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n )
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     float Lscale = depth == CV_8U ? 100.f/255.f : depth == CV_16U ? 100.f/65535.f : 1.f;
     float ab_bias = depth == CV_8U ? 128.f : depth == CV_16U ? 32768.f : 0.f;
     float M[9];
@@ -1218,7 +1219,7 @@ class CV_ColorLuvTest : public CV_ColorCvtBaseTest
 public:
     CV_ColorLuvTest();
 protected:
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
+    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types );
     double get_success_error_level( int test_case_idx, int i, int j );
     void convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n );
     void convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n );
@@ -1231,7 +1232,7 @@ CV_ColorLuvTest::CV_ColorLuvTest() : CV_ColorCvtBaseTest( true, true, false )
 }
 
 
-void CV_ColorLuvTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types )
+void CV_ColorLuvTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types )
 {
     CV_ColorCvtBaseTest::get_test_array_types_and_sizes( test_case_idx, sizes, types );
 
@@ -1254,7 +1255,7 @@ void CV_ColorLuvTest::get_test_array_types_and_sizes( int test_case_idx, vector<
 
 double CV_ColorLuvTest::get_success_error_level( int /*test_case_idx*/, int i, int j )
 {
-    int depth = test_mat[i][j].depth();
+    ElemDepth depth = test_mat[i][j].depth();
     // j == 0 is for forward code, j == 1 is for inverse code
     return (depth ==  CV_8U) ? (srgb ? 36 : 8) :
            //(depth == CV_16U) ? 32 : // 16u is disabled
@@ -1264,7 +1265,7 @@ double CV_ColorLuvTest::get_success_error_level( int /*test_case_idx*/, int i, i
 
 void CV_ColorLuvTest::convert_row_bgr2abc_32f_c3( const float* src_row, float* dst_row, int n )
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     float Lscale = depth == CV_8U ? 255.f/100.f : depth == CV_16U ? 65535.f/100.f : 1.f;
     static const float uLow = -134.f, uHigh = 220.f, uRange = uHigh - uLow;
     static const float vLow = -140.f, vHigh = 122.f, vRange = vHigh - vLow;
@@ -1341,7 +1342,7 @@ void CV_ColorLuvTest::convert_row_bgr2abc_32f_c3( const float* src_row, float* d
 
 void CV_ColorLuvTest::convert_row_abc2bgr_32f_c3( const float* src_row, float* dst_row, int n )
 {
-    int depth = test_mat[INPUT][0].depth();
+    ElemDepth depth = test_mat[INPUT][0].depth();
     float Lscale = depth == CV_8U ? 100.f/255.f : depth == CV_16U ? 100.f/65535.f : 1.f;
     static const float uLow = -134.f, uHigh = 220.f, uRange = uHigh - uLow;
     static const float vLow = -140.f, vHigh = 122.f, vRange = vHigh - vLow;
@@ -1424,7 +1425,7 @@ class CV_ColorRGBTest : public CV_ColorCvtBaseTest
 public:
     CV_ColorRGBTest();
 protected:
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
+    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types );
     double get_success_error_level( int test_case_idx, int i, int j );
     void convert_forward( const Mat& src, Mat& dst );
     void convert_backward( const Mat& src, const Mat& dst, Mat& dst2 );
@@ -1438,7 +1439,7 @@ CV_ColorRGBTest::CV_ColorRGBTest() : CV_ColorCvtBaseTest( true, true, true )
 }
 
 
-void CV_ColorRGBTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types )
+void CV_ColorRGBTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types )
 {
     RNG& rng = ts->get_rng();
     CV_ColorCvtBaseTest::get_test_array_types_and_sizes( test_case_idx, sizes, types );
@@ -1493,7 +1494,8 @@ double CV_ColorRGBTest::get_success_error_level( int /*test_case_idx*/, int /*i*
 
 void CV_ColorRGBTest::convert_forward( const Mat& src, Mat& dst )
 {
-    int depth = src.depth(), cn = src.channels();
+    ElemDepth depth = src.depth();
+    int cn = src.channels();
 /*#if defined _DEBUG || defined DEBUG
     int dst_cn = CV_MAT_CN(dst->type);
 #endif*/
@@ -1579,7 +1581,8 @@ void CV_ColorRGBTest::convert_forward( const Mat& src, Mat& dst )
 
 void CV_ColorRGBTest::convert_backward( const Mat& /*src*/, const Mat& src, Mat& dst )
 {
-    int depth = src.depth(), cn = dst.channels();
+    ElemDepth depth = src.depth();
+    int cn = dst.channels();
 /*#if defined _DEBUG || defined DEBUG
     int src_cn = CV_MAT_CN(src->type);
 #endif*/
@@ -1690,7 +1693,7 @@ class CV_ColorBayerTest : public CV_ColorCvtBaseTest
 public:
     CV_ColorBayerTest();
 protected:
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
+    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types );
     double get_success_error_level( int test_case_idx, int i, int j );
     void run_func();
     void prepare_to_validation( int test_case_idx );
@@ -1709,12 +1712,12 @@ CV_ColorBayerTest::CV_ColorBayerTest() : CV_ColorCvtBaseTest( false, false, true
 }
 
 
-void CV_ColorBayerTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types )
+void CV_ColorBayerTest::get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types )
 {
     RNG& rng = ts->get_rng();
     CV_ColorCvtBaseTest::get_test_array_types_and_sizes( test_case_idx, sizes, types );
 
-    types[INPUT][0] = CV_MAT_DEPTH(types[INPUT][0]);
+    types[INPUT][0] = CV_MAKETYPE(CV_MAT_DEPTH(types[INPUT][0]), 1);
     types[OUTPUT][0] = types[REF_OUTPUT][0] = CV_MAKETYPE(CV_MAT_DEPTH(types[INPUT][0]), 3);
     inplace = false;
 
@@ -1818,7 +1821,7 @@ void CV_ColorBayerTest::prepare_to_validation( int /*test_case_idx*/ )
 {
     const Mat& src = test_mat[INPUT][0];
     Mat& dst = test_mat[REF_OUTPUT][0];
-    int depth = src.depth();
+    ElemDepth depth = src.depth();
     if( depth == CV_8U )
         bayer2BGR_<uchar>(src, dst, fwd_code);
     else if( depth == CV_16U )
@@ -1891,7 +1894,7 @@ TEST(Imgproc_ColorBayerVNG, regression)
 }
 
 // creating Bayer pattern
-template <typename T, int depth>
+template <typename T, ElemDepth depth>
 static void calculateBayerPattern(const Mat& src, Mat& bayer, const char* pattern)
 {
     Size ssize = src.size();

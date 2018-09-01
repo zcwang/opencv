@@ -39,7 +39,7 @@ We use the functions: **cv.calcBackProject (images, channels, hist, dst, ranges,
 @param ranges       array of arrays of the histogram bin boundaries in each dimension(see cv.calcHist).
 @param scale        optional scale factor for the output back projection.
 
-**cv.normalize (src, dst, alpha = 1, beta = 0, norm_type = cv.NORM_L2, dtype = -1, mask = new cv.Mat())**
+**cv.normalize (src, dst, alpha = 1, beta = 0, norm_type = cv.NORM_L2, ddepth = CV_DEPTH_UNSPECIFIED, mask = new cv.Mat())**
 
 @param src        input array.
 @param dst        output array of the same size as src .

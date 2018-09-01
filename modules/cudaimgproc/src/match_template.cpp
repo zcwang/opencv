@@ -593,7 +593,7 @@ namespace
 
 Ptr<cuda::TemplateMatching> cv::cuda::createTemplateMatching(int srcType, int method, Size user_block_size)
 {
-    const int sdepth = CV_MAT_DEPTH(srcType);
+    const ElemDepth sdepth = CV_MAT_DEPTH(srcType);
 
     CV_Assert( sdepth == CV_8U || sdepth == CV_32F );
 

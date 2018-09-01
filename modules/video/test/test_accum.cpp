@@ -50,7 +50,7 @@ public:
     CV_AccumBaseTest();
 
 protected:
-    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
+    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<ElemType> >& types );
     double get_success_error_level( int test_case_idx, int i, int j );
     double alpha;
 };
@@ -68,10 +68,11 @@ CV_AccumBaseTest::CV_AccumBaseTest()
 
 
 void CV_AccumBaseTest::get_test_array_types_and_sizes( int test_case_idx,
-                        vector<vector<Size> >& sizes, vector<vector<int> >& types )
+                        vector<vector<Size> >& sizes, vector<vector<ElemType> >& types )
 {
     RNG& rng = ts->get_rng();
-    int depth = cvtest::randInt(rng) % 4, cn = cvtest::randInt(rng) & 1 ? 3 : 1;
+    ElemDepth depth = static_cast<ElemDepth>(cvtest::randInt(rng) % 4);
+    int cn = cvtest::randInt(rng) & 1 ? 3 : 1;
     int accdepth = (int)(cvtest::randInt(rng) % 2 + 1);
     int i, input_count = (int)test_array[INPUT].size();
     cvtest::ArrayTest::get_test_array_types_and_sizes( test_case_idx, sizes, types );
@@ -152,9 +153,9 @@ void CV_SquareAccTest::prepare_to_validation( int )
     const Mat& mask = test_array[MASK][0] ? test_mat[MASK][0] : Mat();
     Mat temp;
 
-    cvtest::convert( src, temp, dst.type() );
+    cvtest::convert( src, temp, dst.depth() );
     cvtest::multiply( temp, temp, temp, 1 );
-    cvtest::add( temp, 1, dst, 1, cvScalarAll(0.), temp, dst.depth() );
+    cvtest::add( temp, 1, dst, 1, cvScalarAll(0.), temp, CV_MAKETYPE(dst.depth(), 1) );
     cvtest::copy( temp, dst, mask );
 }
 
@@ -191,11 +192,11 @@ void CV_MultiplyAccTest::prepare_to_validation( int )
     const Mat& mask = test_array[MASK][0] ? test_mat[MASK][0] : Mat();
     Mat temp1, temp2;
 
-    cvtest::convert( src1, temp1, dst.type() );
-    cvtest::convert( src2, temp2, dst.type() );
+    cvtest::convert(src1, temp1, dst.depth());
+    cvtest::convert(src2, temp2, dst.depth());
 
     cvtest::multiply( temp1, temp2, temp1, 1 );
-    cvtest::add( temp1, 1, dst, 1, cvScalarAll(0.), temp1, dst.depth() );
+    cvtest::add(temp1, 1, dst, 1, cvScalarAll(0.), temp1, CV_MAKETYPE(dst.depth(), 1));
     cvtest::copy( temp1, dst, mask );
 }
 
@@ -235,8 +236,8 @@ void CV_RunningAvgTest::prepare_to_validation( int )
     cvSetReal1D( &A, 0, alpha);
     cvSetReal1D( &B, 0, 1 - cvGetReal1D(&A, 0));
 
-    cvtest::convert( src, temp, dst.type() );
-    cvtest::add( src, cvGetReal1D(&A, 0), dst, cvGetReal1D(&B, 0), cvScalarAll(0.), temp, temp.depth() );
+    cvtest::convert(src, temp, dst.depth());
+    cvtest::add(src, cvGetReal1D(&A, 0), dst, cvGetReal1D(&B, 0), cvScalarAll(0.), temp, CV_MAKETYPE(temp.depth(), 1));
     cvtest::copy( temp, dst, mask );
 }
 

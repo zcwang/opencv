@@ -56,7 +56,9 @@ namespace ocl {
 
 PARAM_TEST_CASE(ConvertTo, MatDepth, MatDepth, Channels, bool)
 {
-    int src_depth, cn, dstType;
+    ElemDepth src_depth, dst_depth;
+    int cn;
+    ElemType dstType;
     bool use_roi;
 
     TEST_DECLARE_INPUT_PARAMETER(src);
@@ -66,7 +68,8 @@ PARAM_TEST_CASE(ConvertTo, MatDepth, MatDepth, Channels, bool)
     {
         src_depth = GET_PARAM(0);
         cn = GET_PARAM(2);
-        dstType = CV_MAKE_TYPE(GET_PARAM(1), cn);
+        dst_depth = GET_PARAM(1);
+        dstType = CV_MAKE_TYPE(dst_depth, cn);
 
         use_roi = GET_PARAM(3);
     }
@@ -93,8 +96,8 @@ OCL_TEST_P(ConvertTo, WithScale_Accuracy)
 
         double alpha = randomDouble(-4, 4), beta = randomDouble(-4, 4);
 
-        OCL_OFF(src_roi.convertTo(dst_roi, dstType, alpha, beta));
-        OCL_ON(usrc_roi.convertTo(udst_roi, dstType, alpha, beta));
+        OCL_OFF(src_roi.convertTo(dst_roi, dst_depth, alpha, beta));
+        OCL_ON(usrc_roi.convertTo(udst_roi, dst_depth, alpha, beta));
 
         double eps = CV_MAT_DEPTH(dstType) >= CV_32F ? 2e-4 : 1;
         OCL_EXPECT_MATS_NEAR(dst, eps);
@@ -107,10 +110,10 @@ OCL_TEST_P(ConvertTo, NoScale_Accuracy)
     {
         generateTestData();
 
-        OCL_OFF(src_roi.convertTo(dst_roi, dstType, 1, 0));
-        OCL_ON(usrc_roi.convertTo(udst_roi, dstType, 1, 0));
+        OCL_OFF(src_roi.convertTo(dst_roi, dst_depth, 1, 0));
+        OCL_ON(usrc_roi.convertTo(udst_roi, dst_depth, 1, 0));
 
-        double eps = CV_MAT_DEPTH(dstType) >= CV_32F ? 2e-4 : 1;
+        double eps = dst_depth >= CV_32F ? 2e-4 : 1;
         OCL_EXPECT_MATS_NEAR(dst, eps);
     }
 }
@@ -119,7 +122,8 @@ OCL_TEST_P(ConvertTo, NoScale_Accuracy)
 
 PARAM_TEST_CASE(CopyTo, MatDepth, Channels, bool, bool)
 {
-    int depth, cn;
+    ElemDepth depth;
+    int cn;
     bool use_roi, use_mask;
     Scalar val;
 
@@ -137,7 +141,7 @@ PARAM_TEST_CASE(CopyTo, MatDepth, Channels, bool, bool)
 
     void generateTestData(bool one_cn_mask = false)
     {
-        const int type = CV_MAKE_TYPE(depth, cn);
+        const ElemType type = CV_MAKE_TYPE(depth, cn);
 
         Size roiSize = randomSize(1, MAX_VALUE);
         Border srcBorder = randomBorder(0, use_roi ? MAX_VALUE : 0);

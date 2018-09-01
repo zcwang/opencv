@@ -200,7 +200,7 @@ public:
     // Return depth type (e.g. IPL_DEPTH_8U, IPL_DEPTH_32F) which is the number
     // of bits per channel and with the signed bit set.
     // This is known at compile time using specializations.
-    int Depth() const;
+    ElemDepth Depth() const;
 
     inline const T* Row(int r) const {
         return reinterpret_cast<T*>(image_->imageData + r*image_->widthStep);

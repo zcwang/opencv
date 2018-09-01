@@ -21,7 +21,7 @@ struct BaseElemWiseOp
     virtual ~BaseElemWiseOp() {}
     virtual void op(const vector<Mat>&, Mat&, const Mat&) {}
     virtual void refop(const vector<Mat>&, Mat&, const Mat&) {}
-    virtual void getValueRange(int depth, double& minval, double& maxval)
+    virtual void getValueRange(ElemDepth depth, double& minval, double& maxval)
     {
         minval = depth < CV_32S ? cvtest::getMinVal(depth) : depth == CV_32S ? -1000000 : -1000.;
         maxval = depth < CV_32S ? cvtest::getMaxVal(depth) : depth == CV_32S ? 1000000 : 1000.;
@@ -32,14 +32,14 @@ struct BaseElemWiseOp
         cvtest::randomSize(rng, 2, ARITHM_MAX_NDIMS, ARITHM_MAX_SIZE_LOG, size);
     }
 
-    virtual int getRandomType(RNG& rng)
+    virtual ElemType getRandomType(RNG& rng)
     {
         return cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL_BUT_8S, 1,
                                   ninputs > 1 ? ARITHM_MAX_CHANNELS : 4);
     }
 
-    virtual double getMaxErr(int depth) { return depth < CV_32F ? 1 : depth == CV_32F ? 1e-5 : 1e-12; }
-    virtual void generateScalars(int depth, RNG& rng)
+    virtual double getMaxErr(ElemDepth depth) { return depth < CV_32F ? 1 : depth == CV_32F ? 1e-5 : 1e-12; }
+    virtual void generateScalars(ElemDepth depth, RNG& rng)
     {
         const double m = 3.;
 
@@ -69,15 +69,15 @@ struct BaseElemWiseOp
         {
             Mat fl, db;
 
-            db = Mat(1, 1, CV_64F, &alpha);
+            db = Mat(1, 1, CV_64FC1, &alpha);
             db.convertTo(fl, CV_32F);
             fl.convertTo(db, CV_64F);
 
-            db = Mat(1, 1, CV_64F, &beta);
+            db = Mat(1, 1, CV_64FC1, &beta);
             db.convertTo(fl, CV_32F);
             fl.convertTo(db, CV_64F);
 
-            db = Mat(1, 4, CV_64F, &gamma[0]);
+            db = Mat(1, 4, CV_64FC1, &gamma[0]);
             db.convertTo(fl, CV_32F);
             fl.convertTo(db, CV_64F);
         }
@@ -170,7 +170,7 @@ struct ScaleAddOp : public BaseAddOp
     {
         cv::scaleAdd(src[0], alpha, src[1], dst);
     }
-    double getMaxErr(int depth)
+    double getMaxErr(ElemDepth depth)
     {
         return depth <= CV_32S ? 2 : depth < CV_64F ? 1e-4 : 1e-12;
     }
@@ -184,7 +184,7 @@ struct AddWeightedOp : public BaseAddOp
     {
         cv::addWeighted(src[0], alpha, src[1], beta, gamma[0], dst);
     }
-    double getMaxErr(int depth)
+    double getMaxErr(ElemDepth depth)
     {
         return depth <= CV_32S ? 2 : depth < CV_64F ? 1e-5 : 1e-10;
     }
@@ -193,7 +193,7 @@ struct AddWeightedOp : public BaseAddOp
 struct MulOp : public BaseElemWiseOp
 {
     MulOp() : BaseElemWiseOp(2, FIX_BETA+FIX_GAMMA, 1, 1, Scalar::all(0)) {}
-    void getValueRange(int depth, double& minval, double& maxval)
+    void getValueRange(ElemDepth depth, double& minval, double& maxval)
     {
         minval = depth < CV_32S ? cvtest::getMinVal(depth) : depth == CV_32S ? -1000000 : -1000.;
         maxval = depth < CV_32S ? cvtest::getMaxVal(depth) : depth == CV_32S ? 1000000 : 1000.;
@@ -208,7 +208,7 @@ struct MulOp : public BaseElemWiseOp
     {
         cvtest::multiply(src[0], src[1], dst, alpha);
     }
-    double getMaxErr(int depth)
+    double getMaxErr(ElemDepth depth)
     {
         return depth <= CV_32S ? 2 : depth < CV_64F ? 1e-5 : 1e-12;
     }
@@ -225,7 +225,7 @@ struct DivOp : public BaseElemWiseOp
     {
         cvtest::divide(src[0], src[1], dst, alpha);
     }
-    double getMaxErr(int depth)
+    double getMaxErr(ElemDepth depth)
     {
         return depth <= CV_32S ? 2 : depth < CV_64F ? 1e-5 : 1e-12;
     }
@@ -242,7 +242,7 @@ struct RecipOp : public BaseElemWiseOp
     {
         cvtest::divide(Mat(), src[0], dst, alpha);
     }
-    double getMaxErr(int depth)
+    double getMaxErr(ElemDepth depth)
     {
         return depth <= CV_32S ? 2 : depth < CV_64F ? 1e-5 : 1e-12;
     }
@@ -408,7 +408,7 @@ struct MaxSOp : public BaseElemWiseOp
 struct CmpOp : public BaseElemWiseOp
 {
     CmpOp() : BaseElemWiseOp(2, FIX_ALPHA+FIX_BETA+FIX_GAMMA, 1, 1, Scalar::all(0)) { cmpop = 0; }
-    void generateScalars(int depth, RNG& rng)
+    void generateScalars(ElemDepth depth, RNG& rng)
     {
         BaseElemWiseOp::generateScalars(depth, rng);
         cmpop = rng.uniform(0, 6);
@@ -421,7 +421,7 @@ struct CmpOp : public BaseElemWiseOp
     {
         cvtest::compare(src[0], src[1], dst, cmpop);
     }
-    int getRandomType(RNG& rng)
+    ElemType getRandomType(RNG& rng)
     {
         return cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL_BUT_8S, 1, 1);
     }
@@ -436,7 +436,7 @@ struct CmpOp : public BaseElemWiseOp
 struct CmpSOp : public BaseElemWiseOp
 {
     CmpSOp() : BaseElemWiseOp(1, FIX_ALPHA+FIX_BETA+REAL_GAMMA, 1, 1, Scalar::all(0)) { cmpop = 0; }
-    void generateScalars(int depth, RNG& rng)
+    void generateScalars(ElemDepth depth, RNG& rng)
     {
         BaseElemWiseOp::generateScalars(depth, rng);
         cmpop = rng.uniform(0, 6);
@@ -451,7 +451,7 @@ struct CmpSOp : public BaseElemWiseOp
     {
         cvtest::compare(src[0], gamma[0], dst, cmpop);
     }
-    int getRandomType(RNG& rng)
+    ElemType getRandomType(RNG& rng)
     {
         return cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL_BUT_8S, 1, 1);
     }
@@ -474,7 +474,7 @@ struct CopyOp : public BaseElemWiseOp
     {
         cvtest::copy(src[0], dst, mask);
     }
-    int getRandomType(RNG& rng)
+    ElemType getRandomType(RNG& rng)
     {
         return cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL, 1, ARITHM_MAX_CHANNELS);
     }
@@ -496,7 +496,7 @@ struct SetOp : public BaseElemWiseOp
     {
         cvtest::set(dst, gamma, mask);
     }
-    int getRandomType(RNG& rng)
+    ElemType getRandomType(RNG& rng)
     {
         return cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL, 1, ARITHM_MAX_CHANNELS);
     }
@@ -551,14 +551,15 @@ static void inRange(const Mat& src, const Mat& lb, const Mat& rb, Mat& dst)
 {
     CV_Assert( src.type() == lb.type() && src.type() == rb.type() &&
               src.size == lb.size && src.size == rb.size );
-    dst.create( src.dims, &src.size[0], CV_8U );
+    dst.create( src.dims, &src.size[0], CV_8UC1 );
     const Mat *arrays[]={&src, &lb, &rb, &dst, 0};
     Mat planes[4];
 
     NAryMatIterator it(arrays, planes);
     size_t total = planes[0].total();
     size_t i, nplanes = it.nplanes;
-    int depth = src.depth(), cn = src.channels();
+    ElemDepth depth = src.depth();
+    int cn = src.channels();
 
     for( i = 0; i < nplanes; i++, ++it )
     {
@@ -598,16 +599,17 @@ static void inRange(const Mat& src, const Mat& lb, const Mat& rb, Mat& dst)
 
 static void inRangeS(const Mat& src, const Scalar& lb, const Scalar& rb, Mat& dst)
 {
-    dst.create( src.dims, &src.size[0], CV_8U );
+    dst.create( src.dims, &src.size[0], CV_8UC1 );
     const Mat *arrays[]={&src, &dst, 0};
     Mat planes[2];
 
     NAryMatIterator it(arrays, planes);
     size_t total = planes[0].total();
     size_t i, nplanes = it.nplanes;
-    int depth = src.depth(), cn = src.channels();
+    ElemDepth depth = src.depth();
+    int cn = src.channels();
     union { double d[4]; float f[4]; int i[4];} lbuf, rbuf;
-    int wtype = CV_MAKETYPE(depth <= CV_32S ? CV_32S : depth, cn);
+    ElemType wtype = CV_MAKETYPE(depth <= CV_32S ? CV_32S : depth, cn);
     scalarToRawData(lb, lbuf.d, wtype, cn);
     scalarToRawData(rb, rbuf.d, wtype, cn);
 
@@ -663,7 +665,7 @@ struct InRangeSOp : public BaseElemWiseOp
     {
         return 0;
     }
-    void generateScalars(int depth, RNG& rng)
+    void generateScalars(ElemDepth depth, RNG& rng)
     {
         BaseElemWiseOp::generateScalars(depth, rng);
         Scalar temp = gamma;
@@ -706,26 +708,26 @@ struct InRangeOp : public BaseElemWiseOp
 
 struct ConvertScaleOp : public BaseElemWiseOp
 {
-    ConvertScaleOp() : BaseElemWiseOp(1, FIX_BETA+REAL_GAMMA, 1, 1, Scalar::all(0)), ddepth(0) { }
+    ConvertScaleOp() : BaseElemWiseOp(1, FIX_BETA+REAL_GAMMA, 1, 1, Scalar::all(0)), ddepth(CV_8U) { }
     void op(const vector<Mat>& src, Mat& dst, const Mat&)
     {
         src[0].convertTo(dst, ddepth, alpha, gamma[0]);
     }
     void refop(const vector<Mat>& src, Mat& dst, const Mat&)
     {
-        cvtest::convert(src[0], dst, CV_MAKETYPE(ddepth, src[0].channels()), alpha, gamma[0]);
+        cvtest::convert(src[0], dst, ddepth, alpha, gamma[0]);
     }
-    int getRandomType(RNG& rng)
+    ElemType getRandomType(RNG& rng)
     {
-        int srctype = cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL, 1, ARITHM_MAX_CHANNELS);
-        ddepth = cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL, 1, 1);
+        ElemType srctype = cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL, 1, ARITHM_MAX_CHANNELS);
+        ddepth = CV_MAT_DEPTH(cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL, 1, 1));
         return srctype;
     }
     double getMaxErr(int)
     {
         return ddepth <= CV_32S ? 2 : ddepth < CV_64F ? 1e-3 : 1e-12;
     }
-    void generateScalars(int depth, RNG& rng)
+    void generateScalars(ElemDepth depth, RNG& rng)
     {
         if( rng.uniform(0, 2) )
             BaseElemWiseOp::generateScalars(depth, rng);
@@ -735,7 +737,7 @@ struct ConvertScaleOp : public BaseElemWiseOp
             gamma = Scalar::all(0);
         }
     }
-    int ddepth;
+    ElemDepth ddepth;
 };
 
 struct ConvertScaleFp16Op : public BaseElemWiseOp
@@ -751,11 +753,11 @@ struct ConvertScaleFp16Op : public BaseElemWiseOp
     {
         cvtest::copy(src[0], dst);
     }
-    int getRandomType(RNG&)
+    ElemType getRandomType(RNG&)
     {
         // 0: FP32 -> FP16 -> FP32
         // 1: FP16 -> FP32 -> FP16
-        int srctype = (nextRange & 1) == 0 ? CV_32F : CV_16S;
+        ElemType srctype = (nextRange & 1) == 0 ? CV_32FC1 : CV_16SC1;
         return srctype;
     }
     void getValueRange(int, double& minval, double& maxval)
@@ -806,7 +808,7 @@ struct ConvertScaleAbsOp : public BaseElemWiseOp
     {
         cvtest::add(src[0], alpha, Mat(), 0, Scalar::all(gamma[0]), dst, CV_8UC(src[0].channels()), true);
     }
-    int getRandomType(RNG& rng)
+    ElemType getRandomType(RNG& rng)
     {
         return cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL, 1,
             ninputs > 1 ? ARITHM_MAX_CHANNELS : 4);
@@ -815,7 +817,7 @@ struct ConvertScaleAbsOp : public BaseElemWiseOp
     {
         return 1;
     }
-    void generateScalars(int depth, RNG& rng)
+    void generateScalars(ElemDepth depth, RNG& rng)
     {
         if( rng.uniform(0, 2) )
             BaseElemWiseOp::generateScalars(depth, rng);
@@ -965,7 +967,7 @@ static void exp(const Mat& src, Mat& dst)
     NAryMatIterator it(arrays, planes);
     size_t j, total = planes[0].total()*src.channels();
     size_t i, nplanes = it.nplanes;
-    int depth = src.depth();
+    ElemDepth depth = src.depth();
 
     for( i = 0; i < nplanes; i++, ++it )
     {
@@ -994,7 +996,7 @@ static void log(const Mat& src, Mat& dst)
     NAryMatIterator it(arrays, planes);
     size_t j, total = planes[0].total()*src.channels();
     size_t i, nplanes = it.nplanes;
-    int depth = src.depth();
+    ElemDepth depth = src.depth();
 
     for( i = 0; i < nplanes; i++, ++it )
     {
@@ -1019,11 +1021,11 @@ static void log(const Mat& src, Mat& dst)
 struct ExpOp : public BaseElemWiseOp
 {
     ExpOp() : BaseElemWiseOp(1, FIX_ALPHA+FIX_BETA+FIX_GAMMA, 1, 1, Scalar::all(0)) {}
-    int getRandomType(RNG& rng)
+    ElemType getRandomType(RNG& rng)
     {
         return cvtest::randomType(rng, _OutputArray::DEPTH_MASK_FLT, 1, ARITHM_MAX_CHANNELS);
     }
-    void getValueRange(int depth, double& minval, double& maxval)
+    void getValueRange(ElemDepth depth, double& minval, double& maxval)
     {
         maxval = depth == CV_32F ? 50 : 100;
         minval = -maxval;
@@ -1036,7 +1038,7 @@ struct ExpOp : public BaseElemWiseOp
     {
         reference::exp(src[0], dst);
     }
-    double getMaxErr(int depth)
+    double getMaxErr(ElemDepth depth)
     {
         return depth == CV_32F ? 1e-5 : 1e-12;
     }
@@ -1046,11 +1048,11 @@ struct ExpOp : public BaseElemWiseOp
 struct LogOp : public BaseElemWiseOp
 {
     LogOp() : BaseElemWiseOp(1, FIX_ALPHA+FIX_BETA+FIX_GAMMA, 1, 1, Scalar::all(0)) {}
-    int getRandomType(RNG& rng)
+    ElemType getRandomType(RNG& rng)
     {
         return cvtest::randomType(rng, _OutputArray::DEPTH_MASK_FLT, 1, ARITHM_MAX_CHANNELS);
     }
-    void getValueRange(int depth, double& minval, double& maxval)
+    void getValueRange(ElemDepth depth, double& minval, double& maxval)
     {
         maxval = depth == CV_32F ? 50 : 100;
         minval = -maxval;
@@ -1067,7 +1069,7 @@ struct LogOp : public BaseElemWiseOp
         reference::exp(src[0], temp);
         reference::log(temp, dst);
     }
-    double getMaxErr(int depth)
+    double getMaxErr(ElemDepth depth)
     {
         return depth == CV_32F ? 1e-5 : 1e-12;
     }
@@ -1077,7 +1079,7 @@ struct LogOp : public BaseElemWiseOp
 namespace reference {
 static void cartToPolar(const Mat& mx, const Mat& my, Mat& mmag, Mat& mangle, bool angleInDegrees)
 {
-    CV_Assert( (mx.type() == CV_32F || mx.type() == CV_64F) &&
+    CV_Assert( (mx.type() == CV_32FC1 || mx.type() == CV_64FC1) &&
               mx.type() == my.type() && mx.size == my.size );
     mmag.create( mx.dims, &mx.size[0], mx.type() );
     mangle.create( mx.dims, &mx.size[0], mx.type() );
@@ -1087,7 +1089,7 @@ static void cartToPolar(const Mat& mx, const Mat& my, Mat& mmag, Mat& mangle, bo
     NAryMatIterator it(arrays, planes);
     size_t j, total = planes[0].total();
     size_t i, nplanes = it.nplanes;
-    int depth = mx.depth();
+    ElemDepth depth = mx.depth();
     double scale = angleInDegrees ? 180/CV_PI : 1;
 
     for( i = 0; i < nplanes; i++, ++it )
@@ -1134,7 +1136,7 @@ struct CartToPolarToCartOp : public BaseElemWiseOp
         context = 3;
         angleInDegrees = true;
     }
-    int getRandomType(RNG& rng)
+    ElemType getRandomType(RNG& rng)
     {
         return cvtest::randomType(rng, _OutputArray::DEPTH_MASK_FLT, 1, 1);
     }
@@ -1221,7 +1223,7 @@ struct CountNonZeroOp : public BaseElemWiseOp
 {
     CountNonZeroOp() : BaseElemWiseOp(1, FIX_ALPHA+FIX_BETA+FIX_GAMMA+SCALAR_OUTPUT+SUPPORT_MASK, 1, 1, Scalar::all(0))
     {}
-    int getRandomType(RNG& rng)
+    ElemType getRandomType(RNG& rng)
     {
         return cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL, 1, 1);
     }
@@ -1231,7 +1233,7 @@ struct CountNonZeroOp : public BaseElemWiseOp
         src[0].copyTo(temp);
         if( !mask.empty() )
             temp.setTo(Scalar::all(0), mask);
-        dst.create(1, 1, CV_32S);
+        dst.create(1, 1, CV_32SC1);
         dst.at<int>(0,0) = cv::countNonZero(temp);
     }
     void refop(const vector<Mat>& src, Mat& dst, const Mat& mask)
@@ -1240,7 +1242,7 @@ struct CountNonZeroOp : public BaseElemWiseOp
         cvtest::compare(src[0], 0, temp, CMP_NE);
         if( !mask.empty() )
             cvtest::set(temp, Scalar::all(0), mask);
-        dst.create(1, 1, CV_32S);
+        dst.create(1, 1, CV_32SC1);
         dst.at<int>(0,0) = saturate_cast<int>(cvtest::mean(temp)[0]/255*temp.total());
     }
     double getMaxErr(int)
@@ -1301,9 +1303,9 @@ struct NormOp : public BaseElemWiseOp
         context = 1;
         normType = 0;
     };
-    int getRandomType(RNG& rng)
+    ElemType getRandomType(RNG& rng)
     {
-        int type = cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL_BUT_8S, 1, 4);
+        ElemType type = cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL_BUT_8S, 1, 4);
         for(;;)
         {
             normType = rng.uniform(1, 8);
@@ -1314,7 +1316,7 @@ struct NormOp : public BaseElemWiseOp
         }
         if( normType == NORM_HAMMING || normType == NORM_HAMMING2 )
         {
-            type = CV_8U;
+            type = CV_8UC1;
         }
         return type;
     }
@@ -1347,7 +1349,7 @@ struct MinMaxLocOp : public BaseElemWiseOp
     {
         context = ARITHM_MAX_NDIMS*2 + 2;
     };
-    int getRandomType(RNG& rng)
+    ElemType getRandomType(RNG& rng)
     {
         return cvtest::randomType(rng, _OutputArray::DEPTH_MASK_ALL_BUT_8S, 1, 1);
     }
@@ -1401,8 +1403,8 @@ TEST_P(ElemWiseTest, accuracy)
     {
         vector<int> size;
         op->getRandomSize(rng, size);
-        int type = op->getRandomType(rng);
-        int depth = CV_MAT_DEPTH(type);
+        ElemType type = op->getRandomType(rng);
+        ElemDepth depth = CV_MAT_DEPTH(type);
         bool haveMask = ((op->flags & BaseElemWiseOp::SUPPORT_MASK) != 0
                 || (op->flags & BaseElemWiseOp::SUPPORT_MULTICHANNELMASK) != 0) && rng.uniform(0, 4) == 0;
 
@@ -1416,7 +1418,7 @@ TEST_P(ElemWiseTest, accuracy)
         if( haveMask ) {
             bool multiChannelMask = (op->flags & BaseElemWiseOp::SUPPORT_MULTICHANNELMASK) != 0
                     && rng.uniform(0, 2) == 0;
-            int masktype = CV_8UC(multiChannelMask ? CV_MAT_CN(type) : 1);
+            ElemType masktype = CV_8UC(multiChannelMask ? CV_MAT_CN(type) : 1);
             mask = cvtest::randomMat(rng, size, masktype, 0, 2, true);
         }
 
@@ -1503,11 +1505,11 @@ TEST(Core_ArithmMask, uninitialized)
             for( int iter = 0; iter < 100; iter++ )
             {
                 int dims = rng.uniform(1, MAX_DIM+1);
-                int depth = rng.uniform(CV_8U, CV_64F+1);
+                ElemDepth depth = static_cast<ElemDepth>(rng.uniform(CV_8U, CV_64F + 1));
                 int cn = rng.uniform(1, 6);
-                int type = CV_MAKETYPE(depth, cn);
+                ElemType type = CV_MAKETYPE(depth, cn);
                 int op = rng.uniform(0, depth < CV_32F ? 5 : 2); // don't run binary operations between floating-point values
-                int depth1 = op <= 1 ? CV_64F : depth;
+                ElemDepth depth1 = op <= 1 ? CV_64F : depth;
                 for (int k = 0; k < MAX_DIM; k++)
                 {
                     sizes[k] = k < dims ? rng.uniform(1, 30) : 0;
@@ -1517,7 +1519,7 @@ TEST(Core_ArithmMask, uninitialized)
 
                 Mat a(dims, sizes, type), a1;
                 Mat b(dims, sizes, type), b1;
-                Mat mask(dims, sizes, CV_8U);
+                Mat mask(dims, sizes, CV_8UC1);
                 Mat mask1;
                 Mat c, d;
 
@@ -1638,8 +1640,8 @@ class SubtractOutputMatNotEmpty : public testing::TestWithParam< tuple<cv::Size,
 {
 public:
     cv::Size size;
-    int src_type;
-    int dst_depth;
+    ElemType src_type;
+    ElemDepth dst_depth;
     bool fixed;
 
     void SetUp()
@@ -1849,7 +1851,7 @@ INSTANTIATE_TEST_CASE_P(Arithm, SubtractOutputMatNotEmpty, testing::Combine(
 
 TEST(Core_FindNonZero, regression)
 {
-    Mat img(10, 10, CV_8U, Scalar::all(0));
+    Mat img(10, 10, CV_8UC1, Scalar::all(0));
     vector<Point> pts, pts2(5);
     findNonZero(img, pts);
     findNonZero(img, pts2);
@@ -1968,7 +1970,7 @@ TEST(Normalize, regression_6125)
         249, 575, 574, 63, 12
     };
 
-    Mat src(Size(20, 1), CV_32F, initial_values);
+    Mat src(Size(20, 1), CV_32FC1, initial_values);
     float min = 0., max = 400.;
     normalize(src, src, 0, 400, NORM_MINMAX, CV_32F);
     for(int i = 0; i < 20; i++)
@@ -1980,10 +1982,10 @@ TEST(Normalize, regression_6125)
 
 TEST(MinMaxLoc, regression_4955_nans)
 {
-    cv::Mat one_mat(2, 2, CV_32F, cv::Scalar(1));
+    cv::Mat one_mat(2, 2, CV_32FC1, cv::Scalar(1));
     cv::minMaxLoc(one_mat, NULL, NULL, NULL, NULL);
 
-    cv::Mat nan_mat(2, 2, CV_32F, cv::Scalar(std::numeric_limits<float>::quiet_NaN()));
+    cv::Mat nan_mat(2, 2, CV_32FC1, cv::Scalar(std::numeric_limits<float>::quiet_NaN()));
     cv::minMaxLoc(nan_mat, NULL, NULL, NULL, NULL);
 }
 

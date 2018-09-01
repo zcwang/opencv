@@ -115,7 +115,9 @@ void cv::fastNlMeansDenoising( InputArray _src, OutputArray _dst, const std::vec
 {
     CV_INSTRUMENT_REGION()
 
-    int hn = (int)h.size(), type = _src.type(), depth = CV_MAT_DEPTH(type), cn = CV_MAT_CN(type);
+    int hn = (int)h.size(), type = _src.type();
+    ElemDepth depth = CV_MAT_DEPTH(type);
+    int cn = CV_MAT_CN(type);
     CV_Assert(!_src.empty());
     CV_Assert(hn == 1 || hn == cn);
 
@@ -171,7 +173,9 @@ void cv::fastNlMeansDenoisingColored( InputArray _src, OutputArray _dst,
 {
     CV_INSTRUMENT_REGION()
 
-    int type = _src.type(), depth = CV_MAT_DEPTH(type), cn = CV_MAT_CN(type);
+    ElemType type = _src.type();
+    ElemDepth depth = CV_MAT_DEPTH(type);
+    int cn = CV_MAT_CN(type);
     Size src_size = _src.size();
     if (type != CV_8UC3 && type != CV_8UC4)
     {
@@ -331,7 +335,9 @@ void cv::fastNlMeansDenoisingMulti( InputArrayOfArrays _srcImgs, OutputArray _ds
         temporalWindowSize, templateWindowSize, searchWindowSize);
 
     int hn = (int)h.size();
-    int type = srcImgs[0].type(), depth = CV_MAT_DEPTH(type), cn = CV_MAT_CN(type);
+    int type = srcImgs[0].type();
+    ElemDepth depth = CV_MAT_DEPTH(type);
+    int cn = CV_MAT_CN(type);
     CV_Assert(hn == 1 || hn == cn);
 
     _dst.create(srcImgs[0].size(), srcImgs[0].type());
@@ -396,7 +402,8 @@ void cv::fastNlMeansDenoisingColoredMulti( InputArrayOfArrays _srcImgs, OutputAr
     _dst.create(srcImgs[0].size(), srcImgs[0].type());
     Mat dst = _dst.getMat();
 
-    int type = srcImgs[0].type(), depth = CV_MAT_DEPTH(type);
+    ElemType type = srcImgs[0].type();
+    ElemDepth depth = CV_MAT_DEPTH(type);
     int src_imgs_size = static_cast<int>(srcImgs.size());
 
     if (type != CV_8UC3)

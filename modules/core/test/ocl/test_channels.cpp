@@ -56,7 +56,8 @@ namespace ocl {
 
 PARAM_TEST_CASE(Merge, MatDepth, int, bool)
 {
-    int depth, nsrc;
+    ElemDepth depth;
+    int nsrc;
     bool use_roi;
 
     TEST_DECLARE_INPUT_PARAMETER(src1);
@@ -77,7 +78,7 @@ PARAM_TEST_CASE(Merge, MatDepth, int, bool)
         CV_Assert(nsrc >= 1 && nsrc <= 4);
     }
 
-    int type()
+    ElemType type()
     {
         return CV_MAKE_TYPE(depth, randomInt(1, 3));
     }
@@ -145,9 +146,10 @@ OCL_TEST_P(Merge, Accuracy)
 
 //////////////////////////////////////// Split ///////////////////////////////////////////////
 
-PARAM_TEST_CASE(Split, MatType, Channels, bool)
+PARAM_TEST_CASE(Split, MatDepth, Channels, bool)
 {
-    int depth, cn;
+    ElemDepth depth;
+    int cn;
     bool use_roi;
 
     TEST_DECLARE_INPUT_PARAMETER(src);
@@ -176,16 +178,16 @@ PARAM_TEST_CASE(Split, MatType, Channels, bool)
 
         {
             Border dst1Border = randomBorder(0, use_roi ? MAX_VALUE : 0);
-            randomSubMat(dst1, dst1_roi, roiSize, dst1Border, depth, 2, 11);
+            randomSubMat(dst1, dst1_roi, roiSize, dst1Border, CV_MAKETYPE(depth, 1), 2, 11);
 
             Border dst2Border = randomBorder(0, use_roi ? MAX_VALUE : 0);
-            randomSubMat(dst2, dst2_roi, roiSize, dst2Border, depth, -1540, 1740);
+            randomSubMat(dst2, dst2_roi, roiSize, dst2Border, CV_MAKETYPE(depth, 1), -1540, 1740);
 
             Border dst3Border = randomBorder(0, use_roi ? MAX_VALUE : 0);
-            randomSubMat(dst3, dst3_roi, roiSize, dst3Border, depth, -1540, 1740);
+            randomSubMat(dst3, dst3_roi, roiSize, dst3Border, CV_MAKETYPE(depth, 1), -1540, 1740);
 
             Border dst4Border = randomBorder(0, use_roi ? MAX_VALUE : 0);
-            randomSubMat(dst4, dst4_roi, roiSize, dst4Border, depth, -1540, 1740);
+            randomSubMat(dst4, dst4_roi, roiSize, dst4Border, CV_MAKETYPE(depth, 1), -1540, 1740);
         }
 
         UMAT_UPLOAD_INPUT_PARAMETER(src);
@@ -227,9 +229,9 @@ OCL_TEST_P(Split, Accuracy)
 
 //////////////////////////////////////// MixChannels ///////////////////////////////////////////////
 
-PARAM_TEST_CASE(MixChannels, MatType, bool)
+PARAM_TEST_CASE(MixChannels, MatDepth, bool)
 {
-    int depth;
+    ElemDepth depth;
     bool use_roi;
 
     TEST_DECLARE_INPUT_PARAMETER(src1);
@@ -252,7 +254,7 @@ PARAM_TEST_CASE(MixChannels, MatType, bool)
     }
 
     // generate number of channels and create type
-    int type()
+    ElemType type()
     {
         int cn = randomInt(1, 5);
         return CV_MAKE_TYPE(depth, cn);
@@ -368,7 +370,8 @@ OCL_TEST_P(MixChannels, Accuracy)
 
 PARAM_TEST_CASE(InsertChannel, MatDepth, Channels, bool)
 {
-    int depth, cn, coi;
+    ElemDepth depth;
+    int cn, coi;
     bool use_roi;
 
     TEST_DECLARE_INPUT_PARAMETER(src);
@@ -387,7 +390,7 @@ PARAM_TEST_CASE(InsertChannel, MatDepth, Channels, bool)
         coi = randomInt(0, cn);
 
         Border srcBorder = randomBorder(0, use_roi ? MAX_VALUE : 0);
-        randomSubMat(src, src_roi, roiSize, srcBorder, depth, 2, 11);
+        randomSubMat(src, src_roi, roiSize, srcBorder, CV_MAKETYPE(depth, 1), 2, 11);
 
         Border dstBorder = randomBorder(0, use_roi ? MAX_VALUE : 0);
         randomSubMat(dst, dst_roi, roiSize, dstBorder, CV_MAKE_TYPE(depth, cn), 5, 16);
@@ -414,7 +417,8 @@ OCL_TEST_P(InsertChannel, Accuracy)
 
 PARAM_TEST_CASE(ExtractChannel, MatDepth, Channels, bool)
 {
-    int depth, cn, coi;
+    ElemDepth depth;
+    int cn, coi;
     bool use_roi;
 
     TEST_DECLARE_INPUT_PARAMETER(src);
@@ -436,7 +440,7 @@ PARAM_TEST_CASE(ExtractChannel, MatDepth, Channels, bool)
         randomSubMat(src, src_roi, roiSize, srcBorder, CV_MAKE_TYPE(depth, cn), 2, 11);
 
         Border dstBorder = randomBorder(0, use_roi ? MAX_VALUE : 0);
-        randomSubMat(dst, dst_roi, roiSize, dstBorder, depth, 5, 16);
+        randomSubMat(dst, dst_roi, roiSize, dstBorder, CV_MAKETYPE(depth, 1), 5, 16);
 
         UMAT_UPLOAD_INPUT_PARAMETER(src);
         UMAT_UPLOAD_OUTPUT_PARAMETER(dst);

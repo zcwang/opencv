@@ -56,14 +56,14 @@ using namespace perf;
 
 PERF_TEST_P(Sz_Depth_Cn, CUDA_GpuMat_SetTo,
             Combine(CUDA_TYPICAL_MAT_SIZES,
-                    Values(CV_8U, CV_16U, CV_32F, CV_64F),
+                    Values(CV_8U, CV_16U, CV_32FC1, CV_64F),
                     CUDA_CHANNELS_1_3_4))
 {
     const cv::Size size = GET_PARAM(0);
-    const int depth = GET_PARAM(1);
+    const ElemDepth depth = GET_PARAM(1);
     const int channels = GET_PARAM(2);
 
-    const int type = CV_MAKE_TYPE(depth, channels);
+    const ElemType type = CV_MAKE_TYPE(depth, channels);
 
     const cv::Scalar val(1, 2, 3, 4);
 
@@ -88,14 +88,14 @@ PERF_TEST_P(Sz_Depth_Cn, CUDA_GpuMat_SetTo,
 
 PERF_TEST_P(Sz_Depth_Cn, CUDA_GpuMat_SetToMasked,
             Combine(CUDA_TYPICAL_MAT_SIZES,
-                    Values(CV_8U, CV_16U, CV_32F, CV_64F),
+                    Values(CV_8U, CV_16U, CV_32FC1, CV_64F),
                     CUDA_CHANNELS_1_3_4))
 {
     const cv::Size size = GET_PARAM(0);
-    const int depth = GET_PARAM(1);
+    const ElemDepth depth = GET_PARAM(1);
     const int channels = GET_PARAM(2);
 
-    const int type = CV_MAKE_TYPE(depth, channels);
+    const ElemType type = CV_MAKE_TYPE(depth, channels);
 
     cv::Mat src(size, type);
     cv::Mat mask(size, CV_8UC1);
@@ -125,14 +125,14 @@ PERF_TEST_P(Sz_Depth_Cn, CUDA_GpuMat_SetToMasked,
 
 PERF_TEST_P(Sz_Depth_Cn, CUDA_GpuMat_CopyToMasked,
             Combine(CUDA_TYPICAL_MAT_SIZES,
-                    Values(CV_8U, CV_16U, CV_32F, CV_64F),
+                    Values(CV_8U, CV_16U, CV_32FC1, CV_64F),
                     CUDA_CHANNELS_1_3_4))
 {
     const cv::Size size = GET_PARAM(0);
-    const int depth = GET_PARAM(1);
+    const ElemDepth depth = GET_PARAM(1);
     const int channels = GET_PARAM(2);
 
-    const int type = CV_MAKE_TYPE(depth, channels);
+    const ElemType type = CV_MAKE_TYPE(depth, channels);
 
     cv::Mat src(size, type);
     cv::Mat mask(size, CV_8UC1);
@@ -164,11 +164,11 @@ DEF_PARAM_TEST(Sz_2Depth, cv::Size, MatDepth, MatDepth);
 PERF_TEST_P(Sz_2Depth, CUDA_GpuMat_ConvertTo,
             Combine(CUDA_TYPICAL_MAT_SIZES,
                     Values(CV_8U, CV_16U, CV_32F, CV_64F),
-                    Values(CV_8U, CV_16U, CV_32F, CV_64F)))
+                    Values(CV_8U, CV_16U, CV_32FC1, CV_64F)))
 {
     const cv::Size size = GET_PARAM(0);
-    const int depth1 = GET_PARAM(1);
-    const int depth2 = GET_PARAM(2);
+    const ElemDepth depth1 = GET_PARAM(1);
+    const ElemDepth depth2 = GET_PARAM(2);
 
     cv::Mat src(size, depth1);
     declare.in(src, WARMUP_RNG);

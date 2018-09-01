@@ -19,8 +19,8 @@ let src1 = cv.imread("canvasInput1");
 let src2 = cv.imread("canvasInput2");
 let dst = new cv.Mat();
 let mask = new cv.Mat();
-let dtype = -1;
-cv.add(src1, src2, dst, mask, dtype);
+let ddepth = -1;
+cv.add(src1, src2, dst, mask, ddepth);
 src1.delete(); src2.delete(); dst.delete(); mask.delete();
 @endcode
 
@@ -35,8 +35,8 @@ let src1 = cv.imread("canvasInput1");
 let src2 = cv.imread("canvasInput2");
 let dst = new cv.Mat();
 let mask = new cv.Mat();
-let dtype = -1;
-cv.subtract(src1, src2, dst, mask, dtype);
+let ddepth = -1;
+cv.subtract(src1, src2, dst, mask, ddepth);
 src1.delete(); src2.delete(); dst.delete(); mask.delete();
 @endcode
 

@@ -180,7 +180,7 @@ namespace
         GpuMat disp = _disp.getGpuMat();
         GpuMat img = _image.getGpuMat();
 
-        CV_Assert( disp.type() == CV_8U || disp.type() == CV_16S );
+        CV_Assert( disp.type() == CV_8UC1 || disp.type() == CV_16SC1 );
         CV_Assert( img.type() == CV_8UC1 || img.type() == CV_8UC3 );
         CV_Assert( disp.size() == img.size() );
 
