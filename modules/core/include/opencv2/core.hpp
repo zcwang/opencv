@@ -3036,7 +3036,7 @@ String& operator << (String& out, const Mat& mtx)
 
 class CV_EXPORTS Algorithm;
 
-template<typename _Tp> struct ParamType {};
+template<typename _Tp, typename _EnumTp = void> struct ParamType {};
 
 
 /** @brief This is a base class for all more or less complex algorithms in OpenCV
@@ -3250,6 +3250,15 @@ template<> struct ParamType<Scalar>
     typedef Scalar member_type;
 
     enum { type = Param::SCALAR };
+};
+
+template<typename _Tp>
+struct ParamType<_Tp, typename std::enable_if< std::is_enum<_Tp>::value >::type>
+{
+    typedef typename std::underlying_type<_Tp>::type const_param_type;
+    typedef typename std::underlying_type<_Tp>::type member_type;
+
+    enum { type = Param::INT };
 };
 
 //! @} core_basic
