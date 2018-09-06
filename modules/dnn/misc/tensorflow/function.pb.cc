@@ -355,7 +355,7 @@ void FunctionDefLibrary::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.FunctionDefLibrary)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   function_.Clear();
   gradient_.Clear();
@@ -418,7 +418,7 @@ void FunctionDefLibrary::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.FunctionDefLibrary)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .tensorflow.FunctionDef function = 1;
   for (unsigned int i = 0,
@@ -446,7 +446,7 @@ void FunctionDefLibrary::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.FunctionDefLibrary)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .tensorflow.FunctionDef function = 1;
   for (unsigned int i = 0,
@@ -530,7 +530,7 @@ void FunctionDefLibrary::MergeFrom(const FunctionDefLibrary& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   function_.MergeFrom(from.function_);
   gradient_.MergeFrom(from.gradient_);
@@ -700,7 +700,7 @@ void FunctionDef_Node::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.FunctionDef.Node)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   ret_.Clear();
   arg_.Clear();
@@ -834,7 +834,7 @@ void FunctionDef_Node::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.FunctionDef.Node)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated string ret = 1;
   for (int i = 0, n = this->ret_size(); i < n; i++) {
@@ -943,7 +943,7 @@ void FunctionDef_Node::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.FunctionDef.Node)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated string ret = 1;
   for (int i = 0, n = this->ret_size(); i < n; i++) {
@@ -1140,7 +1140,7 @@ void FunctionDef_Node::MergeFrom(const FunctionDef_Node& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   ret_.MergeFrom(from.ret_);
   arg_.MergeFrom(from.arg_);
@@ -1314,7 +1314,7 @@ void FunctionDef::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.FunctionDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   node_.Clear();
   if (GetArenaNoVirtual() == NULL && signature_ != NULL) {
@@ -1381,7 +1381,7 @@ void FunctionDef::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.FunctionDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // .tensorflow.OpDef signature = 1;
   if (this->has_signature()) {
@@ -1408,7 +1408,7 @@ void FunctionDef::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.FunctionDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // .tensorflow.OpDef signature = 1;
   if (this->has_signature()) {
@@ -1487,7 +1487,7 @@ void FunctionDef::MergeFrom(const FunctionDef& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   node_.MergeFrom(from.node_);
   if (from.has_signature()) {
@@ -1635,7 +1635,7 @@ void GradientDef::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.GradientDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   function_name_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
   gradient_func_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
@@ -1708,7 +1708,7 @@ void GradientDef::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.GradientDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string function_name = 1;
   if (this->function_name().size() > 0) {
@@ -1742,7 +1742,7 @@ void GradientDef::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.GradientDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string function_name = 1;
   if (this->function_name().size() > 0) {
@@ -1824,7 +1824,7 @@ void GradientDef::MergeFrom(const GradientDef& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.function_name().size() > 0) {
     set_function_name(from.function_name());
