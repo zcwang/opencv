@@ -4743,7 +4743,7 @@ void BlobShape::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.BlobShape)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   dim_.Clear();
   _has_bits_.Clear();
@@ -4803,7 +4803,7 @@ void BlobShape::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.BlobShape)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated int64 dim = 1 [packed = true];
   if (this->dim_size() > 0) {
@@ -4828,7 +4828,7 @@ void BlobShape::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.BlobShape)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated int64 dim = 1 [packed = true];
   if (this->dim_size() > 0) {
@@ -4903,7 +4903,7 @@ void BlobShape::MergeFrom(const BlobShape& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   dim_.MergeFrom(from.dim_);
 }
@@ -5042,7 +5042,7 @@ void BlobProto::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.BlobProto)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   data_.Clear();
   diff_.Clear();
@@ -5278,7 +5278,7 @@ void BlobProto::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.BlobProto)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 num = 1 [default = 0];
@@ -5367,7 +5367,7 @@ void BlobProto::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.BlobProto)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 num = 1 [default = 0];
@@ -5620,7 +5620,7 @@ void BlobProto::MergeFrom(const BlobProto& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   data_.MergeFrom(from.data_);
   diff_.MergeFrom(from.diff_);
@@ -5765,7 +5765,7 @@ void BlobProtoVector::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.BlobProtoVector)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   blobs_.Clear();
   _has_bits_.Clear();
@@ -5817,7 +5817,7 @@ void BlobProtoVector::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.BlobProtoVector)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .opencv_caffe.BlobProto blobs = 1;
   for (unsigned int i = 0,
@@ -5838,7 +5838,7 @@ void BlobProtoVector::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.BlobProtoVector)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .opencv_caffe.BlobProto blobs = 1;
   for (unsigned int i = 0,
@@ -5903,7 +5903,7 @@ void BlobProtoVector::MergeFrom(const BlobProtoVector& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   blobs_.MergeFrom(from.blobs_);
 }
@@ -6009,7 +6009,7 @@ void PermuteParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.PermuteParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   order_.Clear();
   _has_bits_.Clear();
@@ -6069,7 +6069,7 @@ void PermuteParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.PermuteParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated uint32 order = 1;
   for (int i = 0, n = this->order_size(); i < n; i++) {
@@ -6089,7 +6089,7 @@ void PermuteParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.PermuteParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated uint32 order = 1;
   target = ::google::protobuf::internal::WireFormatLite::
@@ -6148,7 +6148,7 @@ void PermuteParameter::MergeFrom(const PermuteParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   order_.MergeFrom(from.order_);
 }
@@ -6271,7 +6271,7 @@ void NormalizeBBoxParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.NormalizeBBoxParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 15u) {
@@ -6375,7 +6375,7 @@ void NormalizeBBoxParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.NormalizeBBoxParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional bool across_spatial = 1 [default = true];
@@ -6411,7 +6411,7 @@ void NormalizeBBoxParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.NormalizeBBoxParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional bool across_spatial = 1 [default = true];
@@ -6504,7 +6504,7 @@ void NormalizeBBoxParameter::MergeFrom(const NormalizeBBoxParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 15u) {
@@ -6658,7 +6658,7 @@ void PriorBoxParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.PriorBoxParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   aspect_ratio_.Clear();
   variance_.Clear();
@@ -6983,7 +6983,7 @@ void PriorBoxParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.PriorBoxParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float min_size = 1;
@@ -7089,7 +7089,7 @@ void PriorBoxParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.PriorBoxParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float min_size = 1;
@@ -7334,7 +7334,7 @@ void PriorBoxParameter::MergeFrom(const PriorBoxParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   aspect_ratio_.MergeFrom(from.aspect_ratio_);
   variance_.MergeFrom(from.variance_);
@@ -7535,7 +7535,7 @@ void DetectionOutputParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.DetectionOutputParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -7739,7 +7739,7 @@ void DetectionOutputParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.DetectionOutputParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 num_classes = 1;
@@ -7807,7 +7807,7 @@ void DetectionOutputParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.DetectionOutputParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 num_classes = 1;
@@ -7974,7 +7974,7 @@ void DetectionOutputParameter::MergeFrom(const DetectionOutputParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 255u) {
@@ -8143,7 +8143,7 @@ void Datum::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.Datum)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   float_data_.Clear();
   cached_has_bits = _has_bits_[0];
@@ -8295,7 +8295,7 @@ void Datum::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.Datum)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 channels = 1;
@@ -8347,7 +8347,7 @@ void Datum::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.Datum)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 channels = 1;
@@ -8481,7 +8481,7 @@ void Datum::MergeFrom(const Datum& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   float_data_.MergeFrom(from.float_data_);
   cached_has_bits = from._has_bits_[0];
@@ -8638,7 +8638,7 @@ void FillerParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.FillerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
@@ -8811,7 +8811,7 @@ void FillerParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.FillerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string type = 1 [default = "constant"];
@@ -8872,7 +8872,7 @@ void FillerParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.FillerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string type = 1 [default = "constant"];
@@ -9013,7 +9013,7 @@ void FillerParameter::MergeFrom(const FillerParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 255u) {
@@ -9186,7 +9186,7 @@ void NetParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.NetParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   layers_.Clear();
   input_.Clear();
@@ -9370,7 +9370,7 @@ void NetParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.NetParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string name = 1;
@@ -9448,7 +9448,7 @@ void NetParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.NetParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string name = 1;
@@ -9637,7 +9637,7 @@ void NetParameter::MergeFrom(const NetParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   layers_.MergeFrom(from.layers_);
   input_.MergeFrom(from.input_);
@@ -9895,7 +9895,7 @@ void SolverParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.SolverParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   test_net_.Clear();
   test_iter_.Clear();
@@ -10596,7 +10596,7 @@ void SolverParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.SolverParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string train_net = 1;
@@ -10860,7 +10860,7 @@ void SolverParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.SolverParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string train_net = 1;
@@ -11435,7 +11435,7 @@ void SolverParameter::MergeFrom(const SolverParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   test_net_.MergeFrom(from.test_net_);
   test_iter_.MergeFrom(from.test_iter_);
@@ -11734,7 +11734,7 @@ void SolverState::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.SolverState)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   history_.Clear();
   cached_has_bits = _has_bits_[0];
@@ -11840,7 +11840,7 @@ void SolverState::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.SolverState)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 iter = 1;
@@ -11882,7 +11882,7 @@ void SolverState::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.SolverState)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 iter = 1;
@@ -11992,7 +11992,7 @@ void SolverState::MergeFrom(const SolverState& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   history_.MergeFrom(from.history_);
   cached_has_bits = from._has_bits_[0];
@@ -12122,7 +12122,7 @@ void NetState::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.NetState)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   stage_.Clear();
   cached_has_bits = _has_bits_[0];
@@ -12219,7 +12219,7 @@ void NetState::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.NetState)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.Phase phase = 1 [default = TEST];
@@ -12255,7 +12255,7 @@ void NetState::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.NetState)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.Phase phase = 1 [default = TEST];
@@ -12346,7 +12346,7 @@ void NetState::MergeFrom(const NetState& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   stage_.MergeFrom(from.stage_);
   cached_has_bits = from._has_bits_[0];
@@ -12475,7 +12475,7 @@ void NetStateRule::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.NetStateRule)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   stage_.Clear();
   not_stage_.Clear();
@@ -12605,7 +12605,7 @@ void NetStateRule::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.NetStateRule)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.Phase phase = 1;
@@ -12656,7 +12656,7 @@ void NetStateRule::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.NetStateRule)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.Phase phase = 1;
@@ -12777,7 +12777,7 @@ void NetStateRule::MergeFrom(const NetStateRule& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   stage_.MergeFrom(from.stage_);
   not_stage_.MergeFrom(from.not_stage_);
@@ -12915,7 +12915,7 @@ void ParamSpec::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ParamSpec)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
@@ -13029,7 +13029,7 @@ void ParamSpec::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ParamSpec)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string name = 1;
@@ -13070,7 +13070,7 @@ void ParamSpec::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ParamSpec)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string name = 1;
@@ -13169,7 +13169,7 @@ void ParamSpec::MergeFrom(const ParamSpec& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 15u) {
@@ -13813,7 +13813,7 @@ void LayerParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.LayerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   bottom_.Clear();
   top_.Clear();
@@ -14918,7 +14918,7 @@ void LayerParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.LayerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string name = 1;
@@ -15346,7 +15346,7 @@ void LayerParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.LayerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string name = 1;
@@ -16352,7 +16352,7 @@ void LayerParameter::MergeFrom(const LayerParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   bottom_.MergeFrom(from.bottom_);
   top_.MergeFrom(from.top_);
@@ -16741,7 +16741,7 @@ void TransformationParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.TransformationParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   mean_value_.Clear();
   cached_has_bits = _has_bits_[0];
@@ -16898,7 +16898,7 @@ void TransformationParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.TransformationParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float scale = 1 [default = 1];
@@ -16954,7 +16954,7 @@ void TransformationParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.TransformationParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float scale = 1 [default = 1];
@@ -17086,7 +17086,7 @@ void TransformationParameter::MergeFrom(const TransformationParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   mean_value_.MergeFrom(from.mean_value_);
   cached_has_bits = from._has_bits_[0];
@@ -17229,7 +17229,7 @@ void LossParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.LossParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -17324,7 +17324,7 @@ void LossParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.LossParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 ignore_label = 1;
@@ -17355,7 +17355,7 @@ void LossParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.LossParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 ignore_label = 1;
@@ -17438,7 +17438,7 @@ void LossParameter::MergeFrom(const LossParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -17565,7 +17565,7 @@ void AccuracyParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.AccuracyParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -17653,7 +17653,7 @@ void AccuracyParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.AccuracyParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 top_k = 1 [default = 1];
@@ -17683,7 +17683,7 @@ void AccuracyParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.AccuracyParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 top_k = 1 [default = 1];
@@ -17768,7 +17768,7 @@ void AccuracyParameter::MergeFrom(const AccuracyParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -17896,7 +17896,7 @@ void ArgMaxParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ArgMaxParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -17985,7 +17985,7 @@ void ArgMaxParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ArgMaxParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional bool out_max_val = 1 [default = false];
@@ -18015,7 +18015,7 @@ void ArgMaxParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ArgMaxParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional bool out_max_val = 1 [default = false];
@@ -18098,7 +18098,7 @@ void ArgMaxParameter::MergeFrom(const ArgMaxParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -18223,7 +18223,7 @@ void ConcatParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ConcatParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -18296,7 +18296,7 @@ void ConcatParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ConcatParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 concat_dim = 1 [default = 1];
@@ -18321,7 +18321,7 @@ void ConcatParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ConcatParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 concat_dim = 1 [default = 1];
@@ -18394,7 +18394,7 @@ void ConcatParameter::MergeFrom(const ConcatParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -18520,7 +18520,7 @@ void BatchNormParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.BatchNormParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   ::memset(&use_global_stats_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&scale_bias_) -
@@ -18624,7 +18624,7 @@ void BatchNormParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.BatchNormParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional bool use_global_stats = 1;
@@ -18659,7 +18659,7 @@ void BatchNormParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.BatchNormParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional bool use_global_stats = 1;
@@ -18748,7 +18748,7 @@ void BatchNormParameter::MergeFrom(const BatchNormParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 15u) {
@@ -18887,7 +18887,7 @@ void BiasParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.BiasParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -18976,7 +18976,7 @@ void BiasParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.BiasParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 axis = 1 [default = 1];
@@ -19007,7 +19007,7 @@ void BiasParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.BiasParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 axis = 1 [default = 1];
@@ -19094,7 +19094,7 @@ void BiasParameter::MergeFrom(const BiasParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -19219,7 +19219,7 @@ void ContrastiveLossParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ContrastiveLossParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -19292,7 +19292,7 @@ void ContrastiveLossParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ContrastiveLossParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float margin = 1 [default = 1];
@@ -19317,7 +19317,7 @@ void ContrastiveLossParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ContrastiveLossParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float margin = 1 [default = 1];
@@ -19386,7 +19386,7 @@ void ContrastiveLossParameter::MergeFrom(const ContrastiveLossParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -19547,7 +19547,7 @@ void ConvolutionParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ConvolutionParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   pad_.Clear();
   kernel_size_.Clear();
@@ -19889,7 +19889,7 @@ void ConvolutionParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ConvolutionParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 num_output = 1;
@@ -20001,7 +20001,7 @@ void ConvolutionParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ConvolutionParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 num_output = 1;
@@ -20272,7 +20272,7 @@ void ConvolutionParameter::MergeFrom(const ConvolutionParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   pad_.MergeFrom(from.pad_);
   kernel_size_.MergeFrom(from.kernel_size_);
@@ -20450,7 +20450,7 @@ void CropParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.CropParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   offset_.Clear();
   axis_ = 2;
@@ -20525,7 +20525,7 @@ void CropParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.CropParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 axis = 1 [default = 2];
@@ -20551,7 +20551,7 @@ void CropParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.CropParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 axis = 1 [default = 2];
@@ -20623,7 +20623,7 @@ void CropParameter::MergeFrom(const CropParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   offset_.MergeFrom(from.offset_);
   if (from.has_axis()) {
@@ -20761,7 +20761,7 @@ void DataParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.DataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -20971,7 +20971,7 @@ void DataParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.DataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string source = 1;
@@ -21047,7 +21047,7 @@ void DataParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.DataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string source = 1;
@@ -21224,7 +21224,7 @@ void DataParameter::MergeFrom(const DataParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 255u) {
@@ -21384,7 +21384,7 @@ void NonMaximumSuppressionParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.NonMaximumSuppressionParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -21472,7 +21472,7 @@ void NonMaximumSuppressionParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.NonMaximumSuppressionParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float nms_threshold = 1 [default = 0.3];
@@ -21502,7 +21502,7 @@ void NonMaximumSuppressionParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.NonMaximumSuppressionParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float nms_threshold = 1 [default = 0.3];
@@ -21583,7 +21583,7 @@ void NonMaximumSuppressionParameter::MergeFrom(const NonMaximumSuppressionParame
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -21739,7 +21739,7 @@ void SaveOutputParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.SaveOutputParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 31u) {
@@ -21897,7 +21897,7 @@ void SaveOutputParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.SaveOutputParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string output_directory = 1;
@@ -21967,7 +21967,7 @@ void SaveOutputParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.SaveOutputParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string output_directory = 1;
@@ -22118,7 +22118,7 @@ void SaveOutputParameter::MergeFrom(const SaveOutputParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 63u) {
@@ -22260,7 +22260,7 @@ void DropoutParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.DropoutParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -22333,7 +22333,7 @@ void DropoutParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.DropoutParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float dropout_ratio = 1 [default = 0.5];
@@ -22358,7 +22358,7 @@ void DropoutParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.DropoutParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float dropout_ratio = 1 [default = 0.5];
@@ -22427,7 +22427,7 @@ void DropoutParameter::MergeFrom(const DropoutParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -22553,7 +22553,7 @@ void DummyDataParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.DummyDataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   data_filler_.Clear();
   num_.Clear();
@@ -22697,7 +22697,7 @@ void DummyDataParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.DummyDataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .opencv_caffe.FillerParameter data_filler = 1;
   for (unsigned int i = 0,
@@ -22749,7 +22749,7 @@ void DummyDataParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.DummyDataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .opencv_caffe.FillerParameter data_filler = 1;
   for (unsigned int i = 0,
@@ -22885,7 +22885,7 @@ void DummyDataParameter::MergeFrom(const DummyDataParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   data_filler_.MergeFrom(from.data_filler_);
   num_.MergeFrom(from.num_);
@@ -23008,7 +23008,7 @@ void EltwiseParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.EltwiseParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   coeff_.Clear();
   cached_has_bits = _has_bits_[0];
@@ -23107,7 +23107,7 @@ void EltwiseParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.EltwiseParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.EltwiseParameter.EltwiseOp operation = 1 [default = SUM];
@@ -23139,7 +23139,7 @@ void EltwiseParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.EltwiseParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.EltwiseParameter.EltwiseOp operation = 1 [default = SUM];
@@ -23223,7 +23223,7 @@ void EltwiseParameter::MergeFrom(const EltwiseParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   coeff_.MergeFrom(from.coeff_);
   cached_has_bits = from._has_bits_[0];
@@ -23342,7 +23342,7 @@ void ELUParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ELUParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   alpha_ = 1;
   _has_bits_.Clear();
@@ -23397,7 +23397,7 @@ void ELUParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ELUParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float alpha = 1 [default = 1];
@@ -23417,7 +23417,7 @@ void ELUParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ELUParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float alpha = 1 [default = 1];
@@ -23474,7 +23474,7 @@ void ELUParameter::MergeFrom(const ELUParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.has_alpha()) {
     set_alpha(from.alpha());
@@ -23608,7 +23608,7 @@ void EmbedParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.EmbedParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -23731,7 +23731,7 @@ void EmbedParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.EmbedParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 num_output = 1;
@@ -23773,7 +23773,7 @@ void EmbedParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.EmbedParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 num_output = 1;
@@ -23884,7 +23884,7 @@ void EmbedParameter::MergeFrom(const EmbedParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 31u) {
@@ -24019,7 +24019,7 @@ void ExpParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ExpParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -24107,7 +24107,7 @@ void ExpParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ExpParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float base = 1 [default = -1];
@@ -24137,7 +24137,7 @@ void ExpParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ExpParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float base = 1 [default = -1];
@@ -24216,7 +24216,7 @@ void ExpParameter::MergeFrom(const ExpParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -24341,7 +24341,7 @@ void FlattenParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.FlattenParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -24414,7 +24414,7 @@ void FlattenParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.FlattenParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 axis = 1 [default = 1];
@@ -24439,7 +24439,7 @@ void FlattenParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.FlattenParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 axis = 1 [default = 1];
@@ -24512,7 +24512,7 @@ void FlattenParameter::MergeFrom(const FlattenParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -24641,7 +24641,7 @@ void HDF5DataParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.HDF5DataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
@@ -24735,7 +24735,7 @@ void HDF5DataParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.HDF5DataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string source = 1;
@@ -24770,7 +24770,7 @@ void HDF5DataParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.HDF5DataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string source = 1;
@@ -24859,7 +24859,7 @@ void HDF5DataParameter::MergeFrom(const HDF5DataParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -24985,7 +24985,7 @@ void HDF5OutputParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.HDF5OutputParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
@@ -25046,7 +25046,7 @@ void HDF5OutputParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.HDF5OutputParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string file_name = 1;
@@ -25071,7 +25071,7 @@ void HDF5OutputParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.HDF5OutputParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string file_name = 1;
@@ -25136,7 +25136,7 @@ void HDF5OutputParameter::MergeFrom(const HDF5OutputParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.has_file_name()) {
     set_has_file_name();
@@ -25246,7 +25246,7 @@ void HingeLossParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.HingeLossParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   norm_ = 1;
   _has_bits_.Clear();
@@ -25307,7 +25307,7 @@ void HingeLossParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.HingeLossParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.HingeLossParameter.Norm norm = 1 [default = L1];
@@ -25328,7 +25328,7 @@ void HingeLossParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.HingeLossParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.HingeLossParameter.Norm norm = 1 [default = L1];
@@ -25387,7 +25387,7 @@ void HingeLossParameter::MergeFrom(const HingeLossParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.has_norm()) {
     set_norm(from.norm());
@@ -25532,7 +25532,7 @@ void ImageDataParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ImageDataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -25772,7 +25772,7 @@ void ImageDataParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ImageDataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string source = 1;
@@ -25862,7 +25862,7 @@ void ImageDataParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ImageDataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string source = 1;
@@ -26067,7 +26067,7 @@ void ImageDataParameter::MergeFrom(const ImageDataParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 255u) {
@@ -26234,7 +26234,7 @@ void InfogainLossParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.InfogainLossParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
@@ -26295,7 +26295,7 @@ void InfogainLossParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.InfogainLossParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string source = 1;
@@ -26320,7 +26320,7 @@ void InfogainLossParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.InfogainLossParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string source = 1;
@@ -26385,7 +26385,7 @@ void InfogainLossParameter::MergeFrom(const InfogainLossParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.has_source()) {
     set_has_source();
@@ -26522,7 +26522,7 @@ void InnerProductParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.InnerProductParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -26660,7 +26660,7 @@ void InnerProductParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.InnerProductParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 num_output = 1;
@@ -26707,7 +26707,7 @@ void InnerProductParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.InnerProductParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 num_output = 1;
@@ -26828,7 +26828,7 @@ void InnerProductParameter::MergeFrom(const InnerProductParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 63u) {
@@ -26960,7 +26960,7 @@ void InputParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.InputParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   shape_.Clear();
   _has_bits_.Clear();
@@ -27012,7 +27012,7 @@ void InputParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.InputParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .opencv_caffe.BlobShape shape = 1;
   for (unsigned int i = 0,
@@ -27033,7 +27033,7 @@ void InputParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.InputParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .opencv_caffe.BlobShape shape = 1;
   for (unsigned int i = 0,
@@ -27098,7 +27098,7 @@ void InputParameter::MergeFrom(const InputParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   shape_.MergeFrom(from.shape_);
 }
@@ -27211,7 +27211,7 @@ void LogParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.LogParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -27299,7 +27299,7 @@ void LogParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.LogParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float base = 1 [default = -1];
@@ -27329,7 +27329,7 @@ void LogParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.LogParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float base = 1 [default = -1];
@@ -27408,7 +27408,7 @@ void LogParameter::MergeFrom(const LogParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -27542,7 +27542,7 @@ void LRNParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.LRNParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 63u) {
@@ -27688,7 +27688,7 @@ void LRNParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.LRNParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 local_size = 1 [default = 5];
@@ -27735,7 +27735,7 @@ void LRNParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.LRNParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 local_size = 1 [default = 5];
@@ -27850,7 +27850,7 @@ void LRNParameter::MergeFrom(const LRNParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 63u) {
@@ -27990,7 +27990,7 @@ void MemoryDataParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.MemoryDataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 15u) {
@@ -28092,7 +28092,7 @@ void MemoryDataParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.MemoryDataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 batch_size = 1;
@@ -28127,7 +28127,7 @@ void MemoryDataParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.MemoryDataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 batch_size = 1;
@@ -28224,7 +28224,7 @@ void MemoryDataParameter::MergeFrom(const MemoryDataParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 15u) {
@@ -28355,7 +28355,7 @@ void MVNParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.MVNParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -28443,7 +28443,7 @@ void MVNParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.MVNParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional bool normalize_variance = 1 [default = true];
@@ -28473,7 +28473,7 @@ void MVNParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.MVNParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional bool normalize_variance = 1 [default = true];
@@ -28552,7 +28552,7 @@ void MVNParameter::MergeFrom(const MVNParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -28680,7 +28680,7 @@ void ParameterParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ParameterParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
@@ -28737,7 +28737,7 @@ void ParameterParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ParameterParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.BlobShape shape = 1;
@@ -28758,7 +28758,7 @@ void ParameterParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ParameterParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.BlobShape shape = 1;
@@ -28819,7 +28819,7 @@ void ParameterParameter::MergeFrom(const ParameterParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.has_shape()) {
     mutable_shape()->::opencv_caffe::BlobShape::MergeFrom(from.shape());
@@ -28946,7 +28946,7 @@ void PoolingParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.PoolingParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 255u) {
@@ -29193,7 +29193,7 @@ void PoolingParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.PoolingParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.PoolingParameter.PoolMethod pool = 1 [default = MAX];
@@ -29275,7 +29275,7 @@ void PoolingParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.PoolingParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.PoolingParameter.PoolMethod pool = 1 [default = MAX];
@@ -29478,7 +29478,7 @@ void PoolingParameter::MergeFrom(const PoolingParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 255u) {
@@ -29648,7 +29648,7 @@ void PowerParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.PowerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -29736,7 +29736,7 @@ void PowerParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.PowerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float power = 1 [default = 1];
@@ -29766,7 +29766,7 @@ void PowerParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.PowerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float power = 1 [default = 1];
@@ -29845,7 +29845,7 @@ void PowerParameter::MergeFrom(const PowerParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -29987,7 +29987,7 @@ void PythonParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.PythonParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -30105,7 +30105,7 @@ void PythonParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.PythonParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string module = 1;
@@ -30155,7 +30155,7 @@ void PythonParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.PythonParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string module = 1;
@@ -30268,7 +30268,7 @@ void PythonParameter::MergeFrom(const PythonParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 15u) {
@@ -30420,7 +30420,7 @@ void RecurrentParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.RecurrentParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -30542,7 +30542,7 @@ void RecurrentParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.RecurrentParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 num_output = 1 [default = 0];
@@ -30584,7 +30584,7 @@ void RecurrentParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.RecurrentParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 num_output = 1 [default = 0];
@@ -30693,7 +30693,7 @@ void RecurrentParameter::MergeFrom(const RecurrentParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 31u) {
@@ -30828,7 +30828,7 @@ void ReductionParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ReductionParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -30922,7 +30922,7 @@ void ReductionParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ReductionParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.ReductionParameter.ReductionOp operation = 1 [default = SUM];
@@ -30953,7 +30953,7 @@ void ReductionParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ReductionParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.ReductionParameter.ReductionOp operation = 1 [default = SUM];
@@ -31036,7 +31036,7 @@ void ReductionParameter::MergeFrom(const ReductionParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -31162,7 +31162,7 @@ void ReLUParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ReLUParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -31242,7 +31242,7 @@ void ReLUParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ReLUParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float negative_slope = 1 [default = 0];
@@ -31268,7 +31268,7 @@ void ReLUParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ReLUParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float negative_slope = 1 [default = 0];
@@ -31339,7 +31339,7 @@ void ReLUParameter::MergeFrom(const ReLUParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -31471,7 +31471,7 @@ void ReshapeParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ReshapeParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
@@ -31560,7 +31560,7 @@ void ReshapeParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ReshapeParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.BlobShape shape = 1;
@@ -31591,7 +31591,7 @@ void ReshapeParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ReshapeParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.BlobShape shape = 1;
@@ -31678,7 +31678,7 @@ void ReshapeParameter::MergeFrom(const ReshapeParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -31825,7 +31825,7 @@ void ScaleParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ScaleParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -31947,7 +31947,7 @@ void ScaleParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ScaleParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 axis = 1 [default = 1];
@@ -31989,7 +31989,7 @@ void ScaleParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ScaleParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 axis = 1 [default = 1];
@@ -32100,7 +32100,7 @@ void ScaleParameter::MergeFrom(const ScaleParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 31u) {
@@ -32229,7 +32229,7 @@ void SigmoidParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.SigmoidParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   engine_ = 0;
   _has_bits_.Clear();
@@ -32290,7 +32290,7 @@ void SigmoidParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.SigmoidParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.SigmoidParameter.Engine engine = 1 [default = DEFAULT];
@@ -32311,7 +32311,7 @@ void SigmoidParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.SigmoidParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.SigmoidParameter.Engine engine = 1 [default = DEFAULT];
@@ -32370,7 +32370,7 @@ void SigmoidParameter::MergeFrom(const SigmoidParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.has_engine()) {
     set_engine(from.engine());
@@ -32485,7 +32485,7 @@ void SliceParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.SliceParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   slice_point_.Clear();
   cached_has_bits = _has_bits_[0];
@@ -32578,7 +32578,7 @@ void SliceParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.SliceParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 slice_dim = 1 [default = 1];
@@ -32609,7 +32609,7 @@ void SliceParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.SliceParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 slice_dim = 1 [default = 1];
@@ -32695,7 +32695,7 @@ void SliceParameter::MergeFrom(const SliceParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   slice_point_.MergeFrom(from.slice_point_);
   cached_has_bits = from._has_bits_[0];
@@ -32818,7 +32818,7 @@ void SoftmaxParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.SoftmaxParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -32897,7 +32897,7 @@ void SoftmaxParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.SoftmaxParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.SoftmaxParameter.Engine engine = 1 [default = DEFAULT];
@@ -32923,7 +32923,7 @@ void SoftmaxParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.SoftmaxParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.SoftmaxParameter.Engine engine = 1 [default = DEFAULT];
@@ -32996,7 +32996,7 @@ void SoftmaxParameter::MergeFrom(const SoftmaxParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -33113,7 +33113,7 @@ void TanHParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.TanHParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   engine_ = 0;
   _has_bits_.Clear();
@@ -33174,7 +33174,7 @@ void TanHParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.TanHParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.TanHParameter.Engine engine = 1 [default = DEFAULT];
@@ -33195,7 +33195,7 @@ void TanHParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.TanHParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.TanHParameter.Engine engine = 1 [default = DEFAULT];
@@ -33254,7 +33254,7 @@ void TanHParameter::MergeFrom(const TanHParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.has_engine()) {
     set_engine(from.engine());
@@ -33367,7 +33367,7 @@ void TileParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.TileParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -33440,7 +33440,7 @@ void TileParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.TileParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 axis = 1 [default = 1];
@@ -33465,7 +33465,7 @@ void TileParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.TileParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional int32 axis = 1 [default = 1];
@@ -33538,7 +33538,7 @@ void TileParameter::MergeFrom(const TileParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -33655,7 +33655,7 @@ void ThresholdParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ThresholdParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   threshold_ = 0;
   _has_bits_.Clear();
@@ -33710,7 +33710,7 @@ void ThresholdParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ThresholdParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float threshold = 1 [default = 0];
@@ -33730,7 +33730,7 @@ void ThresholdParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ThresholdParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float threshold = 1 [default = 0];
@@ -33787,7 +33787,7 @@ void ThresholdParameter::MergeFrom(const ThresholdParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.has_threshold()) {
     set_threshold(from.threshold());
@@ -33941,7 +33941,7 @@ void WindowDataParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.WindowDataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 15u) {
@@ -34202,7 +34202,7 @@ void WindowDataParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.WindowDataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string source = 1;
@@ -34302,7 +34302,7 @@ void WindowDataParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.WindowDataParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string source = 1;
@@ -34521,7 +34521,7 @@ void WindowDataParameter::MergeFrom(const WindowDataParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 255u) {
@@ -34695,7 +34695,7 @@ void SPPParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.SPPParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -34795,7 +34795,7 @@ void SPPParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.SPPParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 pyramid_height = 1;
@@ -34827,7 +34827,7 @@ void SPPParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.SPPParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 pyramid_height = 1;
@@ -34912,7 +34912,7 @@ void SPPParameter::MergeFrom(const SPPParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -35341,7 +35341,7 @@ void V1LayerParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.V1LayerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   bottom_.Clear();
   top_.Clear();
@@ -36107,7 +36107,7 @@ void V1LayerParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.V1LayerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.V0LayerParameter layer = 1;
@@ -36401,7 +36401,7 @@ void V1LayerParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.V1LayerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.V0LayerParameter layer = 1;
@@ -37086,7 +37086,7 @@ void V1LayerParameter::MergeFrom(const V1LayerParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   bottom_.MergeFrom(from.bottom_);
   top_.MergeFrom(from.top_);
@@ -37466,7 +37466,7 @@ void V0LayerParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.V0LayerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   blobs_.Clear();
   blobs_lr_.Clear();
@@ -38121,7 +38121,7 @@ void V0LayerParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.V0LayerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string name = 1;
@@ -38361,7 +38361,7 @@ void V0LayerParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.V0LayerParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional string name = 1;
@@ -38899,7 +38899,7 @@ void V0LayerParameter::MergeFrom(const V0LayerParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   blobs_.MergeFrom(from.blobs_);
   blobs_lr_.MergeFrom(from.blobs_lr_);
@@ -39183,7 +39183,7 @@ void PReLUParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.PReLUParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 0x00000001u) {
@@ -39255,7 +39255,7 @@ void PReLUParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.PReLUParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.FillerParameter filler = 1;
@@ -39281,7 +39281,7 @@ void PReLUParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.PReLUParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional .opencv_caffe.FillerParameter filler = 1;
@@ -39354,7 +39354,7 @@ void PReLUParameter::MergeFrom(const PReLUParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 3u) {
@@ -39482,7 +39482,7 @@ void NormalizedBBox::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.NormalizedBBox)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 255u) {
@@ -39640,7 +39640,7 @@ void NormalizedBBox::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.NormalizedBBox)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float xmin = 1;
@@ -39695,7 +39695,7 @@ void NormalizedBBox::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.NormalizedBBox)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional float xmin = 1;
@@ -39826,7 +39826,7 @@ void NormalizedBBox::MergeFrom(const NormalizedBBox& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 255u) {
@@ -39974,7 +39974,7 @@ void ROIPoolingParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ROIPoolingParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -40063,7 +40063,7 @@ void ROIPoolingParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ROIPoolingParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 pooled_h = 1 [default = 0];
@@ -40093,7 +40093,7 @@ void ROIPoolingParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ROIPoolingParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 pooled_h = 1 [default = 0];
@@ -40176,7 +40176,7 @@ void ROIPoolingParameter::MergeFrom(const ROIPoolingParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -40313,7 +40313,7 @@ void ProposalParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.ProposalParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   ratio_.Clear();
   scale_.Clear();
@@ -40486,7 +40486,7 @@ void ProposalParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.ProposalParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 feat_stride = 1 [default = 16];
@@ -40543,7 +40543,7 @@ void ProposalParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.ProposalParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // optional uint32 feat_stride = 1 [default = 16];
@@ -40688,7 +40688,7 @@ void ProposalParameter::MergeFrom(const ProposalParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   ratio_.MergeFrom(from.ratio_);
   scale_.MergeFrom(from.scale_);
@@ -40831,7 +40831,7 @@ void PSROIPoolingParameter::Clear() {
 // @@protoc_insertion_point(message_clear_start:opencv_caffe.PSROIPoolingParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   if (cached_has_bits & 7u) {
@@ -40919,7 +40919,7 @@ void PSROIPoolingParameter::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:opencv_caffe.PSROIPoolingParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // required float spatial_scale = 1;
@@ -40949,7 +40949,7 @@ void PSROIPoolingParameter::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:opencv_caffe.PSROIPoolingParameter)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
   // required float spatial_scale = 1;
@@ -41053,7 +41053,7 @@ void PSROIPoolingParameter::MergeFrom(const PSROIPoolingParameter& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 7u) {

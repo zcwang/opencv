@@ -350,7 +350,7 @@ void GraphDef::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.GraphDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   node_.Clear();
   if (GetArenaNoVirtual() == NULL && library_ != NULL) {
@@ -448,7 +448,7 @@ void GraphDef::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.GraphDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .tensorflow.NodeDef node = 1;
   for (unsigned int i = 0,
@@ -486,7 +486,7 @@ void GraphDef::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.GraphDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .tensorflow.NodeDef node = 1;
   for (unsigned int i = 0,
@@ -591,7 +591,7 @@ void GraphDef::MergeFrom(const GraphDef& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   node_.MergeFrom(from.node_);
   if (from.has_library()) {
@@ -781,7 +781,7 @@ void NodeDef::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.NodeDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   input_.Clear();
   attr_.Clear();
@@ -913,7 +913,7 @@ void NodeDef::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.NodeDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1;
   if (this->name().size() > 0) {
@@ -1022,7 +1022,7 @@ void NodeDef::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.NodeDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1;
   if (this->name().size() > 0) {
@@ -1219,7 +1219,7 @@ void NodeDef::MergeFrom(const NodeDef& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   input_.MergeFrom(from.input_);
   attr_.MergeFrom(from.attr_);
