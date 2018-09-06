@@ -1021,7 +1021,7 @@ template<typename T, typename DT>
 static bool openvx_cvt(const T* src, size_t sstep,
                        DT* dst, size_t dstep, Size size)
 {
-    (void)src; (void)sstep; (void)dst; (void)dstep; (void)size;
+    CV_UNUSED(src); CV_UNUSED(sstep); CV_UNUSED(dst); CV_UNUSED(dstep); CV_UNUSED(size);
     return false;
 }
 

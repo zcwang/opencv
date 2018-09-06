@@ -3180,7 +3180,7 @@ void Layer::finalize(const std::vector<Mat> &inputs, std::vector<Mat> &outputs)
 
 void Layer::finalize(const std::vector<Mat*> &input, std::vector<Mat> &output)
 {
-    (void)input;(void)output;
+    CV_UNUSED(input);CV_UNUSED(output);
 }
 
 std::vector<Mat> Layer::finalize(const std::vector<Mat> &inputs)

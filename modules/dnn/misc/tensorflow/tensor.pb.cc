@@ -283,7 +283,7 @@ void TensorProto::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.TensorProto)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   float_val_.Clear();
   double_val_.Clear();
@@ -556,7 +556,7 @@ void TensorProto::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.TensorProto)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // .tensorflow.DataType dtype = 1;
   if (this->dtype() != 0) {
@@ -677,7 +677,7 @@ void TensorProto::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.TensorProto)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // .tensorflow.DataType dtype = 1;
   if (this->dtype() != 0) {
@@ -1021,7 +1021,7 @@ void TensorProto::MergeFrom(const TensorProto& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   float_val_.MergeFrom(from.float_val_);
   double_val_.MergeFrom(from.double_val_);

@@ -199,7 +199,7 @@ void VersionDef::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.VersionDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   bad_consumers_.Clear();
   ::memset(&producer_, 0, static_cast<size_t>(
@@ -289,7 +289,7 @@ void VersionDef::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.VersionDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // int32 producer = 1;
   if (this->producer() != 0) {
@@ -324,7 +324,7 @@ void VersionDef::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.VersionDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // int32 producer = 1;
   if (this->producer() != 0) {
@@ -423,7 +423,7 @@ void VersionDef::MergeFrom(const VersionDef& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   bad_consumers_.MergeFrom(from.bad_consumers_);
   if (from.producer() != 0) {
