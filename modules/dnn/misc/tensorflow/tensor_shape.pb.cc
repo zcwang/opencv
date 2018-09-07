@@ -235,7 +235,7 @@ void TensorShapeProto_Dim::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.TensorShapeProto.Dim)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   name_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
   size_ = GOOGLE_LONGLONG(0);
@@ -306,7 +306,7 @@ void TensorShapeProto_Dim::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.TensorShapeProto.Dim)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // int64 size = 1;
   if (this->size() != 0) {
@@ -335,7 +335,7 @@ void TensorShapeProto_Dim::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.TensorShapeProto.Dim)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // int64 size = 1;
   if (this->size() != 0) {
@@ -411,7 +411,7 @@ void TensorShapeProto_Dim::MergeFrom(const TensorShapeProto_Dim& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.name().size() > 0) {
     set_name(from.name());
@@ -551,7 +551,7 @@ void TensorShapeProto::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.TensorShapeProto)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   dim_.Clear();
   unknown_rank_ = false;
@@ -617,7 +617,7 @@ void TensorShapeProto::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.TensorShapeProto)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .tensorflow.TensorShapeProto.Dim dim = 2;
   for (unsigned int i = 0,
@@ -643,7 +643,7 @@ void TensorShapeProto::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.TensorShapeProto)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .tensorflow.TensorShapeProto.Dim dim = 2;
   for (unsigned int i = 0,
@@ -718,7 +718,7 @@ void TensorShapeProto::MergeFrom(const TensorShapeProto& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   dim_.MergeFrom(from.dim_);
   if (from.unknown_rank() != 0) {

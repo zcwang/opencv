@@ -337,7 +337,7 @@ void AttrValue_ListValue::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.AttrValue.ListValue)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   s_.Clear();
   i_.Clear();
@@ -503,7 +503,7 @@ void AttrValue_ListValue::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.AttrValue.ListValue)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated bytes s = 2;
   for (int i = 0, n = this->s_size(); i < n; i++) {
@@ -580,7 +580,7 @@ void AttrValue_ListValue::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.AttrValue.ListValue)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated bytes s = 2;
   for (int i = 0, n = this->s_size(); i < n; i++) {
@@ -796,7 +796,7 @@ void AttrValue_ListValue::MergeFrom(const AttrValue_ListValue& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   s_.MergeFrom(from.s_);
   i_.MergeFrom(from.i_);
@@ -1149,7 +1149,7 @@ void AttrValue::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.AttrValue)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   clear_value();
   _internal_metadata_.Clear();
@@ -1325,7 +1325,7 @@ void AttrValue::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.AttrValue)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // .tensorflow.AttrValue.ListValue list = 1;
   if (has_list()) {
@@ -1400,7 +1400,7 @@ void AttrValue::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.AttrValue)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // .tensorflow.AttrValue.ListValue list = 1;
   if (has_list()) {
@@ -1583,7 +1583,7 @@ void AttrValue::MergeFrom(const AttrValue& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   switch (from.value_case()) {
     case kS: {
@@ -1784,7 +1784,7 @@ void NameAttrList::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.NameAttrList)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   attr_.Clear();
   name_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
@@ -1864,7 +1864,7 @@ void NameAttrList::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.NameAttrList)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1;
   if (this->name().size() > 0) {
@@ -1943,7 +1943,7 @@ void NameAttrList::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.NameAttrList)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1;
   if (this->name().size() > 0) {
@@ -2086,7 +2086,7 @@ void NameAttrList::MergeFrom(const NameAttrList& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   attr_.MergeFrom(from.attr_);
   if (from.name().size() > 0) {

@@ -418,7 +418,7 @@ void OpDef_ArgDef::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.OpDef.ArgDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   name_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
   description_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
@@ -574,7 +574,7 @@ void OpDef_ArgDef::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.OpDef.ArgDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1;
   if (this->name().size() > 0) {
@@ -649,7 +649,7 @@ void OpDef_ArgDef::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.OpDef.ArgDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1;
   if (this->name().size() > 0) {
@@ -807,7 +807,7 @@ void OpDef_ArgDef::MergeFrom(const OpDef_ArgDef& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.name().size() > 0) {
     set_name(from.name());
@@ -1057,7 +1057,7 @@ void OpDef_AttrDef::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.OpDef.AttrDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   name_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
   type_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
@@ -1210,7 +1210,7 @@ void OpDef_AttrDef::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.OpDef.AttrDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1;
   if (this->name().size() > 0) {
@@ -1276,7 +1276,7 @@ void OpDef_AttrDef::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.OpDef.AttrDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1;
   if (this->name().size() > 0) {
@@ -1426,7 +1426,7 @@ void OpDef_AttrDef::MergeFrom(const OpDef_AttrDef& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.name().size() > 0) {
     set_name(from.name());
@@ -1649,7 +1649,7 @@ void OpDef::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.OpDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   input_arg_.Clear();
   output_arg_.Clear();
@@ -1850,7 +1850,7 @@ void OpDef::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.OpDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1;
   if (this->name().size() > 0) {
@@ -1941,7 +1941,7 @@ void OpDef::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.OpDef)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // string name = 1;
   if (this->name().size() > 0) {
@@ -2152,7 +2152,7 @@ void OpDef::MergeFrom(const OpDef& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   input_arg_.MergeFrom(from.input_arg_);
   output_arg_.MergeFrom(from.output_arg_);
@@ -2327,7 +2327,7 @@ void OpDeprecation::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.OpDeprecation)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   explanation_.ClearToEmpty(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), GetArenaNoVirtual());
   version_ = 0;
@@ -2398,7 +2398,7 @@ void OpDeprecation::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.OpDeprecation)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // int32 version = 1;
   if (this->version() != 0) {
@@ -2427,7 +2427,7 @@ void OpDeprecation::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.OpDeprecation)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // int32 version = 1;
   if (this->version() != 0) {
@@ -2503,7 +2503,7 @@ void OpDeprecation::MergeFrom(const OpDeprecation& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   if (from.explanation().size() > 0) {
     set_explanation(from.explanation());
@@ -2640,7 +2640,7 @@ void OpList::Clear() {
 // @@protoc_insertion_point(message_clear_start:tensorflow.OpList)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   op_.Clear();
   _internal_metadata_.Clear();
@@ -2691,7 +2691,7 @@ void OpList::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:tensorflow.OpList)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .tensorflow.OpDef op = 1;
   for (unsigned int i = 0,
@@ -2712,7 +2712,7 @@ void OpList::SerializeWithCachedSizes(
   (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:tensorflow.OpList)
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   // repeated .tensorflow.OpDef op = 1;
   for (unsigned int i = 0,
@@ -2777,7 +2777,7 @@ void OpList::MergeFrom(const OpList& from) {
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
+  (void)cached_has_bits;
 
   op_.MergeFrom(from.op_);
 }
